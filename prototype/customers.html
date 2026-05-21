@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>ТМ-замовники — БІОЛАБ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="bulk-list.html">Журнал варок</a></li>
+        <li><a href="finished-list.html">Журнал ГП</a></li>
+        <li><a href="passport.html">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details open>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html">Продукти (RP)</a></li>
+        <li><a href="variants.html">Товарні позиції</a></li>
+        <li><a href="customers.html" class="active">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <h1>ТМ-замовники</h1>
+    <a href="#" role="button">+ Додати ТМ</a>
+  </header>
+
+  <p style="color: var(--pico-muted-color);">
+    Клієнти-власники торгових марок для яких Biolab виробляє продукцію.
+    Назва ТМ використовується у журналі ГП і в паспортах якості.
+  </p>
+
+  <form class="toolbar">
+    <div>
+      <label>Пошук</label>
+      <input type="search" placeholder="Назва ТМ або контактна особа...">
+    </div>
+    <div class="spacer"></div>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Назва ТМ</th>
+        <th>Контактна особа</th>
+        <th>Товарних позицій</th>
+        <th>Партій ГП</th>
+        <th>Останнє фасування</th>
+        <th>Дії</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Crumb</strong></td>
+        <td>Шевченко І. О.</td>
+        <td>14</td>
+        <td>87</td>
+        <td>21.05.2026</td>
+        <td><a href="#">Редагувати</a> · <a href="#">Видалити</a></td>
+      </tr>
+      <tr>
+        <td><strong>Pinky</strong></td>
+        <td>Коваленко М. С.</td>
+        <td>9</td>
+        <td>42</td>
+        <td>19.05.2026</td>
+        <td><a href="#">Редагувати</a> · <a href="#">Видалити</a></td>
+      </tr>
+      <tr>
+        <td><strong>Plis Me</strong></td>
+        <td>Іванова К. О.</td>
+        <td>5</td>
+        <td>28</td>
+        <td>20.05.2026</td>
+        <td><a href="#">Редагувати</a> · <a href="#">Видалити</a></td>
+      </tr>
+      <tr>
+        <td><strong>Пухтенко</strong></td>
+        <td>Пухтенко О. В.</td>
+        <td>3</td>
+        <td>15</td>
+        <td>04.11.2024</td>
+        <td><a href="#">Редагувати</a> · <a href="#">Видалити</a></td>
+      </tr>
+      <tr>
+        <td><strong>Азаренко</strong></td>
+        <td>Азаренко В. Р.</td>
+        <td>2</td>
+        <td>8</td>
+        <td>04.11.2024</td>
+        <td><a href="#">Редагувати</a> · <a href="#">Видалити</a></td>
+      </tr>
+      <tr>
+        <td><strong>ANKIE002</strong></td>
+        <td>—</td>
+        <td>6</td>
+        <td>22</td>
+        <td>18.05.2026</td>
+        <td><a href="#">Редагувати</a> · <a href="#">Видалити</a></td>
+      </tr>
+      <tr>
+        <td><strong>Сіксай</strong></td>
+        <td>Сіксай Н. Р.</td>
+        <td>4</td>
+        <td>11</td>
+        <td>15.04.2026</td>
+        <td><a href="#">Редагувати</a> · <a href="#">Видалити</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="color: var(--pico-muted-color); font-size: 0.85em; margin-top: 1rem;">
+    Видалити ТМ можна тільки якщо немає пов'язаних товарних позицій і партій ГП —
+    інакше тільки деактивувати. Усі історичні дані залишаються незмінними (GMP).
+  </p>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Нова партія ГП — БІОЛАБ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details open>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="bulk-list.html">Журнал варок</a></li>
+        <li><a href="finished-list.html" class="active">Журнал ГП</a></li>
+        <li><a href="passport.html">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html">Продукти (RP)</a></li>
+        <li><a href="variants.html">Товарні позиції</a></li>
+        <li><a href="customers.html">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <div>
+      <p style="margin: 0;"><a href="finished-list.html" style="font-size: 0.85em;">← Журнал ГП</a></p>
+      <h1>Нова партія ГП</h1>
+    </div>
+  </header>
+
+  <form>
+    <section>
+      <h3>1. Виберіть варку (партію bulk)</h3>
+      <p style="color: var(--pico-muted-color); font-size: 0.9em; margin-top: -0.5rem;">
+        Спершу відфільтруйте за датою — варок 1000+, без фільтра не знайдете.
+        Потім виберіть конкретну партію зі скороченого списку.
+      </p>
+
+      <div class="grid">
+        <label>
+          Дата варки від
+          <input type="date" id="bulk-date-from" value="2026-05-15">
+        </label>
+        <label>
+          Дата варки до
+          <input type="date" id="bulk-date-to" value="2026-05-21">
+        </label>
+        <label>
+          Швидко
+          <select id="bulk-date-quick">
+            <option value="">— виберіть —</option>
+            <option value="today">Сьогодні</option>
+            <option value="week">Останній тиждень</option>
+            <option value="month">Поточний місяць</option>
+            <option value="prev-month">Попередній місяць</option>
+          </select>
+        </label>
+      </div>
+
+      <label style="margin-top: 0.75rem;">
+        № партії bulk <span id="bulk-count" style="color: var(--pico-muted-color); font-size: 0.85em;">(4 знайдено)</span>
+        <select id="bulk-select" required>
+          <option value="RP21/05/26(1)">RP21/05/26(1) — RP032 Гель для душу — 21.05.2026 — OK</option>
+          <option value="RP21/05/26(2)">RP21/05/26(2) — RP064 Кондиціонер — 21.05.2026 — OK</option>
+          <option value="RP20/05/26(3)">RP20/05/26(3) — RP002 Шампунь — 20.05.2026 — OUT (не можна випустити)</option>
+          <option value="RP20/05/26(2)">RP20/05/26(2) — RP014 Шампунь Avocado — 20.05.2026 — OK</option>
+        </select>
+      </label>
+    </section>
+
+    <section style="margin-top: 1.5rem;">
+      <h3>2. Дані з варки (read-only)</h3>
+      <article style="background: rgba(0,0,0,0.02); padding: 1rem 1.25rem; border-radius: 8px;">
+        <div class="grid">
+          <div>
+            <small style="color: var(--pico-muted-color);">Продукт</small><br>
+            <strong id="bulk-product">RP032 — Гель для душу</strong>
+          </div>
+          <div>
+            <small style="color: var(--pico-muted-color);">Дата виготовлення варки</small><br>
+            <strong id="bulk-date">21.05.2026</strong>
+          </div>
+          <div>
+            <small style="color: var(--pico-muted-color);">Обсяг варки</small><br>
+            <strong id="bulk-volume">50.00 кг</strong>
+          </div>
+          <div>
+            <small style="color: var(--pico-muted-color);">Висновок варки</small><br>
+            <strong id="bulk-verdict"><span class="badge badge-ok">OK</span></strong>
+          </div>
+        </div>
+        <details style="margin-top: 0.75rem;">
+          <summary>Показники якості (з варки) →</summary>
+          <table style="margin-top: 0.5rem; font-size: 0.9em;">
+            <tr><th>pH</th><td id="qa-ph">5.4</td></tr>
+            <tr><th>В'язкість</th><td id="qa-viscosity">S3V12 Cp=7200 mPas</td></tr>
+            <tr><th>Густина</th><td id="qa-density">0.95 г/мл</td></tr>
+            <tr><th>Колоїдна / Термо</th><td>стабільний / стабільний</td></tr>
+            <tr><th>Мікробіологія</th><td>не виявлено</td></tr>
+          </table>
+        </details>
+      </article>
+    </section>
+
+    <section style="margin-top: 1.5rem;">
+      <h3>3. Виберіть товарну позицію (ТМ × етикетка × тара)</h3>
+      <p style="color: var(--pico-muted-color); font-size: 0.9em; margin-top: -0.5rem;">
+        ТМ-замовник і назва на етикетці тягнуться з довідника товарних позицій.
+        Якщо потрібного варіанту нема — спочатку додайте у довідник.
+      </p>
+      <label>
+        Товарна позиція (ТМ + назва на етикетці)
+        <select id="variant-select" required>
+          <option>Crumb — "Гель для душу Chery and Santal"</option>
+          <option>Pinky — "Гель Floral wood"</option>
+          <option>ANKIE002 — "Shower gel Bright"</option>
+        </select>
+      </label>
+
+      <article style="background: rgba(0,0,0,0.02); padding: 1rem 1.25rem; border-radius: 8px; margin-top: 0.75rem;">
+        <div class="grid">
+          <div>
+            <small style="color: var(--pico-muted-color);">ТМ-замовник</small><br>
+            <strong>Crumb</strong>
+          </div>
+          <div>
+            <small style="color: var(--pico-muted-color);">Назва на етикетці</small><br>
+            <strong>Гель для душу Chery and Santal</strong>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section style="margin-top: 1.5rem;">
+      <h3>4. Тара</h3>
+      <p style="color: var(--pico-muted-color); font-size: 0.9em; margin-top: -0.5rem;">
+        Тип тари — з довідника <a href="packaging-types.html">Типи тари</a>.
+        Об'єм або вагу вписуєте цифрою.
+      </p>
+      <div class="grid">
+        <label>
+          Тип тари (з довідника)
+          <select required>
+            <option>Флакон</option>
+            <option>Туба</option>
+            <option>Ролер</option>
+            <option>Банка</option>
+            <option>Бомбочка для ванни</option>
+            <option>Скраб (паста)</option>
+            <option>Баттер</option>
+            <option>Саше</option>
+          </select>
+        </label>
+        <label>
+          Об'єм / вага одиниці
+          <input type="number" step="0.1" min="0" value="200" required>
+        </label>
+        <label>
+          Одиниці
+          <select required>
+            <option>мл</option>
+            <option>г</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section style="margin-top: 1.5rem;">
+      <h3>5. Поля партії ГП (вводимо руками)</h3>
+      <div class="grid">
+        <label>
+          Дата фасування
+          <input type="date" id="gp-fill-date" value="2026-05-21" required>
+        </label>
+        <label>
+          Порядковий номер за день
+          <input type="number" id="gp-seq" value="1" min="1" max="99" required>
+          <small>NN — скільки партій ГП цього дня вже є + 1</small>
+        </label>
+        <label>
+          № партії ГП (генерується)
+          <input type="text" id="gp-batch-number" value="21/05/26(01)" readonly>
+        </label>
+      </div>
+      <div class="grid">
+        <label>
+          Кількість, шт
+          <input type="number" placeholder="напр. 240" required>
+        </label>
+        <label>
+          Об'єм партії ГП, кг
+          <input type="number" step="0.01" placeholder="напр. 48.00" required>
+        </label>
+        <label>
+          Дата введення аромату (опц.)
+          <input type="date">
+          <small>Залишити порожнім якщо продукт без аромату</small>
+        </label>
+      </div>
+      <div class="grid">
+        <label>
+          Виконавець фасування (з довідника)
+          <select required>
+            <option>Санмарі А. П.</option>
+            <option>Мовчан О. М.</option>
+            <option>Карабут В. О.</option>
+            <option>Номеровська О. С.</option>
+          </select>
+        </label>
+        <label>
+          Примітка
+          <input type="text" placeholder="Опційно">
+        </label>
+      </div>
+    </section>
+
+    <div class="verdict-panel ok" id="verdict-panel-ok">
+      <h3>Дозволено для відвантаження</h3>
+      <p style="margin: 0;">Варка має висновок OK → партію ГП можна випускати. Після збереження
+      буде доступна кнопка <strong>Згенерувати паспорт якості</strong>.</p>
+    </div>
+
+    <div class="verdict-panel out" id="verdict-panel-out" hidden>
+      <h3>Партію ГП створити не можна</h3>
+      <p style="margin: 0 0 0.5rem 0;">
+        Варка має висновок <strong>OUT</strong> — показники не відповідають специфікації.
+        Паспорт якості згенерувати неможливо.
+      </p>
+      <p style="margin: 0;">
+        <strong>Що робити:</strong> відкрити цю варку в
+        <a href="bulk-list.html">Журналі варок</a>, перевірити показники
+        (можливо помилка вводу) або виправити дані. Якщо показники справді
+        відхилені — варка не може бути випущена.
+      </p>
+    </div>
+
+    <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+      <button type="submit" id="save-btn">Зберегти партію ГП</button>
+      <a href="finished-list.html" role="button" class="secondary outline">Скасувати</a>
+    </div>
+  </form>
+</main>
+
+<script>
+  // Демо: при зміні bulk підтягуємо дані варки.
+  // У реальному застосунку — HTMX через GET /bulk/{id}/details
+  const BULKS = {
+    "RP21/05/26(1)": {
+      product: "RP032 — Гель для душу",
+      date: "21.05.2026",
+      volume: "50.00 кг",
+      verdict_html: '<span class="badge badge-ok">OK</span>',
+      ph: "5.4",
+      viscosity: "S3V12 Cp=7200 mPas",
+      density: "0.95 г/мл",
+    },
+    "RP21/05/26(2)": {
+      product: "RP064 — Кондиціонер для волосся чорний",
+      date: "21.05.2026",
+      volume: "38.20 кг",
+      verdict_html: '<span class="badge badge-ok">OK</span>',
+      ph: "5.7",
+      viscosity: "S3V12 Cp=5000 mPas",
+      density: "1.0 г/мл",
+    },
+    "RP20/05/26(3)": {
+      product: "RP002 — Безсульфатний шампунь",
+      date: "20.05.2026",
+      volume: "23.00 кг",
+      verdict_html: '<span class="badge badge-out">OUT</span>',
+      ph: "7.2",
+      viscosity: "S3V12 Cp=6500 mPas",
+      density: "0.95 г/мл",
+    },
+    "RP20/05/26(2)": {
+      product: "RP014 — Шампунь Avocado + Collagen",
+      date: "20.05.2026",
+      volume: "15.00 кг",
+      verdict_html: '<span class="badge badge-ok">OK</span>',
+      ph: "5.5",
+      viscosity: "S3V12 Cp=5200 mPas",
+      density: "0.98 г/мл",
+    },
+  };
+
+  function applyBulk(key) {
+    const b = BULKS[key];
+    if (!b) return;
+    document.getElementById("bulk-product").textContent = b.product;
+    document.getElementById("bulk-date").textContent = b.date;
+    document.getElementById("bulk-volume").textContent = b.volume;
+    document.getElementById("bulk-verdict").innerHTML = b.verdict_html;
+    document.getElementById("qa-ph").textContent = b.ph;
+    document.getElementById("qa-viscosity").textContent = b.viscosity;
+    document.getElementById("qa-density").textContent = b.density;
+
+    // Блокування коли варка OUT
+    const isOut = b.verdict_html.includes("badge-out");
+    document.getElementById("verdict-panel-ok").hidden = isOut;
+    document.getElementById("verdict-panel-out").hidden = !isOut;
+    const saveBtn = document.getElementById("save-btn");
+    saveBtn.disabled = isOut;
+    saveBtn.style.opacity = isOut ? "0.4" : "1";
+    saveBtn.style.cursor = isOut ? "not-allowed" : "pointer";
+  }
+
+  document.getElementById("bulk-select").addEventListener("change", (e) => {
+    applyBulk(e.target.value);
+  });
+
+  // Авто-генерація № партії ГП з дати фасування + порядкового
+  function generateGpBatchNumber() {
+    const dateStr = document.getElementById("gp-fill-date").value;  // "2026-05-21"
+    const seqRaw = document.getElementById("gp-seq").value || "1";
+    const seq = String(seqRaw).padStart(2, "0");  // "01", "02", ...
+    if (!dateStr) return;
+    const [yyyy, mm, dd] = dateStr.split("-");
+    const yy = yyyy.slice(-2);
+    document.getElementById("gp-batch-number").value = `${dd}/${mm}/${yy}(${seq})`;
+  }
+  document.getElementById("gp-fill-date").addEventListener("change", generateGpBatchNumber);
+  document.getElementById("gp-seq").addEventListener("input", generateGpBatchNumber);
+
+  // Quick-select дат для фільтра bulk
+  document.getElementById("bulk-date-quick").addEventListener("change", (e) => {
+    const today = new Date();
+    const isoDate = (d) => d.toISOString().split("T")[0];
+    let from = today, to = today;
+    switch (e.target.value) {
+      case "today":
+        from = to = today; break;
+      case "week":
+        from = new Date(today); from.setDate(today.getDate() - 7); break;
+      case "month":
+        from = new Date(today.getFullYear(), today.getMonth(), 1);
+        to = new Date(today.getFullYear(), today.getMonth() + 1, 0); break;
+      case "prev-month":
+        from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        to = new Date(today.getFullYear(), today.getMonth(), 0); break;
+      default: return;
+    }
+    document.getElementById("bulk-date-from").value = isoDate(from);
+    document.getElementById("bulk-date-to").value = isoDate(to);
+  });
+</script>
+
+</body>
+</html>

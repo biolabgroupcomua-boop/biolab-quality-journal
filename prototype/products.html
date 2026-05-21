@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Продукти (RP) — БІОЛАБ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="bulk-list.html">Журнал варок</a></li>
+        <li><a href="finished-list.html">Журнал ГП</a></li>
+        <li><a href="passport.html">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details open>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html" class="active">Продукти (RP)</a></li>
+        <li><a href="variants.html">Товарні позиції</a></li>
+        <li><a href="customers.html">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <h1>Продукти (RP-артикули)</h1>
+    <a href="#" role="button">+ Додати RP</a>
+  </header>
+
+  <p style="color: var(--pico-muted-color);">
+    Внутрішні рецептури Biolab. Один RP = одна рецептура, яка може фасуватись
+    під різні ТМ під різними назвами через
+    <a href="variants.html">товарні позиції</a>. До кожного RP має бути
+    <a href="spec-card.html">затверджена специфікація</a>.
+  </p>
+
+  <form class="toolbar">
+    <div>
+      <label>Пошук</label>
+      <input type="search" placeholder="RP-код або назва...">
+    </div>
+    <div>
+      <label>Категорія</label>
+      <select>
+        <option>Всі</option>
+        <option>Волосся</option>
+        <option>Тіло</option>
+        <option>Обличчя</option>
+        <option>Декоративна косметика</option>
+      </select>
+    </div>
+    <div>
+      <label>Специфікація</label>
+      <select>
+        <option>Всі</option>
+        <option>Затверджено</option>
+        <option>Потребує верифікації</option>
+        <option>Чернетка</option>
+        <option>Нема</option>
+      </select>
+    </div>
+    <div class="spacer"></div>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>RP-код</th>
+        <th>Внутрішня назва</th>
+        <th>Категорія</th>
+        <th>Специфікація</th>
+        <th>Варок</th>
+        <th>Товарних позицій</th>
+        <th>Дії</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>RP001</strong></td>
+        <td>Шампунь Anti-Dundruff</td>
+        <td>Волосся</td>
+        <td><span class="badge badge-approved">v1.0</span></td>
+        <td>12</td>
+        <td>4</td>
+        <td><a href="spec-card.html">Спека</a> · <a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td><strong>RP002</strong></td>
+        <td>Безсульфатний шампунь з гідролізатом шовку та аргановою олією</td>
+        <td>Волосся</td>
+        <td><span class="badge badge-approved">v1.0</span></td>
+        <td>7</td>
+        <td>3</td>
+        <td><a href="spec-card.html">Спека</a> · <a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td><strong>RP014</strong></td>
+        <td>Шампунь Avocado + Collagen</td>
+        <td>Волосся</td>
+        <td><span class="badge badge-draft">v0.9 чернетка</span></td>
+        <td>9</td>
+        <td>2</td>
+        <td><a href="spec-card.html">Спека</a> · <a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td><strong>RP032</strong></td>
+        <td>Гель для душу</td>
+        <td>Тіло</td>
+        <td><span class="badge badge-approved">v1.0</span></td>
+        <td>15</td>
+        <td>5</td>
+        <td><a href="spec-card.html">Спека</a> · <a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td><strong>RP060</strong></td>
+        <td>Маска для волосся кераміди і шовк</td>
+        <td>Волосся</td>
+        <td><span class="badge badge-approved">v1.0</span></td>
+        <td>6</td>
+        <td>2</td>
+        <td><a href="spec-card.html">Спека</a> · <a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td><strong>RP064</strong></td>
+        <td>Кондиціонер для волосся чорний</td>
+        <td>Волосся</td>
+        <td><span class="badge badge-approved">v1.0</span></td>
+        <td>8</td>
+        <td>3</td>
+        <td><a href="spec-card.html">Спека</a> · <a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td><strong>RP168</strong></td>
+        <td>Рідкий дезодорант</td>
+        <td>Тіло</td>
+        <td><span class="badge badge-pending">потребує верифікації</span></td>
+        <td>3</td>
+        <td>1</td>
+        <td><a href="spec-card.html">Спека</a> · <a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td><strong>L301</strong></td>
+        <td>Тонік Rich, з есцином та трояндою</td>
+        <td>Обличчя</td>
+        <td><span class="badge badge-approved">v1.0</span></td>
+        <td>4</td>
+        <td>2</td>
+        <td><a href="spec-card.html">Спека</a> · <a href="#">Редагувати</a></td>
+      </tr>
+    </tbody>
+  </table>
+</main>
+
+</body>
+</html>

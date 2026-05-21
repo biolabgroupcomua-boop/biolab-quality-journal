@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Паспорти якості — БІОЛАБ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details open>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="bulk-list.html">Журнал варок</a></li>
+        <li><a href="finished-list.html">Журнал ГП</a></li>
+        <li><a href="passport.html" class="active">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html">Продукти (RP)</a></li>
+        <li><a href="variants.html">Товарні позиції</a></li>
+        <li><a href="customers.html">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <h1>Паспорти якості</h1>
+    <span class="subtitle">99 згенерованих · 5 очікують</span>
+  </header>
+
+  <form class="toolbar">
+    <div>
+      <label>ТМ</label>
+      <select><option>Всі</option><option>Crumb</option><option>Plis Me</option><option>Pinky</option></select>
+    </div>
+    <div>
+      <label>Від</label>
+      <input type="date" value="2026-05-01">
+    </div>
+    <div>
+      <label>До</label>
+      <input type="date" value="2026-05-21">
+    </div>
+    <div>
+      <label>Статус</label>
+      <select>
+        <option>Всі</option>
+        <option>Очікують генерації</option>
+        <option>Створені</option>
+        <option>Відкликані</option>
+      </select>
+    </div>
+    <div class="spacer"></div>
+    <div><button class="secondary outline">Фільтр</button></div>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>№ паспорта</th>
+        <th>Згенеровано</th>
+        <th>№ партії ГП</th>
+        <th>ТМ</th>
+        <th>Продукт</th>
+        <th>Об'єм</th>
+        <th>Статус</th>
+        <th>Дії</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="month-row"><td colspan="8"><strong>Травень 2026</strong> · 5 паспортів · 2 очікують</td></tr>
+      <tr>
+        <td>ПУ-21/05/26(01)</td>
+        <td>21.05.2026 14:30</td>
+        <td><a href="finished-detail.html">21/05/26(01)</a></td>
+        <td>Crumb</td>
+        <td>Гель Chery and Santal · 200 мл</td>
+        <td>48.0 кг</td>
+        <td><span class="badge badge-approved">створено</span></td>
+        <td>
+          <a href="passport-view.html" role="button" class="outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Відкрити</a>
+        </td>
+      </tr>
+      <tr>
+        <td>—</td>
+        <td>—</td>
+        <td><a href="finished-detail.html">21/05/26(02)</a></td>
+        <td>Pinky</td>
+        <td>Гель Floral wood · 250 мл</td>
+        <td>2.0 кг</td>
+        <td><span class="badge badge-draft">очікує</span></td>
+        <td>
+          <a href="#" role="button" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
+        </td>
+      </tr>
+      <tr>
+        <td>ПУ-20/05/26(02)</td>
+        <td>20.05.2026 16:15</td>
+        <td><a href="finished-detail.html">20/05/26(02)</a></td>
+        <td>Crumb</td>
+        <td>Шампунь Avocado + Collagen · 250 мл</td>
+        <td>15.0 кг</td>
+        <td><span class="badge badge-approved">створено</span></td>
+        <td>
+          <a href="passport-view.html" role="button" class="outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Відкрити</a>
+        </td>
+      </tr>
+      <tr>
+        <td>—</td>
+        <td>—</td>
+        <td><a href="finished-detail.html">19/05/26(01)</a></td>
+        <td>Pinky</td>
+        <td>Тонік Rich · 150 мл</td>
+        <td>8.0 кг</td>
+        <td><span class="badge badge-draft">очікує</span></td>
+        <td>
+          <a href="#" role="button" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
+        </td>
+      </tr>
+      <tr>
+        <td>ПУ-18/05/26(03)</td>
+        <td>19.05.2026 09:20</td>
+        <td><a href="finished-detail.html">18/05/26(03)</a></td>
+        <td>ANKIE002</td>
+        <td>Маска для волосся кераміди · 200 мл</td>
+        <td>8.95 кг</td>
+        <td><span class="badge badge-approved">створено</span></td>
+        <td>
+          <a href="passport-view.html" role="button" class="outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Відкрити</a>
+        </td>
+      </tr>
+
+      <tr class="month-row"><td colspan="8"><strong>Квітень 2026</strong> · 28 паспортів · 0 очікують</td></tr>
+      <tr>
+        <td>ПУ-28/04/26(01)</td>
+        <td>28.04.2026 11:00</td>
+        <td><a href="finished-detail.html">28/04/26(01)</a></td>
+        <td>Crumb</td>
+        <td>Гель Chery and Santal · 200 мл</td>
+        <td>44.0 кг</td>
+        <td><span class="badge badge-approved">створено</span></td>
+        <td>
+          <a href="passport-view.html" role="button" class="outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Відкрити</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>
+
+</body>
+</html>

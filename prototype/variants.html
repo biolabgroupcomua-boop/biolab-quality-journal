@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Товарні позиції — БІОЛАБ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="bulk-list.html">Журнал варок</a></li>
+        <li><a href="finished-list.html">Журнал ГП</a></li>
+        <li><a href="passport.html">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details open>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html">Продукти (RP)</a></li>
+        <li><a href="variants.html" class="active">Товарні позиції</a></li>
+        <li><a href="customers.html">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <h1>Товарні позиції</h1>
+    <a href="#" role="button">+ Додати позицію</a>
+  </header>
+
+  <p style="color: var(--pico-muted-color);">
+    Конкретні етикетки товарів = <strong>ТМ × Продукт (RP) × назва-у-клієнта</strong>.
+    Один RP може мати багато позицій під різні ТМ. Тара тут не зберігається —
+    вибирається у формі фасування.
+  </p>
+
+  <form class="toolbar">
+    <div>
+      <label>ТМ</label>
+      <select>
+        <option>Всі</option>
+        <option>Crumb</option>
+        <option>Pinky</option>
+        <option>Plis Me</option>
+        <option>ANKIE002</option>
+      </select>
+    </div>
+    <div>
+      <label>RP</label>
+      <select>
+        <option>Всі</option>
+        <option>RP032</option>
+        <option>RP001</option>
+        <option>RP064</option>
+      </select>
+    </div>
+    <div>
+      <label>Пошук</label>
+      <input type="search" placeholder="Назва етикетки...">
+    </div>
+    <div class="spacer"></div>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ТМ</th>
+        <th>Назва на етикетці</th>
+        <th>RP</th>
+        <th>Внутрішня назва RP</th>
+        <th>Партій ГП</th>
+        <th>Останнє фасування</th>
+        <th>Дії</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Crumb</td>
+        <td><strong>Гель для душу Chery and Santal</strong></td>
+        <td>RP032</td>
+        <td>Гель для душу</td>
+        <td>23</td>
+        <td>21.05.2026</td>
+        <td><a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td>Pinky</td>
+        <td><strong>Гель Floral wood</strong></td>
+        <td>RP032</td>
+        <td>Гель для душу</td>
+        <td>8</td>
+        <td>21.05.2026</td>
+        <td><a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td>ANKIE002</td>
+        <td><strong>Shower gel Bright</strong></td>
+        <td>RP032</td>
+        <td>Гель для душу</td>
+        <td>5</td>
+        <td>10.04.2026</td>
+        <td><a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td>Crumb</td>
+        <td><strong>Шампунь Avocado + Collagen</strong></td>
+        <td>RP014</td>
+        <td>Шампунь Avocado + Collagen</td>
+        <td>12</td>
+        <td>20.05.2026</td>
+        <td><a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td>Plis Me</td>
+        <td><strong>Рідкий дезодорант</strong></td>
+        <td>RP168</td>
+        <td>Рідкий дезодорант</td>
+        <td>6</td>
+        <td>20.05.2026</td>
+        <td><a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td>Pinky</td>
+        <td><strong>Шампунь з пребіотиком</strong></td>
+        <td>RP001</td>
+        <td>Шампунь Anti-Dundruff</td>
+        <td>9</td>
+        <td>18.05.2026</td>
+        <td><a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td>Pinky</td>
+        <td><strong>Тонік Rich</strong></td>
+        <td>L301</td>
+        <td>Тонік Rich, з есцином та трояндою</td>
+        <td>4</td>
+        <td>19.05.2026</td>
+        <td><a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td>ANKIE002</td>
+        <td><strong>Hair mask ceramides</strong></td>
+        <td>RP060</td>
+        <td>Маска для волосся кераміди і шовк</td>
+        <td>3</td>
+        <td>18.05.2026</td>
+        <td><a href="#">Редагувати</a></td>
+      </tr>
+      <tr>
+        <td>Pinky</td>
+        <td><strong>Скраб кокос маршмелоу</strong></td>
+        <td><span style="color: #c98a1d;">— немає RP</span></td>
+        <td>—</td>
+        <td>0</td>
+        <td>—</td>
+        <td><a href="#">Присвоїти RP</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="color: var(--pico-muted-color); font-size: 0.85em; margin-top: 1rem;">
+    Якщо у позиції немає RP — її не можна вибрати у формі ГП. Спершу
+    присвойте RP (через <a href="products.html">Продукти RP</a>) і затвердьте
+    специфікацію.
+  </p>
+</main>
+
+</body>
+</html>

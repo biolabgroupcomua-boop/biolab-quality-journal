@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Журнал варок — БІОЛАБ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details open>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="bulk-list.html" class="active">Журнал варок</a></li>
+        <li><a href="finished-list.html">Журнал ГП</a></li>
+        <li><a href="passport.html">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html">Продукти (RP)</a></li>
+        <li><a href="variants.html">Товарні позиції</a></li>
+        <li><a href="customers.html">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <h1>Журнал варок (bulk)</h1>
+    <a href="bulk-new.html" role="button">+ Нова варка</a>
+  </header>
+
+  <form class="toolbar">
+    <div>
+      <label>Продукт (RP)</label>
+      <select>
+        <option>Всі</option>
+        <option>RP032 — Гель для душу</option>
+        <option>RP064 — Кондиціонер</option>
+        <option>RP002 — Шампунь безсульфатний</option>
+      </select>
+    </div>
+    <div>
+      <label>Від</label>
+      <input type="date" value="2026-05-01">
+    </div>
+    <div>
+      <label>До</label>
+      <input type="date" value="2026-05-21">
+    </div>
+    <div>
+      <label>Висновок</label>
+      <select>
+        <option>Всі</option>
+        <option>OK</option>
+        <option>OUT</option>
+      </select>
+    </div>
+    <div class="spacer"></div>
+    <div>
+      <button type="submit" class="secondary outline">Фільтр</button>
+    </div>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Дата</th>
+        <th>RP</th>
+        <th>Назва</th>
+        <th>№ партії</th>
+        <th>Обсяг, кг</th>
+        <th>pH факт</th>
+        <th>Висновок</th>
+        <th>Виконавець</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="month-row"><td colspan="8"><strong>Травень 2026</strong> · 12 варок · 1 OUT</td></tr>
+      <tr>
+        <td>21.05.2026</td>
+        <td>RP032</td>
+        <td>Гель для душу</td>
+        <td><a href="bulk-detail.html">RP21/05/26(1)</a></td>
+        <td>50.00</td>
+        <td>5.4</td>
+        <td><span class="badge badge-pending" title="Мікробіологія ще ферментується">очікує мікро</span></td>
+        <td>Санмарі А. П.</td>
+      </tr>
+      <tr>
+        <td>21.05.2026</td>
+        <td>RP064</td>
+        <td>Кондиціонер для волосся чорний</td>
+        <td><a href="bulk-detail.html">RP21/05/26(2)</a></td>
+        <td>38.20</td>
+        <td>6.1</td>
+        <td><span class="badge badge-pending" title="Мікробіологія ще ферментується">очікує мікро</span></td>
+        <td>Мовчан О. М.</td>
+      </tr>
+      <tr>
+        <td>20.05.2026</td>
+        <td>RP002</td>
+        <td>Безсульфатний шампунь</td>
+        <td><a href="bulk-detail.html">RP20/05/26(3)</a></td>
+        <td>23.00</td>
+        <td>7.2</td>
+        <td><span class="badge badge-out">OUT</span></td>
+        <td>Санмарі А. П.</td>
+      </tr>
+      <tr>
+        <td>20.05.2026</td>
+        <td>RP014</td>
+        <td>Шампунь Avocado + Collagen</td>
+        <td><a href="bulk-detail.html">RP20/05/26(2)</a></td>
+        <td>15.00</td>
+        <td>5.5</td>
+        <td><span class="badge badge-pending" title="Мікробіологія ще не завершена">очікує мікро</span></td>
+        <td>Мовчан О. М.</td>
+      </tr>
+      <tr>
+        <td>19.05.2026</td>
+        <td>L301</td>
+        <td>Тонік Rich з есцином</td>
+        <td><a href="bulk-detail.html">RP19/05/26(1)</a></td>
+        <td>8.00</td>
+        <td>5.5</td>
+        <td><span class="badge badge-ok">OK</span></td>
+        <td>Санмарі А. П.</td>
+      </tr>
+      <tr>
+        <td>18.05.2026</td>
+        <td>RP001</td>
+        <td>Шампунь Anti-Dundruff</td>
+        <td><a href="bulk-detail.html">RP18/05/26(4)</a></td>
+        <td>20.00</td>
+        <td>5.8</td>
+        <td><span class="badge badge-ok">OK</span></td>
+        <td>Мовчан О. М.</td>
+      </tr>
+      <tr>
+        <td>18.05.2026</td>
+        <td>RP060</td>
+        <td>Маска для волосся кераміди</td>
+        <td><a href="bulk-detail.html">RP18/05/26(3)</a></td>
+        <td>8.95</td>
+        <td>5.8</td>
+        <td><span class="badge badge-ok">OK</span></td>
+        <td>Санмарі А. П.</td>
+      </tr>
+
+      <tr class="month-row"><td colspan="8"><strong>Квітень 2026</strong> · 15 варок · 0 OUT</td></tr>
+      <tr>
+        <td>28.04.2026</td>
+        <td>RP032</td>
+        <td>Гель для душу</td>
+        <td><a href="bulk-detail.html">RP28/04/26(1)</a></td>
+        <td>45.00</td>
+        <td>5.6</td>
+        <td><span class="badge badge-ok">OK</span></td>
+        <td>Мовчан О. М.</td>
+      </tr>
+      <tr>
+        <td>22.04.2026</td>
+        <td>RP168</td>
+        <td>Рідкий дезодорант</td>
+        <td><a href="bulk-detail.html">RP22/04/26(1)</a></td>
+        <td>25.00</td>
+        <td>5.9</td>
+        <td><span class="badge badge-ok">OK</span></td>
+        <td>Санмарі А. П.</td>
+      </tr>
+
+      <tr class="month-row"><td colspan="8"><strong>Березень 2026</strong> · 10 варок · 0 OUT</td></tr>
+      <tr>
+        <td>15.03.2026</td>
+        <td>RP002</td>
+        <td>Безсульфатний шампунь</td>
+        <td><a href="bulk-detail.html">RP15/03/26(1)</a></td>
+        <td>30.00</td>
+        <td>5.4</td>
+        <td><span class="badge badge-ok">OK</span></td>
+        <td>Мовчан О. М.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <nav style="margin-top: 1rem;">
+    <ul>
+      <li><a href="#" class="secondary">← Попередня</a></li>
+      <li>Сторінка 1 з 16</li>
+      <li><a href="#">Наступна →</a></li>
+    </ul>
+  </nav>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,534 @@
+/* === Biolab brand kit === */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Unbounded:wght@600;700;800&display=swap');
+
+:root {
+  --bl-blue: #193B8F;
+  --bl-blue-dark: #122d6e;
+  --bl-blue-soft: rgba(25, 59, 143, 0.08);
+  --bl-paper: #FBFAF7;
+  --bl-white: #FFFFFF;
+  --bl-ink: #0A0A0A;
+  --bl-gray: #D9D9D6;
+  --bl-gray-soft: #f0f0ed;
+  --bl-lime: #DCFF50;
+  --bl-coral: #FF3D2E;
+
+  /* Pico overrides — щоб primary стало брендовим синім */
+  --pico-primary: var(--bl-blue);
+  --pico-primary-hover: var(--bl-blue-dark);
+  --pico-primary-background: var(--bl-blue);
+  --pico-primary-border: var(--bl-blue);
+  --pico-primary-underline: var(--bl-blue);
+  --pico-primary-focus: rgba(25, 59, 143, 0.25);
+  --pico-primary-inverse: var(--bl-white);
+}
+
+body {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  background: var(--bl-paper);
+  color: var(--bl-ink);
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: var(--bl-ink);
+}
+
+main > header.page-header h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--bl-ink);
+}
+
+/* === Layout === */
+
+body {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  margin: 0;
+}
+
+aside.sidebar {
+  background: var(--bl-white);
+  border-right: 1px solid var(--bl-gray);
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+aside.sidebar .brand {
+  margin: 0 0 1.5rem 0.5rem;
+}
+aside.sidebar .brand img {
+  width: 130px;
+  height: auto;
+  display: block;
+}
+aside.sidebar .brand .subtitle {
+  font-size: 0.78em;
+  color: #666;
+  margin-top: 0.35rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* legacy text logo — для зворотної сумісності якщо десь лишилось */
+aside.sidebar .logo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 2rem 0.5rem;
+  line-height: 1.3;
+  color: var(--bl-blue);
+  font-family: 'Unbounded', sans-serif;
+}
+aside.sidebar .logo small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.7em;
+  color: #666;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+aside.sidebar nav details {
+  margin-bottom: 0.75rem;
+}
+
+aside.sidebar nav summary {
+  font-weight: 600;
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.65;
+  cursor: pointer;
+  padding: 0.4rem 0.5rem;
+  list-style: none;
+}
+aside.sidebar nav summary::-webkit-details-marker { display: none; }
+
+aside.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0 0 0;
+}
+
+aside.sidebar nav li a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--pico-color);
+  font-size: 0.95em;
+}
+
+aside.sidebar nav li a:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+aside.sidebar nav li a.active {
+  background: var(--bl-blue);
+  color: var(--bl-white);
+  font-weight: 500;
+}
+
+/* User info — стиль */
+.sidebar .user-info {
+  background: var(--bl-blue-soft);
+  border-left: 3px solid var(--bl-blue);
+}
+.sidebar .user-info .name { color: var(--bl-blue); }
+
+main {
+  padding: 2rem 2.5rem;
+  max-width: none;
+}
+
+main > header.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+main > header.page-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+main > header.page-header .subtitle {
+  color: var(--pico-muted-color);
+  font-size: 0.95em;
+}
+
+/* KPI cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background: var(--bl-white);
+  padding: 1.25rem;
+  border-radius: 6px;
+  border: 1px solid var(--bl-gray);
+}
+
+.kpi-card .label {
+  font-size: 0.72em;
+  color: #666;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.kpi-card .value {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--bl-blue);
+}
+
+.kpi-card.warn { border-left: 4px solid var(--bl-lime); }
+.kpi-card.warn .value { color: #5a7800; }
+
+.kpi-card.error { border-left: 4px solid var(--bl-coral); }
+.kpi-card.error .value { color: var(--bl-coral); }
+
+/* Verdict and status badges */
+.badge {
+  display: inline-block;
+  padding: 0.15em 0.65em;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-ok       { background: #e6f4ea; color: #1b5e20; border: 1px solid #c8e6c9; }
+.badge-out      { background: #ffe9e6; color: var(--bl-coral); border: 1px solid #ffcec7; }
+.badge-pending  { background: #faffe0; color: #5a7800; border: 1px solid var(--bl-lime); }
+.badge-approved { background: var(--bl-blue-soft); color: var(--bl-blue); border: 1px solid rgba(25,59,143,0.25); }
+.badge-draft    { background: var(--bl-gray-soft); color: #555; border: 1px solid var(--bl-gray); }
+.badge-revoked  { background: #e2e3e5; color: #41464b; text-decoration: line-through; }
+
+/* User info at top of sidebar */
+.sidebar .user-info {
+  background: rgba(0,0,0,0.04);
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-size: 0.85em;
+}
+.sidebar .user-info .name { font-weight: 600; }
+.sidebar .user-info .role { color: var(--pico-muted-color); font-size: 0.9em; }
+
+/* Норма-факт grid у формі варки */
+.norm-fact-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.norm-fact-row > label {
+  font-weight: 500;
+  margin: 0;
+}
+
+.norm-fact-row .norm {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.9em;
+  color: var(--pico-muted-color);
+  background: rgba(0,0,0,0.03);
+  padding: 0.4rem 0.7rem;
+  border-radius: 4px;
+}
+
+.norm-fact-row input,
+.norm-fact-row select {
+  margin: 0;
+}
+
+/* Split viscosity field: prefix + input + suffix */
+.viscosity-split {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--pico-form-element-border-color);
+  border-radius: var(--pico-border-radius);
+  background: var(--pico-form-element-background-color);
+  overflow: hidden;
+}
+.viscosity-split .prefix,
+.viscosity-split .suffix {
+  padding: 0 0.6rem;
+  background: rgba(0,0,0,0.04);
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.9em;
+  color: var(--pico-muted-color);
+  white-space: nowrap;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+.viscosity-split input {
+  border: none !important;
+  background: transparent !important;
+  flex: 1;
+  min-width: 80px;
+  margin: 0 !important;
+  padding: 0.5rem 0.6rem !important;
+  text-align: center;
+}
+.viscosity-split input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Висновок панель */
+.verdict-panel {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+.verdict-panel.ok {
+  background: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.verdict-panel.out {
+  background: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+.verdict-panel h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.05rem;
+}
+
+/* Month group row in tables */
+tr.month-row td {
+  background: var(--bl-blue-soft);
+  font-size: 0.85em;
+  color: var(--bl-blue);
+  letter-spacing: 0.04em;
+  padding: 0.5rem 0.75rem !important;
+  border-top: 2px solid var(--bl-blue) !important;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+tr.month-row td strong {
+  color: var(--bl-blue);
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 700;
+  font-size: 1.05em;
+}
+
+/* Clickable KPI cards */
+.kpi-card.clickable {
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.kpi-card.clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+.kpi-card.clickable a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  gap: 0.75rem;
+  align-items: end;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.toolbar > * { margin: 0 !important; }
+.toolbar .spacer { flex: 1; }
+.toolbar label {
+  font-size: 0.85em;
+  color: var(--pico-muted-color);
+  margin-bottom: 0.25rem !important;
+  display: block;
+}
+
+/* Картка специфікації */
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.spec-block h4 {
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bl-blue);
+  margin: 0 0 0.75rem 0;
+  font-weight: 600;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--bl-gray);
+}
+
+.spec-block dl {
+  margin: 0;
+}
+.spec-block dl dt {
+  font-size: 0.85em;
+  color: var(--pico-muted-color);
+  margin-top: 0.5rem;
+}
+.spec-block dl dd {
+  margin: 0;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.95em;
+}
+
+/* Passport preview — стиль за brand kit Biolab */
+/* Brand: #193B8F (BL-blue), Unbounded для заголовка, Montserrat для тексту */
+.passport-preview {
+  background: white;
+  color: #0A0A0A;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 2.5rem 3rem;
+  margin-top: 1rem;
+  font-size: 0.92em;
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  max-width: 800px;
+  line-height: 1.45;
+}
+
+.passport-preview .pp-letterhead {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  border-bottom: 2px solid #193B8F;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+.passport-preview .pp-logo {
+  height: 60px;
+  width: auto;
+  flex-shrink: 0;
+}
+.passport-preview .pp-company-info {
+  font-size: 0.82em;
+  line-height: 1.5;
+  color: #444;
+  text-align: right;
+  flex: 1;
+}
+.passport-preview .pp-company-info strong { color: #193B8F; }
+
+.passport-preview h2 {
+  text-align: center;
+  font-family: 'Unbounded', 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #193B8F;
+  margin: 0 0 0.5rem 0;
+}
+
+.passport-preview .pp-no {
+  text-align: center;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+  font-size: 1.05em;
+}
+
+.passport-preview table {
+  font-size: 0.95em;
+  margin: 0 auto 1rem;
+  border-collapse: collapse;
+  width: 100%;
+}
+.passport-preview table th,
+.passport-preview table td {
+  border: 1px solid #333;
+  padding: 0.4rem 0.6rem;
+  vertical-align: middle;
+}
+
+.passport-preview .pp-meta {
+  width: 100%;
+}
+.passport-preview .pp-meta th {
+  text-align: left;
+  width: 35%;
+  background: #f4f6fb;
+  font-weight: 600;
+  color: #193B8F;
+}
+
+.passport-preview .pp-quality thead th {
+  text-align: center;
+  background: #193B8F;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85em;
+  letter-spacing: 0.02em;
+}
+.passport-preview .pp-quality td {
+  text-align: center;
+}
+.passport-preview .pp-quality td:nth-child(2),
+.passport-preview .pp-quality td:nth-child(4),
+.passport-preview .pp-quality td:nth-child(5) {
+  text-align: left;
+}
+
+.passport-preview .pp-signatures {
+  margin-top: 2rem;
+  border: none;
+}
+.passport-preview .pp-signatures td {
+  border: none;
+  vertical-align: bottom;
+  padding: 0.5rem 0;
+}
+
+.passport-preview .pp-footer {
+  text-align: center;
+  font-size: 0.78em;
+  color: #666;
+  margin-top: 1.5rem;
+  border-top: 1px solid #ddd;
+  padding-top: 0.75rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+@media print {
+  body { display: block; }
+  aside.sidebar { display: none; }
+  main { padding: 0; }
+}

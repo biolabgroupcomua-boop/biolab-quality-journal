@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Типи тари — БІОЛАБ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="bulk-list.html">Журнал варок</a></li>
+        <li><a href="finished-list.html">Журнал ГП</a></li>
+        <li><a href="passport.html">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details open>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html">Продукти (RP)</a></li>
+        <li><a href="variants.html">Товарні позиції</a></li>
+        <li><a href="customers.html">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html" class="active">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <h1>Типи тари</h1>
+    <a href="#" role="button">+ Додати тип</a>
+  </header>
+
+  <p style="color: var(--pico-muted-color);">
+    Невеликий довідник типів тари, які використовуються у фасуванні. У формі
+    "Нова партія ГП" вибирається тип з цього довідника + об'єм у мл або г
+    вводиться окремо.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>№</th>
+        <th>Назва типу</th>
+        <th>Одиниці</th>
+        <th>Активний</th>
+        <th>Дії</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Флакон</td><td>мл</td><td><span class="badge badge-ok">так</span></td><td><a href="#">Редагувати</a></td></tr>
+      <tr><td>2</td><td>Туба</td><td>мл</td><td><span class="badge badge-ok">так</span></td><td><a href="#">Редагувати</a></td></tr>
+      <tr><td>3</td><td>Ролер</td><td>мл</td><td><span class="badge badge-ok">так</span></td><td><a href="#">Редагувати</a></td></tr>
+      <tr><td>4</td><td>Банка</td><td>мл або г</td><td><span class="badge badge-ok">так</span></td><td><a href="#">Редагувати</a></td></tr>
+      <tr><td>5</td><td>Бомбочка для ванни</td><td>г</td><td><span class="badge badge-ok">так</span></td><td><a href="#">Редагувати</a></td></tr>
+      <tr><td>6</td><td>Скраб (паста)</td><td>г</td><td><span class="badge badge-ok">так</span></td><td><a href="#">Редагувати</a></td></tr>
+      <tr><td>7</td><td>Баттер</td><td>г</td><td><span class="badge badge-ok">так</span></td><td><a href="#">Редагувати</a></td></tr>
+      <tr><td>8</td><td>Саше</td><td>мл або г</td><td><span class="badge badge-ok">так</span></td><td><a href="#">Редагувати</a></td></tr>
+    </tbody>
+  </table>
+
+  <p style="color: var(--pico-muted-color); font-size: 0.85em; margin-top: 1rem;">
+    «Одиниці» — підказка для лаборанта які одиниці зазвичай для цього типу.
+    У формі ГП можна перевизначити. Видалити тип не можна якщо він використовується
+    у партіях ГП — лише деактивувати.
+  </p>
+</main>
+
+</body>
+</html>

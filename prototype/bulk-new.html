@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Нова варка — БІОЛАБ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details open>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="bulk-list.html" class="active">Журнал варок</a></li>
+        <li><a href="finished-list.html">Журнал ГП</a></li>
+        <li><a href="passport.html">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html">Продукти (RP)</a></li>
+        <li><a href="variants.html">Товарні позиції</a></li>
+        <li><a href="customers.html">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <div>
+      <p style="margin: 0;"><a href="bulk-list.html" style="font-size: 0.85em;">← Журнал варок</a></p>
+      <h1>Нова варка</h1>
+    </div>
+  </header>
+
+  <form>
+    <section>
+      <h3>Основна інформація</h3>
+      <div class="grid">
+        <label>
+          Продукт (RP)
+          <select id="rp-select" required>
+            <option value="RP032">RP032 — Гель для душу</option>
+            <option value="RP064">RP064 — Кондиціонер для волосся чорний</option>
+            <option value="RP002">RP002 — Безсульфатний шампунь</option>
+            <option value="RP014">RP014 — Шампунь Avocado + Collagen</option>
+          </select>
+        </label>
+        <label>
+          Специфікація (поточна затверджена)
+          <input type="text" id="spec-id" value="SPEC-RP032-v1.0" readonly>
+          <small><a href="spec-card.html">Переглянути специфікацію →</a> <span id="spec-status" class="badge badge-approved">затверджено</span></small>
+        </label>
+      </div>
+      <div class="grid">
+        <label>
+          Дата виготовлення
+          <input type="date" id="mfg-date" value="2026-05-21" required>
+        </label>
+        <label>
+          Порядковий номер за день
+          <input type="number" id="batch-seq" value="4" min="1" max="99" required>
+          <small>Скільки варок цього продукту вже було за день + 1</small>
+        </label>
+        <label>
+          № партії (генерується)
+          <input type="text" id="batch-number" value="RP21/05/26(4)" readonly>
+        </label>
+      </div>
+      <div class="grid">
+        <label>
+          Обсяг варки, кг
+          <input type="number" step="0.01" value="50.00" required>
+        </label>
+        <label></label>
+      </div>
+    </section>
+
+    <section style="margin-top: 2rem;">
+      <h3>Показники якості</h3>
+      <p style="color: var(--pico-muted-color); font-size: 0.9em; margin-top: -0.5rem;">
+        Норми зліва — зі специфікації, не редагуються. Вводимо тільки фактичний результат.
+      </p>
+
+      <div class="norm-fact-row">
+        <label>pH</label>
+        <div class="norm" id="norm-ph">5.0 — 6.0</div>
+        <input type="number" step="0.1" min="0" max="14" value="5.7" placeholder="напр. 5.7">
+      </div>
+
+      <div class="norm-fact-row">
+        <label>В'язкість</label>
+        <div class="norm" id="norm-viscosity">S3V12 Cp=5000-8000 mPas</div>
+        <div class="viscosity-split">
+          <span class="prefix" id="visc-prefix">S3V12 Cp=</span>
+          <input type="number" step="1" min="0" placeholder="7200">
+          <span class="suffix" id="visc-suffix">mPas</span>
+        </div>
+      </div>
+
+      <div class="norm-fact-row">
+        <label>Густина, г/мл</label>
+        <div class="norm" id="norm-density">0.9 — 1.0</div>
+        <input type="number" step="0.01" min="0" value="0.95" placeholder="напр. 0.95">
+      </div>
+
+      <div class="norm-fact-row">
+        <label>Колоїдна стабільність</label>
+        <div class="norm" id="norm-colloid">стабільний</div>
+        <select><option>стабільний</option><option>нестабільний</option></select>
+      </div>
+
+      <div class="norm-fact-row">
+        <label>Термостабільність</label>
+        <div class="norm" id="norm-thermo">стабільний</div>
+        <select><option>стабільний</option><option>нестабільний</option></select>
+      </div>
+
+      <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1rem;">
+        Мікробіологія
+        <small style="color: var(--pico-muted-color); font-weight: 400;">
+          — результат стає відомий через 3-7 днів після варки
+        </small>
+      </h4>
+
+      <div class="norm-fact-row">
+        <label>Дата постановки</label>
+        <div class="norm">= дата варки</div>
+        <input type="date" value="2026-05-21" readonly>
+      </div>
+
+      <div class="norm-fact-row">
+        <label>Дата завершення</label>
+        <div class="norm" style="color: #856404;">залишити порожнім, заповнити пізніше</div>
+        <input type="date" id="micro-completed-date" placeholder="ще не завершено">
+      </div>
+
+      <div class="norm-fact-row">
+        <label>Мікро загальна</label>
+        <div class="norm" id="norm-micro-total">не виявлено</div>
+        <select><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
+      </div>
+
+      <div class="norm-fact-row">
+        <label>Дріжджі та плісняви</label>
+        <div class="norm" id="norm-micro-yeast">не виявлено</div>
+        <select><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
+      </div>
+
+      <div class="norm-fact-row">
+        <label>Органолептика</label>
+        <div class="norm" id="norm-organoleptic">відповідає затвердженому зразку</div>
+        <input type="text" value="відповідає">
+      </div>
+    </section>
+
+    <section style="margin-top: 1.5rem;">
+      <div class="grid">
+        <label>
+          Виконавець (з довідника)
+          <select required>
+            <option>Санмарі А. П.</option>
+            <option>Мовчан О. М.</option>
+            <option>Карабут В. О.</option>
+            <option>Номеровська О. С.</option>
+          </select>
+        </label>
+        <label>
+          Арбітражні зразки
+          <select><option>взято</option><option>не взято</option></select>
+        </label>
+      </div>
+      <label>
+        Примітка
+        <textarea rows="2" placeholder="Опційно"></textarea>
+      </label>
+    </section>
+
+    <div class="verdict-panel ok" style="background: #d1ecf1; border-color: #b8daff; color: #0c5460;">
+      <h3>Поточний висновок: ОЧІКУЄ МІКРО</h3>
+      <p style="margin: 0;">
+        Органолептика і фіз-хім готові, мікробіологія ще не завершена.
+        Поки дата мікро не заповнена → висновок не OK. Партію ГП можна
+        створити, але паспорт згенерується тільки після завершення мікро.
+      </p>
+    </div>
+
+    <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+      <button type="submit">Зберегти варку</button>
+      <a href="bulk-list.html" role="button" class="secondary outline">Скасувати</a>
+    </div>
+  </form>
+</main>
+
+<script>
+  // Демо: при зміні RP підтягуємо норми зі специфікації.
+  // У реальному застосунку це робитиме HTMX через GET /specs/{rp}/active
+  const SPECS = {
+    "RP032": {
+      spec_id: "SPEC-RP032-v1.0",
+      status: "затверджено",
+      status_class: "badge-approved",
+      ph: "5.0 — 6.0",
+      viscosity: "S3V12 Cp=5000-8000 mPas",
+      density: "0.9 — 1.0",
+      colloid: "стабільний",
+      thermo: "стабільний",
+      micro_total: "не виявлено",
+      micro_yeast: "не виявлено",
+      organoleptic: "відповідає затвердженому зразку",
+    },
+    "RP064": {
+      spec_id: "SPEC-RP064-v1.0",
+      status: "затверджено",
+      status_class: "badge-approved",
+      ph: "5.0 — 6.0",
+      viscosity: "S3V12 Cp=3000-6000 mPas",
+      density: "0.95 — 1.05",
+      colloid: "стабільний",
+      thermo: "стабільний",
+      micro_total: "не виявлено",
+      micro_yeast: "не виявлено",
+      organoleptic: "відповідає затвердженому зразку",
+    },
+    "RP002": {
+      spec_id: "SPEC-RP002-v1.0",
+      status: "затверджено",
+      status_class: "badge-approved",
+      ph: "5.0 — 6.0",
+      viscosity: "S3V12 Cp=5000-8000 mPas",
+      density: "0.9 — 1.0",
+      colloid: "стабільний",
+      thermo: "стабільний",
+      micro_total: "не виявлено",
+      micro_yeast: "не виявлено",
+      organoleptic: "від світло-бежевого до жовтого",
+    },
+    "RP014": {
+      spec_id: "SPEC-RP014-v0.9",
+      status: "потребує верифікації",
+      status_class: "badge-draft",
+      ph: "—",
+      viscosity: "S3V12 Cp=4000-7000 mPas",
+      density: "0.95 — 1.0",
+      colloid: "стабільний",
+      thermo: "стабільний",
+      micro_total: "не виявлено",
+      micro_yeast: "не виявлено",
+      organoleptic: "відповідає зразку",
+    },
+  };
+
+  function applySpec(rp) {
+    const s = SPECS[rp];
+    if (!s) return;
+    document.getElementById("spec-id").value = s.spec_id;
+    const statusEl = document.getElementById("spec-status");
+    statusEl.textContent = s.status;
+    statusEl.className = "badge " + s.status_class;
+    document.getElementById("norm-ph").textContent = s.ph;
+    document.getElementById("norm-viscosity").textContent = s.viscosity;
+    document.getElementById("norm-density").textContent = s.density;
+    document.getElementById("norm-colloid").textContent = s.colloid;
+    document.getElementById("norm-thermo").textContent = s.thermo;
+    document.getElementById("norm-micro-total").textContent = s.micro_total;
+    document.getElementById("norm-micro-yeast").textContent = s.micro_yeast;
+    document.getElementById("norm-organoleptic").textContent = s.organoleptic;
+  }
+
+  document.getElementById("rp-select").addEventListener("change", (e) => {
+    applySpec(e.target.value);
+  });
+
+  // Авто-генерація № партії з дати + порядкового номера
+  function generateBatchNumber() {
+    const dateStr = document.getElementById("mfg-date").value;  // "2026-05-21"
+    const seq = document.getElementById("batch-seq").value || "1";
+    if (!dateStr) return;
+    const [yyyy, mm, dd] = dateStr.split("-");
+    const yy = yyyy.slice(-2);
+    document.getElementById("batch-number").value = `RP${dd}/${mm}/${yy}(${seq})`;
+  }
+  document.getElementById("mfg-date").addEventListener("change", generateBatchNumber);
+  document.getElementById("batch-seq").addEventListener("input", generateBatchNumber);
+
+  // Розпарсити "S3V12 Cp=5000-8000 mPas" → префікс "S3V12 Cp=" і суфікс "mPas"
+  function updateViscositySplit(viscosityNorm) {
+    const m = viscosityNorm.match(/^(.*?)([\d\-\s.]+)(.*)$/);
+    if (m) {
+      document.getElementById("visc-prefix").textContent = m[1].trim() + " ";
+      document.getElementById("visc-suffix").textContent = " " + m[3].trim();
+    }
+  }
+  // Виклик при завантаженні + при зміні RP
+  updateViscositySplit(document.getElementById("norm-viscosity").textContent);
+  document.getElementById("rp-select").addEventListener("change", (e) => {
+    const s = SPECS[e.target.value];
+    if (s) updateViscositySplit(s.viscosity);
+  });
+</script>
+
+</body>
+</html>

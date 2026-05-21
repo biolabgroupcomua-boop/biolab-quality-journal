@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard — БІОЛАБ Журнал якості</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details open>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html" class="active">Dashboard</a></li>
+        <li><a href="bulk-list.html">Журнал варок</a></li>
+        <li><a href="finished-list.html">Журнал ГП</a></li>
+        <li><a href="passport.html">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details open>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html">Продукти (RP)</a></li>
+        <li><a href="variants.html">Товарні позиції</a></li>
+        <li><a href="customers.html">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <h1>Dashboard</h1>
+    <span class="subtitle">Сьогодні: 21 травня 2026</span>
+  </header>
+
+  <section class="kpi-grid">
+    <article class="kpi-card clickable">
+      <a href="bulk-list.html">
+        <div class="label">Варок цього тижня</div>
+        <p class="value">12</p>
+      </a>
+    </article>
+    <article class="kpi-card warn clickable">
+      <a href="bulk-list.html">
+        <div class="label">Відхилення (OUT)</div>
+        <p class="value">1</p>
+      </a>
+    </article>
+    <article class="kpi-card clickable">
+      <a href="finished-list.html">
+        <div class="label">Очікують паспорта</div>
+        <p class="value">5</p>
+      </a>
+    </article>
+    <article class="kpi-card clickable">
+      <a href="passport.html">
+        <div class="label">Згенеровано сьогодні</div>
+        <p class="value">3</p>
+      </a>
+    </article>
+  </section>
+
+  <section>
+    <h3>Останні варки</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Дата</th>
+          <th>RP</th>
+          <th>№ партії</th>
+          <th>Обсяг, кг</th>
+          <th>pH</th>
+          <th>Висновок</th>
+          <th>Виконавець</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>21.05.2026</td>
+          <td>RP032</td>
+          <td><a href="bulk-detail.html">RP21/05/26(1)</a></td>
+          <td>50.00</td>
+          <td>5.4</td>
+          <td><span class="badge badge-ok">OK</span></td>
+          <td>Санмарі А. П.</td>
+        </tr>
+        <tr>
+          <td>21.05.2026</td>
+          <td>RP064</td>
+          <td><a href="bulk-detail.html">RP21/05/26(2)</a></td>
+          <td>38.20</td>
+          <td>6.1</td>
+          <td><span class="badge badge-ok">OK</span></td>
+          <td>Мовчан О. М.</td>
+        </tr>
+        <tr>
+          <td>20.05.2026</td>
+          <td>RP002</td>
+          <td><a href="bulk-detail.html">RP20/05/26(3)</a></td>
+          <td>23.00</td>
+          <td>7.2</td>
+          <td><span class="badge badge-out">OUT</span></td>
+          <td>Санмарі А. П.</td>
+        </tr>
+        <tr>
+          <td>20.05.2026</td>
+          <td>RP014</td>
+          <td><a href="bulk-detail.html">RP20/05/26(2)</a></td>
+          <td>15.00</td>
+          <td>5.5</td>
+          <td><span class="badge badge-ok">OK</span></td>
+          <td>Мовчан О. М.</td>
+        </tr>
+        <tr>
+          <td>19.05.2026</td>
+          <td>L301</td>
+          <td><a href="bulk-detail.html">RP19/05/26(1)</a></td>
+          <td>8.00</td>
+          <td>5.5</td>
+          <td><span class="badge badge-ok">OK</span></td>
+          <td>Санмарі А. П.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><a href="bulk-list.html">Усі варки →</a></p>
+  </section>
+
+  <section style="margin-top: 2rem;">
+    <a href="bulk-new.html" role="button">+ Нова варка</a>
+    <a href="#" role="button" class="secondary">+ Нова партія ГП</a>
+  </section>
+</main>
+
+</body>
+</html>

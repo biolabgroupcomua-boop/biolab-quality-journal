@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Варка RP21/05/26(1) — БІОЛАБ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <div class="user-info">
+    <div class="name">Olena Nomerovska</div>
+    <div class="role">Адмін · повний доступ</div>
+  </div>
+  <nav>
+    <details open>
+      <summary>Щоденне</summary>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="bulk-list.html" class="active">Журнал варок</a></li>
+        <li><a href="finished-list.html">Журнал ГП</a></li>
+        <li><a href="passport.html">Паспорти якості</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Довідники</summary>
+      <ul>
+        <li><a href="spec-card.html">Специфікації</a></li>
+        <li><a href="products.html">Продукти (RP)</a></li>
+        <li><a href="variants.html">Товарні позиції</a></li>
+        <li><a href="customers.html">ТМ-замовники</a></li>
+        <li><a href="packaging-types.html">Типи тари</a></li>
+      </ul>
+    </details>
+    <details>
+      <summary>Адмін</summary>
+      <ul>
+        <li><a href="#">Імпорт даних</a></li>
+        <li><a href="#">Профіль</a></li>
+      </ul>
+    </details>
+  </nav>
+</aside>
+
+<main>
+  <header class="page-header">
+    <div>
+      <p style="margin: 0;"><a href="bulk-list.html" style="font-size: 0.85em;">← Журнал варок</a></p>
+      <h1>Варка RP21/05/26(1)
+        <span class="badge badge-ok" style="font-size: 0.55em; vertical-align: middle;">OK</span>
+      </h1>
+      <p class="subtitle">RP032 · Гель для душу · 21.05.2026 · 50.00 кг</p>
+    </div>
+    <div>
+      <a href="#" role="button" class="secondary outline">Редагувати</a>
+    </div>
+  </header>
+
+  <article>
+    <div class="spec-grid">
+      <div class="spec-block">
+        <h4>Основна інформація</h4>
+        <dl>
+          <dt>Продукт (RP)</dt>
+          <dd>RP032 — Гель для душу</dd>
+          <dt>Специфікація</dt>
+          <dd><a href="spec-card.html">SPEC-RP032-v1.0</a> <span class="badge badge-approved">затверджено</span></dd>
+          <dt>Дата виготовлення</dt>
+          <dd>21.05.2026</dd>
+          <dt>Обсяг варки</dt>
+          <dd>50.00 кг</dd>
+          <dt>Виконавець</dt>
+          <dd>Санмарі А. П.</dd>
+          <dt>Арбітражні зразки</dt>
+          <dd>взято</dd>
+        </dl>
+      </div>
+
+      <div class="spec-block">
+        <h4>Висновок і дозвіл</h4>
+        <dl>
+          <dt>Висновок</dt>
+          <dd><span class="badge badge-ok">OK</span> — всі показники в нормі</dd>
+          <dt>Партії ГП з цієї варки</dt>
+          <dd>
+            <a href="finished-detail.html">21/05/26(01)</a> — Crumb (Гель Chery and Santal, 200мл) · 240 шт<br>
+            <a href="finished-detail.html">21/05/26(02)</a> — Pinky (Гель Floral wood, 250мл) · 8 шт
+          </dd>
+          <dt>Залишок неprodified</dt>
+          <dd>~0 кг (повністю розфасовано)</dd>
+        </dl>
+      </div>
+    </div>
+  </article>
+
+  <article style="margin-top: 1.5rem;">
+    <h3 style="margin-top: 0;">Показники якості</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Показник</th>
+          <th>Норма (зі специфікації)</th>
+          <th>Факт</th>
+          <th>Перевірка</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>pH</td><td>5.0 — 6.0</td><td><strong>5.4</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
+        <tr><td>В'язкість</td><td>S3V12 Cp=5000-8000 mPas</td><td><strong>S3V12 Cp=7200 mPas</strong></td><td>—</td></tr>
+        <tr><td>Густина, г/мл</td><td>0.9 — 1.0</td><td><strong>0.95</strong></td><td>—</td></tr>
+        <tr><td>Колоїдна стабільність</td><td>стабільний</td><td><strong>стабільний</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
+        <tr><td>Термостабільність</td><td>стабільний</td><td><strong>стабільний</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
+        <tr><td>Мікробіологія загальна</td><td>не виявлено</td><td><strong>не виявлено</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
+        <tr><td>Дріжджі та плісняви</td><td>не виявлено</td><td><strong>не виявлено</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
+        <tr><td>Органолептика</td><td>відповідає затвердженому зразку</td><td><strong>відповідає</strong></td><td>—</td></tr>
+      </tbody>
+    </table>
+    <p style="color: var(--pico-muted-color); font-size: 0.85em;">
+      «—» у колонці перевірки — показник не порівнюємо автоматично (рядкова норма).
+      Висновок OK означає що всі автоматично-перевіряні показники в нормі.
+    </p>
+  </article>
+
+  <article style="margin-top: 1.5rem;">
+    <h3 style="margin-top: 0;">Примітка</h3>
+    <p style="color: var(--pico-muted-color);">Без приміток.</p>
+  </article>
+</main>
+
+</body>
+</html>
