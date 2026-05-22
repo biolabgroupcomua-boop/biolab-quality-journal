@@ -57,7 +57,7 @@
       <p class="subtitle" id="page-subtitle">RP032 · Гель для душу · 21.05.2026 · 50.00 кг</p>
     </div>
     <div>
-      <a href="#" role="button" class="secondary outline">Редагувати</a>
+      <button id="edit-btn" type="button" class="secondary outline">Редагувати</button>
     </div>
   </header>
 
@@ -67,17 +67,17 @@
         <h4>Основна інформація</h4>
         <dl>
           <dt>Продукт (RP)</dt>
-          <dd>RP032 — Гель для душу</dd>
+          <dd id="fld-product">RP032 — Гель для душу</dd>
           <dt>Специфікація</dt>
-          <dd><a href="spec-card.html">SPEC-RP032-v1.0</a> <span class="badge badge-approved">затверджено</span></dd>
+          <dd id="fld-spec"><a href="spec-card.html">SPEC-RP032-v1.0</a> <span class="badge badge-approved">затверджено</span></dd>
           <dt>Дата виготовлення</dt>
-          <dd>21.05.2026</dd>
+          <dd id="fld-date">21.05.2026</dd>
           <dt>Обсяг варки</dt>
-          <dd>50.00 кг</dd>
+          <dd id="fld-volume">50.00 кг</dd>
           <dt>Виконавець</dt>
-          <dd>Санмарі А. П.</dd>
-          <dt>Арбітражні зразки</dt>
-          <dd>взято</dd>
+          <dd id="fld-operator">Санмарі А. П.</dd>
+          <dt>№ запису в журналі</dt>
+          <dd id="fld-journal-no">—</dd>
         </dl>
       </div>
 
@@ -85,14 +85,11 @@
         <h4>Висновок і дозвіл</h4>
         <dl>
           <dt>Висновок</dt>
-          <dd><span class="badge badge-ok">OK</span> — всі показники в нормі</dd>
+          <dd id="fld-verdict-text"><span class="badge badge-ok">OK</span> — всі показники в нормі</dd>
           <dt>Партії ГП з цієї варки</dt>
-          <dd>
-            <a href="finished-detail.html?gp=21/05/26(01)">21/05/26(01)</a> — Crumb (Гель Chery and Santal, 200мл) · 240 шт<br>
-            <a href="finished-detail.html?gp=21/05/26(02)">21/05/26(02)</a> — Pinky (Гель Floral wood, 250мл) · 8 шт
-          </dd>
-          <dt>Залишок нерозфасованого bulk</dt>
-          <dd>~0 кг (повністю розфасовано)</dd>
+          <dd id="fld-gp-list">—</dd>
+          <dt>Збережено</dt>
+          <dd id="fld-saved-at">—</dd>
         </dl>
       </div>
     </div>
@@ -109,15 +106,14 @@
           <th>Перевірка</th>
         </tr>
       </thead>
-      <tbody>
-        <tr><td>pH</td><td>5.0 — 6.0</td><td><strong>5.4</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
-        <tr><td>В'язкість</td><td>S3V12 Cp=5000-8000 mPas</td><td><strong>S3V12 Cp=7200 mPas</strong></td><td>—</td></tr>
-        <tr><td>Густина, г/мл</td><td>0.9 — 1.0</td><td><strong>0.95</strong></td><td>—</td></tr>
-        <tr><td>Колоїдна стабільність</td><td>стабільний</td><td><strong>стабільний</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
-        <tr><td>Термостабільність</td><td>стабільний</td><td><strong>стабільний</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
-        <tr><td>Мікробіологія загальна</td><td>не виявлено</td><td><strong>не виявлено</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
-        <tr><td>Дріжджі та плісняви</td><td>не виявлено</td><td><strong>не виявлено</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
-        <tr><td>Органолептика</td><td>відповідає затвердженому зразку</td><td><strong>відповідає</strong></td><td>—</td></tr>
+      <tbody id="qa-tbody">
+        <tr><td>pH</td><td id="qa-norm-ph">5.0 — 6.0</td><td><strong id="qa-fact-ph">5.4</strong></td><td id="qa-check-ph"><span class="badge badge-ok">в нормі</span></td></tr>
+        <tr><td>В'язкість</td><td id="qa-norm-visc">S3V12 Cp=5000-8000 mPas</td><td><strong id="qa-fact-visc">S3V12 Cp=7200 mPas</strong></td><td>—</td></tr>
+        <tr><td>Густина, г/мл</td><td id="qa-norm-dens">0.9 — 1.0</td><td><strong id="qa-fact-dens">0.95</strong></td><td>—</td></tr>
+        <tr><td>Колоїдна стабільність</td><td>стабільний</td><td><strong id="qa-fact-colloid">стабільний</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
+        <tr><td>Термостабільність</td><td>стабільний</td><td><strong id="qa-fact-thermo">стабільний</strong></td><td><span class="badge badge-ok">в нормі</span></td></tr>
+        <tr><td>Мікробіологія загальна</td><td>не виявлено</td><td><strong id="qa-fact-micro-total">не виявлено</strong></td><td id="qa-check-micro-total"><span class="badge badge-ok">в нормі</span></td></tr>
+        <tr><td>Дріжджі та плісняви</td><td>не виявлено</td><td><strong id="qa-fact-micro-yeast">не виявлено</strong></td><td id="qa-check-micro-yeast"><span class="badge badge-ok">в нормі</span></td></tr>
       </tbody>
     </table>
     <p style="color: var(--pico-muted-color); font-size: 0.85em;">
@@ -132,32 +128,46 @@
   const params = new URLSearchParams(window.location.search);
   const batchNum = params.get("batch");
 
-  // Шукаємо у фейк-даних і localStorage
-  const FAKE_BATCHES_BY_NO = {
-    "RP21/05/26(1)": {rp: "RP032", name: "Гель для душу", date: "21.05.2026", volume: "50.00", verdict: "PENDING"},
-    "RP21/05/26(2)": {rp: "RP064", name: "Кондиціонер для волосся чорний", date: "21.05.2026", volume: "38.20", verdict: "PENDING"},
-    "RP20/05/26(3)": {rp: "RP002", name: "Безсульфатний шампунь", date: "20.05.2026", volume: "23.00", verdict: "OUT"},
-    "RP20/05/26(2)": {rp: "RP014", name: "Шампунь Avocado + Collagen", date: "20.05.2026", volume: "15.00", verdict: "PENDING"},
-    "RP19/05/26(1)": {rp: "L301", name: "Тонік Rich з есцином", date: "19.05.2026", volume: "8.00", verdict: "OK"},
-    "RP18/05/26(4)": {rp: "RP001", name: "Шампунь Anti-Dandruff", date: "18.05.2026", volume: "20.00", verdict: "OK"},
-    "RP18/05/26(3)": {rp: "RP060", name: "Маска для волосся кераміди", date: "18.05.2026", volume: "8.95", verdict: "OK"},
-    "RP28/04/26(1)": {rp: "RP032", name: "Гель для душу", date: "28.04.2026", volume: "45.00", verdict: "OK"},
-    "RP22/04/26(1)": {rp: "RP168", name: "Рідкий дезодорант", date: "22.04.2026", volume: "25.00", verdict: "OK"},
-    "RP15/03/26(1)": {rp: "RP002", name: "Безсульфатний шампунь", date: "15.03.2026", volume: "30.00", verdict: "OK"},
+  // Специфікації для відомих RP-кодів (синхронно з bulk-new.html)
+  const SPEC_BY_RP = {
+    "RP032": {spec_id: "SPEC-RP032-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "S3V12 Cp=5000-8000 mPas", dens: "0.9 — 1.0"},
+    "RP064": {spec_id: "SPEC-RP064-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "S3V12 Cp=3000-6000 mPas", dens: "0.95 — 1.05"},
+    "RP002": {spec_id: "SPEC-RP002-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "S3V12 Cp=5000-8000 mPas", dens: "0.9 — 1.0"},
+    "RP014": {spec_id: "SPEC-RP014-v0.9", status: "потребує верифікації", status_class: "badge-draft", ph: "5.0 — 6.0", visc: "S3V12 Cp=4000-7000 mPas", dens: "0.95 — 1.0"},
+    "RP001": {spec_id: "SPEC-RP001-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 8.5", visc: "S3V12 Cp=3000-6000 mPas", dens: "1.0 — 1.05"},
+    "RP060": {spec_id: "SPEC-RP060-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "S3V12 Cp=5000-9000 mPas", dens: "0.95 — 1.0"},
+    "RP168": {spec_id: "SPEC-RP168-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 7.0", visc: "—", dens: "0.95 — 1.0"},
+    "L301": {spec_id: "SPEC-L301-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "—", dens: "0.95 — 1.0"},
   };
 
-  function getVerdictBadgeHtml(v) {
-    if (v === "PENDING") return '<span class="badge badge-pending" style="font-size: 0.55em; vertical-align: middle;">очікує мікро</span>';
-    if (v === "OUT") return '<span class="badge badge-out" style="font-size: 0.55em; vertical-align: middle;">OUT</span>';
-    return '<span class="badge badge-ok" style="font-size: 0.55em; vertical-align: middle;">OK</span>';
+  const FAKE_BATCHES_BY_NO = {
+    "RP21/05/26(1)": {rp: "RP032", name: "Гель для душу", date: "21.05.2026", volume: "50.00", verdict: "PENDING", operator: "Санмарі А. П.", ph_fact: "5.4", gp: [{no: "21/05/26(01)", tm: "Crumb", label: "Гель Chery and Santal", vol: "200мл", qty: "240"}, {no: "21/05/26(02)", tm: "Pinky", label: "Гель Floral wood", vol: "250мл", qty: "8"}]},
+    "RP21/05/26(2)": {rp: "RP064", name: "Кондиціонер для волосся чорний", date: "21.05.2026", volume: "38.20", verdict: "PENDING", operator: "Мовчан О. М.", ph_fact: "6.1"},
+    "RP20/05/26(3)": {rp: "RP002", name: "Безсульфатний шампунь", date: "20.05.2026", volume: "23.00", verdict: "OUT", operator: "Санмарі А. П.", ph_fact: "7.2"},
+    "RP20/05/26(2)": {rp: "RP014", name: "Шампунь Avocado + Collagen", date: "20.05.2026", volume: "15.00", verdict: "PENDING", operator: "Мовчан О. М.", ph_fact: "5.5"},
+    "RP19/05/26(1)": {rp: "L301", name: "Тонік Rich з есцином", date: "19.05.2026", volume: "8.00", verdict: "OK", operator: "Санмарі А. П.", ph_fact: "5.5"},
+    "RP18/05/26(4)": {rp: "RP001", name: "Шампунь Anti-Dandruff", date: "18.05.2026", volume: "20.00", verdict: "OK", operator: "Мовчан О. М.", ph_fact: "5.8"},
+    "RP18/05/26(3)": {rp: "RP060", name: "Маска для волосся кераміди", date: "18.05.2026", volume: "8.95", verdict: "OK", operator: "Санмарі А. П.", ph_fact: "5.8"},
+    "RP28/04/26(1)": {rp: "RP032", name: "Гель для душу", date: "28.04.2026", volume: "45.00", verdict: "OK", operator: "Мовчан О. М.", ph_fact: "5.6"},
+    "RP22/04/26(1)": {rp: "RP168", name: "Рідкий дезодорант", date: "22.04.2026", volume: "25.00", verdict: "OK", operator: "Санмарі А. П.", ph_fact: "5.9"},
+    "RP15/03/26(1)": {rp: "RP002", name: "Безсульфатний шампунь", date: "15.03.2026", volume: "30.00", verdict: "OK", operator: "Мовчан О. М.", ph_fact: "5.4"},
+  };
+
+  function getVerdictBadgeHtml(v, small) {
+    const sizeStyle = small ? 'style="font-size: 0.55em; vertical-align: middle;"' : '';
+    if (v === "PENDING") return `<span class="badge badge-pending" ${sizeStyle}>очікує мікро</span>`;
+    if (v === "OUT") return `<span class="badge badge-out" ${sizeStyle}>OUT</span>`;
+    return `<span class="badge badge-ok" ${sizeStyle}>OK</span>`;
   }
 
-  // Знайти партію
+  // Знайти партію — спершу фейк, потім localStorage
   let batch = FAKE_BATCHES_BY_NO[batchNum];
+  let fromLocalStorage = false;
   if (!batch) {
     const saved = JSON.parse(localStorage.getItem("bulk_batches") || "[]");
     const s = saved.find(b => b.batch_number === batchNum);
     if (s) {
+      fromLocalStorage = true;
       const [yyyy, mm, dd] = s.date.split("-");
       batch = {
         rp: s.rp_code,
@@ -166,16 +176,121 @@
         volume: s.volume_kg.toFixed(2),
         verdict: s.verdict,
         operator: s.operator,
+        ph_fact: s.ph_fact || "—",
+        journal_record_no: s.journal_record_no,
+        saved_at: s.saved_at,
+        micro_applies: s.micro_applies,
+        micro_completed_date: s.micro_completed_date,
       };
     }
   }
 
   if (batch && batchNum) {
+    // Заголовок
     document.getElementById("page-title").innerHTML =
-      `Варка ${batchNum} ${getVerdictBadgeHtml(batch.verdict)}`;
+      `Варка ${batchNum} ${getVerdictBadgeHtml(batch.verdict, true)}`;
     document.getElementById("page-subtitle").textContent =
       `${batch.rp} · ${batch.name} · ${batch.date} · ${batch.volume} кг`;
+
+    // Основна інформація
+    document.getElementById("fld-product").textContent = `${batch.rp} — ${batch.name}`;
+    const spec = SPEC_BY_RP[batch.rp];
+    if (spec) {
+      document.getElementById("fld-spec").innerHTML =
+        `<a href="spec-card.html">${spec.spec_id}</a> <span class="badge ${spec.status_class}">${spec.status}</span>`;
+    } else {
+      document.getElementById("fld-spec").textContent = "немає у довіднику — додати";
+    }
+    document.getElementById("fld-date").textContent = batch.date;
+    document.getElementById("fld-volume").textContent = `${batch.volume} кг`;
+    document.getElementById("fld-operator").textContent = batch.operator || "—";
+    document.getElementById("fld-journal-no").textContent = batch.journal_record_no || "—";
+
+    // Висновок і дозвіл
+    let verdictText;
+    if (batch.verdict === "OK") verdictText = `${getVerdictBadgeHtml("OK")} — всі показники в нормі, можна випускати`;
+    else if (batch.verdict === "OUT") verdictText = `${getVerdictBadgeHtml("OUT")} — невідповідність специфікації, випуск заборонено`;
+    else verdictText = `${getVerdictBadgeHtml("PENDING")} — очікує завершення мікробіології`;
+    document.getElementById("fld-verdict-text").innerHTML = verdictText;
+
+    // Партії ГП — тільки для фейк-варок з gp[]
+    const gpListEl = document.getElementById("fld-gp-list");
+    if (batch.gp && batch.gp.length) {
+      gpListEl.innerHTML = batch.gp.map(g =>
+        `<a href="finished-detail.html?gp=${g.no}">${g.no}</a> — ${g.tm} (${g.label}, ${g.vol}) · ${g.qty} шт`
+      ).join("<br>");
+    } else if (fromLocalStorage) {
+      gpListEl.textContent = "— ще немає (нова варка)";
+    } else {
+      gpListEl.textContent = "—";
+    }
+
+    // Saved-at (тільки для нових)
+    if (batch.saved_at) {
+      const d = new Date(batch.saved_at);
+      document.getElementById("fld-saved-at").textContent =
+        d.toLocaleString("uk-UA");
+    } else {
+      document.getElementById("fld-saved-at").textContent = "—";
+    }
+
+    // Таблиця показників — оновлюємо норми зі спеки + факти з варки
+    if (spec) {
+      document.getElementById("qa-norm-ph").textContent = spec.ph;
+      document.getElementById("qa-norm-visc").textContent = spec.visc;
+      document.getElementById("qa-norm-dens").textContent = spec.dens;
+    }
+    document.getElementById("qa-fact-ph").textContent = batch.ph_fact || "—";
+    if (fromLocalStorage) {
+      // Інші факти невідомі бо при збереженні беремо тільки pH і operator
+      document.getElementById("qa-fact-visc").textContent = "—";
+      document.getElementById("qa-fact-dens").textContent = "—";
+      document.getElementById("qa-fact-colloid").textContent = "—";
+      document.getElementById("qa-fact-thermo").textContent = "—";
+      if (batch.micro_applies && !batch.micro_completed_date) {
+        document.getElementById("qa-fact-micro-total").textContent = "очікує (не завершено)";
+        document.getElementById("qa-fact-micro-yeast").textContent = "очікує (не завершено)";
+        document.getElementById("qa-check-micro-total").innerHTML = '<span class="badge badge-pending">очікує</span>';
+        document.getElementById("qa-check-micro-yeast").innerHTML = '<span class="badge badge-pending">очікує</span>';
+      } else if (!batch.micro_applies) {
+        document.getElementById("qa-fact-micro-total").textContent = "не застосовується";
+        document.getElementById("qa-fact-micro-yeast").textContent = "не застосовується";
+        document.getElementById("qa-check-micro-total").innerHTML = '<span class="badge badge-draft">N/A</span>';
+        document.getElementById("qa-check-micro-yeast").innerHTML = '<span class="badge badge-draft">N/A</span>';
+      }
+    }
+
+    // pH перевірка
+    if (spec && batch.ph_fact && batch.ph_fact !== "—") {
+      const m = spec.ph.match(/([\d.]+)\s*—\s*([\d.]+)/);
+      const phNum = parseFloat(batch.ph_fact);
+      if (m && !isNaN(phNum)) {
+        const min = parseFloat(m[1]), max = parseFloat(m[2]);
+        if (phNum >= min && phNum <= max) {
+          document.getElementById("qa-check-ph").innerHTML = '<span class="badge badge-ok">в нормі</span>';
+        } else {
+          document.getElementById("qa-check-ph").innerHTML = '<span class="badge badge-out">поза нормою</span>';
+        }
+      }
+    }
+  } else if (batchNum) {
+    document.getElementById("page-title").innerHTML =
+      `Варка ${batchNum} <span class="badge badge-out" style="font-size: 0.55em;">не знайдена</span>`;
+    document.getElementById("page-subtitle").textContent =
+      `Партія з таким номером відсутня у журналі.`;
   }
+
+  // Кнопка "Редагувати" — для прототипа alert
+  document.getElementById("edit-btn").addEventListener("click", () => {
+    alert(`Прототип: тут відкриється форма редагування варки ${batchNum || "..."}.
+
+У реальному застосунку:
+1) Технолог зможе виправити фактичні показники (наприклад, якщо ввів pH помилково)
+2) Лаборант через 3-7 днів додасть результати мікро + дату завершення
+3) При збереженні висновок перерахується автоматично
+4) Усі зміни логуються в audit_log (хто/коли/що)
+5) Для адміна — можна змінити будь-яке поле; для лаборанта — обмеження`);
+  });
 </script>
 
 
