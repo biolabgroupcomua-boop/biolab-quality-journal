@@ -182,6 +182,23 @@
     // KPI: усі OUT варки
     const outCount = all.filter(b => b.verdict === "OUT").length;
     document.getElementById("kpi-out").textContent = outCount;
+
+    // KPI: згенеровано сьогодні (з localStorage["generated_passports"])
+    const generated = JSON.parse(localStorage.getItem("generated_passports") || "[]");
+    const SEED_GENERATED_TODAY = 0; // seed-паспорти датовано назадніми днями
+    const todayCount = SEED_GENERATED_TODAY + generated.filter(g =>
+      g.generated_at && g.generated_at.slice(0, 10) === isoToday
+    ).length;
+    document.getElementById("kpi-today").textContent = todayCount;
+
+    // KPI: очікують паспорта (з finished_batches без запису у generated_passports)
+    const generatedSet = new Set(generated.map(g => g.gp_no));
+    const savedGp = JSON.parse(localStorage.getItem("finished_batches") || "[]");
+    const SEED_PENDING_GP = ["21/05/26(02)", "19/05/26(01)"]; // GP-партії з seed без паспорта
+    const stillPendingFromSeed = SEED_PENDING_GP.filter(no => !generatedSet.has(no)).length;
+    const stillPendingFromSaved = savedGp.filter(gp => !generatedSet.has(gp.batch_number)).length;
+    document.getElementById("kpi-pending").textContent =
+      stillPendingFromSeed + stillPendingFromSaved;
   })();
 </script>
 
