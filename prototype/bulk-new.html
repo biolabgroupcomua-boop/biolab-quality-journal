@@ -118,7 +118,7 @@
       <div class="norm-fact-row">
         <label>pH</label>
         <div class="norm" id="norm-ph">5.0 — 6.0</div>
-        <input type="number" step="0.1" min="0" max="14" value="5.7" placeholder="напр. 5.7">
+        <input type="number" id="ph-fact" step="0.1" min="0" max="14" placeholder="напр. 5.7">
       </div>
 
       <div class="norm-fact-row">
@@ -140,13 +140,13 @@
       <div class="norm-fact-row">
         <label>Колоїдна стабільність</label>
         <div class="norm" id="norm-colloid">стабільний</div>
-        <select><option>стабільний</option><option>нестабільний</option></select>
+        <select id="colloid-fact"><option>стабільний</option><option>нестабільний</option></select>
       </div>
 
       <div class="norm-fact-row">
         <label>Термостабільність</label>
         <div class="norm" id="norm-thermo">стабільний</div>
-        <select><option>стабільний</option><option>нестабільний</option></select>
+        <select id="thermo-fact"><option>стабільний</option><option>нестабільний</option></select>
       </div>
 
       <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1rem;">
@@ -176,13 +176,13 @@
         <div class="norm-fact-row">
           <label>Мікро загальна</label>
           <div class="norm" id="norm-micro-total">не виявлено</div>
-          <select class="micro-field"><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
+          <select id="micro-total-fact" class="micro-field"><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
         </div>
 
         <div class="norm-fact-row">
           <label>Дріжджі та плісняви</label>
           <div class="norm" id="norm-micro-yeast">не виявлено</div>
-          <select class="micro-field"><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
+          <select id="micro-yeast-fact" class="micro-field"><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
         </div>
       </div>
 
@@ -215,12 +215,10 @@
       </label>
     </section>
 
-    <div class="verdict-panel ok" style="background: #d1ecf1; border-color: #b8daff; color: #0c5460;">
-      <h3>Поточний висновок: ОЧІКУЄ МІКРО</h3>
-      <p style="margin: 0;">
-        Органолептика і фіз-хім готові, мікробіологія ще не завершена.
-        Поки дата мікро не заповнена → висновок не OK. Партію ГП можна
-        створити, але паспорт згенерується тільки після завершення мікро.
+    <div class="verdict-panel" id="verdict-panel">
+      <h3 id="verdict-title">Поточний висновок: ОЧІКУЄ МІКРО</h3>
+      <p id="verdict-text" style="margin: 0;">
+        Заповніть факт-показники — висновок перерахується автоматично.
       </p>
     </div>
 
@@ -386,18 +384,91 @@
     generateBatchNumber();
   });
 
-  // Toggle мікро при checkbox
+  // Toggle мікро при checkbox + перерахунок висновку
   document.getElementById("micro-applies").addEventListener("change", function() {
     const enabled = this.checked;
     document.querySelectorAll(".micro-field").forEach(f => {
       f.disabled = !enabled;
       if (!enabled) f.value = "";
     });
-    // Дата постановки повертаємо до сьогодні якщо знову вмикаємо
     if (enabled) {
       document.getElementById("micro-started-date").value = document.getElementById("mfg-date").value;
     }
+    recalculateVerdict();
   });
+
+  // === Динамічна перевірка висновку відповідно до специфікації ===
+  function recalculateVerdict() {
+    const panel = document.getElementById("verdict-panel");
+    const title = document.getElementById("verdict-title");
+    const text = document.getElementById("verdict-text");
+    const microApplies = document.getElementById("micro-applies").checked;
+    const microCompleted = document.getElementById("micro-completed-date").value;
+
+    const rp = document.getElementById("rp-select").value;
+    const spec = SPECS[rp];
+    const failures = [];
+
+    // pH check (числова норма)
+    const phFact = parseFloat(document.getElementById("ph-fact").value);
+    if (spec && !isNaN(phFact) && spec.ph !== "—") {
+      const m = spec.ph.match(/([\d.]+)\s*—\s*([\d.]+)/);
+      if (m) {
+        const phMin = parseFloat(m[1]);
+        const phMax = parseFloat(m[2]);
+        if (phFact < phMin || phFact > phMax) {
+          failures.push(`pH ${phFact} поза нормою ${spec.ph}`);
+        }
+      }
+    }
+
+    // Текстові показники
+    const checks = [
+      {id: "colloid-fact", norm: spec?.colloid, label: "Колоїдна стабільність"},
+      {id: "thermo-fact", norm: spec?.thermo, label: "Термостабільність"},
+    ];
+    if (microApplies && microCompleted) {
+      checks.push({id: "micro-total-fact", norm: spec?.micro_total, label: "Мікро загальна"});
+      checks.push({id: "micro-yeast-fact", norm: spec?.micro_yeast, label: "Дріжджі та плісняви"});
+    }
+    for (const c of checks) {
+      const el = document.getElementById(c.id);
+      if (!el || el.disabled) continue;
+      const fact = (el.value || "").trim().toLowerCase();
+      const norm = (c.norm || "").trim().toLowerCase();
+      if (fact && norm && fact !== norm) {
+        failures.push(`${c.label}: «${el.value}» ≠ норма «${c.norm}»`);
+      }
+    }
+
+    // Визначення стану панелі
+    panel.classList.remove("ok", "out");
+    panel.style = "";
+    if (microApplies && !microCompleted) {
+      panel.classList.add("ok");
+      panel.style.cssText = "background: #d1ecf1; border-color: #b8daff; color: #0c5460;";
+      title.textContent = "Поточний висновок: ОЧІКУЄ МІКРО";
+      text.innerHTML = "Органолептика і фіз-хім введено. Мікробіологія ще не завершена — заповніть дату завершення і результати, висновок перерахується автоматично.";
+    } else if (failures.length > 0) {
+      panel.classList.add("out");
+      title.textContent = "Поточний висновок: OUT (невідповідність специфікації)";
+      text.innerHTML = `Виявлені відхилення:<br>• ${failures.join("<br>• ")}<br><br>Перевірте чи правильно ввели факти. Якщо так — варка не може бути випущена.`;
+    } else {
+      panel.classList.add("ok");
+      title.textContent = "Поточний висновок: OK";
+      text.innerHTML = "Усі перевірені показники в межах норм. Кнопка <strong>Зберегти варку</strong> доступна.";
+    }
+  }
+
+  // Підключити слухачі до всіх факт-полів
+  ["ph-fact", "colloid-fact", "thermo-fact", "micro-total-fact", "micro-yeast-fact", "micro-completed-date"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", recalculateVerdict);
+      el.addEventListener("change", recalculateVerdict);
+    }
+  });
+  document.getElementById("rp-select").addEventListener("change", recalculateVerdict);
 
   // Submit — зберегти в localStorage і перейти у журнал
   document.querySelector("form").addEventListener("submit", function(e) {
@@ -417,15 +488,15 @@
       return;
     }
 
-    const ph = document.querySelector('input[type="number"][step="0.1"]').value;
+    const ph = document.getElementById("ph-fact").value;
 
-    // verdict: якщо мікро застосовується і не завершено → PENDING; інакше OK (для прототипа)
+    // verdict: реально перерахуємо через recalculateVerdict — читаємо з panel
+    recalculateVerdict();
+    const panel = document.getElementById("verdict-panel");
     let verdict;
-    if (microApplies && !microCompleted) {
-      verdict = "PENDING";
-    } else {
-      verdict = "OK";
-    }
+    if (panel.classList.contains("out")) verdict = "OUT";
+    else if (microApplies && !microCompleted) verdict = "PENDING";
+    else verdict = "OK";
 
     const data = {
       id: Date.now(),
@@ -453,6 +524,7 @@
   });
 
   initForm();
+  recalculateVerdict();
 </script>
 
 </body>

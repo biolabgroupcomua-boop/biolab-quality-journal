@@ -51,10 +51,10 @@
   <header class="page-header">
     <div>
       <p style="margin: 0;"><a href="finished-list.html" style="font-size: 0.85em;">← Журнал ГП</a></p>
-      <h1>Партія ГП 21/05/26(01)
+      <h1 id="page-title">Партія ГП 21/05/26(01)
         <span class="badge badge-ok" style="font-size: 0.55em; vertical-align: middle;">дозволено</span>
       </h1>
-      <p class="subtitle">Crumb · Гель для душу Chery and Santal · 200 мл · 240 шт</p>
+      <p class="subtitle" id="page-subtitle">Crumb · Гель для душу Chery and Santal · 200 мл · 240 шт</p>
     </div>
     <div>
       <a href="passport.html" role="button">⬇ Завантажити паспорт</a>
@@ -107,7 +107,7 @@
         <h4>Варка (з якої виготовлено)</h4>
         <dl>
           <dt>№ партії варки</dt>
-          <dd><a href="bulk-detail.html">RP21/05/26(1)</a></dd>
+          <dd><a href="bulk-detail.html?batch=RP21/05/26(1)">RP21/05/26(1)</a></dd>
           <dt>Дата варки</dt>
           <dd>21.05.2026</dd>
           <dt>Продукт</dt>
@@ -158,6 +158,30 @@
     </table>
   </article>
 </main>
+
+<script>
+  // Читаємо ?gp=... з URL і оновлюємо заголовок
+  const params = new URLSearchParams(window.location.search);
+  const gpNum = params.get("gp");
+
+  const FAKE_GP = {
+    "21/05/26(01)": {tm: "Crumb", label: "Гель для душу Chery and Santal", volume: "200 мл", qty: "240"},
+    "21/05/26(02)": {tm: "Pinky", label: "Гель Floral wood", volume: "250 мл", qty: "8"},
+    "20/05/26(01)": {tm: "Plis Me", label: "Рідкий дезодорант", volume: "50 мл", qty: "460"},
+    "20/05/26(02)": {tm: "Crumb", label: "Шампунь Avocado + Collagen", volume: "250 мл", qty: "60"},
+    "19/05/26(01)": {tm: "Pinky", label: "Тонік Rich", volume: "150 мл", qty: "53"},
+    "28/04/26(01)": {tm: "Crumb", label: "Гель для душу Chery and Santal", volume: "200 мл", qty: "220"},
+    "18/05/26(03)": {tm: "ANKIE002", label: "Маска для волосся кераміди", volume: "200 мл", qty: "30"},
+  };
+
+  if (gpNum && FAKE_GP[gpNum]) {
+    const g = FAKE_GP[gpNum];
+    document.getElementById("page-title").innerHTML =
+      `Партія ГП ${gpNum} <span class="badge badge-ok" style="font-size: 0.55em; vertical-align: middle;">дозволено</span>`;
+    document.getElementById("page-subtitle").textContent =
+      `${g.tm} · ${g.label} · ${g.volume} · ${g.qty} шт`;
+  }
+</script>
 
 </body>
 </html>

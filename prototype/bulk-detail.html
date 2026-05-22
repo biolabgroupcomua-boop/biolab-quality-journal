@@ -51,10 +51,10 @@
   <header class="page-header">
     <div>
       <p style="margin: 0;"><a href="bulk-list.html" style="font-size: 0.85em;">← Журнал варок</a></p>
-      <h1>Варка RP21/05/26(1)
-        <span class="badge badge-ok" style="font-size: 0.55em; vertical-align: middle;">OK</span>
+      <h1 id="page-title">Варка RP21/05/26(1)
+        <span id="page-verdict" class="badge badge-ok" style="font-size: 0.55em; vertical-align: middle;">OK</span>
       </h1>
-      <p class="subtitle">RP032 · Гель для душу · 21.05.2026 · 50.00 кг</p>
+      <p class="subtitle" id="page-subtitle">RP032 · Гель для душу · 21.05.2026 · 50.00 кг</p>
     </div>
     <div>
       <a href="#" role="button" class="secondary outline">Редагувати</a>
@@ -88,8 +88,8 @@
           <dd><span class="badge badge-ok">OK</span> — всі показники в нормі</dd>
           <dt>Партії ГП з цієї варки</dt>
           <dd>
-            <a href="finished-detail.html">21/05/26(01)</a> — Crumb (Гель Chery and Santal, 200мл) · 240 шт<br>
-            <a href="finished-detail.html">21/05/26(02)</a> — Pinky (Гель Floral wood, 250мл) · 8 шт
+            <a href="finished-detail.html?gp=21/05/26(01)">21/05/26(01)</a> — Crumb (Гель Chery and Santal, 200мл) · 240 шт<br>
+            <a href="finished-detail.html?gp=21/05/26(02)">21/05/26(02)</a> — Pinky (Гель Floral wood, 250мл) · 8 шт
           </dd>
           <dt>Залишок неprodified</dt>
           <dd>~0 кг (повністю розфасовано)</dd>
@@ -125,6 +125,59 @@
       Висновок OK означає що всі автоматично-перевіряні показники в нормі.
     </p>
   </article>
+
+<script>
+  // Читаємо ?batch=... з URL і оновлюємо заголовок сторінки
+  // Так кожна партія має свою унікальну сторінку.
+  const params = new URLSearchParams(window.location.search);
+  const batchNum = params.get("batch");
+
+  // Шукаємо у фейк-даних і localStorage
+  const FAKE_BATCHES_BY_NO = {
+    "RP21/05/26(1)": {rp: "RP032", name: "Гель для душу", date: "21.05.2026", volume: "50.00", verdict: "PENDING"},
+    "RP21/05/26(2)": {rp: "RP064", name: "Кондиціонер для волосся чорний", date: "21.05.2026", volume: "38.20", verdict: "PENDING"},
+    "RP20/05/26(3)": {rp: "RP002", name: "Безсульфатний шампунь", date: "20.05.2026", volume: "23.00", verdict: "OUT"},
+    "RP20/05/26(2)": {rp: "RP014", name: "Шампунь Avocado + Collagen", date: "20.05.2026", volume: "15.00", verdict: "PENDING"},
+    "RP19/05/26(1)": {rp: "L301", name: "Тонік Rich з есцином", date: "19.05.2026", volume: "8.00", verdict: "OK"},
+    "RP18/05/26(4)": {rp: "RP001", name: "Шампунь Anti-Dundruff", date: "18.05.2026", volume: "20.00", verdict: "OK"},
+    "RP18/05/26(3)": {rp: "RP060", name: "Маска для волосся кераміди", date: "18.05.2026", volume: "8.95", verdict: "OK"},
+    "RP28/04/26(1)": {rp: "RP032", name: "Гель для душу", date: "28.04.2026", volume: "45.00", verdict: "OK"},
+    "RP22/04/26(1)": {rp: "RP168", name: "Рідкий дезодорант", date: "22.04.2026", volume: "25.00", verdict: "OK"},
+    "RP15/03/26(1)": {rp: "RP002", name: "Безсульфатний шампунь", date: "15.03.2026", volume: "30.00", verdict: "OK"},
+  };
+
+  function getVerdictBadgeHtml(v) {
+    if (v === "PENDING") return '<span class="badge badge-pending" style="font-size: 0.55em; vertical-align: middle;">очікує мікро</span>';
+    if (v === "OUT") return '<span class="badge badge-out" style="font-size: 0.55em; vertical-align: middle;">OUT</span>';
+    return '<span class="badge badge-ok" style="font-size: 0.55em; vertical-align: middle;">OK</span>';
+  }
+
+  // Знайти партію
+  let batch = FAKE_BATCHES_BY_NO[batchNum];
+  if (!batch) {
+    const saved = JSON.parse(localStorage.getItem("bulk_batches") || "[]");
+    const s = saved.find(b => b.batch_number === batchNum);
+    if (s) {
+      const [yyyy, mm, dd] = s.date.split("-");
+      batch = {
+        rp: s.rp_code,
+        name: s.product_name || s.rp_code,
+        date: `${dd}.${mm}.${yyyy}`,
+        volume: s.volume_kg.toFixed(2),
+        verdict: s.verdict,
+        operator: s.operator,
+      };
+    }
+  }
+
+  if (batch && batchNum) {
+    document.getElementById("page-title").innerHTML =
+      `Варка ${batchNum} ${getVerdictBadgeHtml(batch.verdict)}`;
+    document.getElementById("page-subtitle").textContent =
+      `${batch.rp} · ${batch.name} · ${batch.date} · ${batch.volume} кг`;
+  }
+</script>
+
 
   <article style="margin-top: 1.5rem;">
     <h3 style="margin-top: 0;">Примітка</h3>
