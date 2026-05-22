@@ -498,11 +498,14 @@
     else if (microApplies && !microCompleted) verdict = "PENDING";
     else verdict = "OK";
 
+    const rpSelect = document.getElementById("rp-select");
+    const rpOptionText = rpSelect.options[rpSelect.selectedIndex].textContent;
+    const productName = rpOptionText.split(" — ")[1] || rp;
     const data = {
       id: Date.now(),
       date: dateStr,
       rp_code: rp,
-      product_name: SPECS[rp]?.spec_id?.replace("SPEC-", "").split("-v")[0] || rp,
+      product_name: productName,
       daily: daily,
       journal_record_no: journalRecordNo,
       batch_number: batchNumber,

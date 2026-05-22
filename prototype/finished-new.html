@@ -413,6 +413,42 @@
     document.getElementById("bulk-date-from").value = isoDate(from);
     document.getElementById("bulk-date-to").value = isoDate(to);
   });
+
+  // Submit-handler — зберегти партію ГП у localStorage і перейти у журнал ГП
+  document.querySelector("form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const bulkBatch = document.getElementById("bulk-select").value;
+    const variantSelect = document.getElementById("variant-select");
+    const variantText = variantSelect.options[variantSelect.selectedIndex].textContent;
+    const [tm, label] = variantText.split(" — ").map(s => s.replace(/"/g, "").trim());
+    const dateStr = document.getElementById("gp-fill-date").value;
+    const daily = parseInt(document.getElementById("gp-daily").value);
+    const recordNo = parseInt(document.getElementById("gp-journal-record-no").value);
+    const batchNumber = document.getElementById("gp-batch-number").value;
+
+    // Перевірка чи bulk OK (не OUT)
+    if (document.getElementById("save-btn").disabled) {
+      alert("Не можна зберегти партію — варка має висновок OUT. Спершу виправте варку.");
+      return;
+    }
+
+    const data = {
+      id: Date.now(),
+      date: dateStr,
+      bulk_batch: bulkBatch,
+      tm: tm,
+      label: label,
+      batch_number: batchNumber,
+      daily: daily,
+      journal_record_no: recordNo,
+      saved_at: new Date().toISOString(),
+    };
+    const saved = JSON.parse(localStorage.getItem("finished_batches") || "[]");
+    saved.push(data);
+    localStorage.setItem("finished_batches", JSON.stringify(saved));
+    alert(`Партію ГП ${batchNumber} збережено!\n\nЇї можна знайти у Журналі ГП.`);
+    window.location.href = "finished-list.html";
+  });
 </script>
 
 </body>
