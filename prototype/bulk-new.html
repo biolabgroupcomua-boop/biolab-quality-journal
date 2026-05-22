@@ -77,32 +77,33 @@
       <div class="grid">
         <label>
           Дата виготовлення
-          <input type="date" id="mfg-date" value="2026-05-22" required>
+          <input type="date" id="mfg-date" required>
+          <small>За замовчуванням — сьогодні</small>
         </label>
         <label>
-          Номер варки за місяць
-          <input type="number" id="batch-monthly" value="23" min="1" required>
-          <small>Скільки варок (усіх продуктів) вже було цього місяця + 1</small>
+          Порядковий номер за день
+          <input type="number" id="batch-daily" min="1" required readonly>
+          <small>Автоматично: скільки варок вже сьогодні + 1</small>
         </label>
-        <label>
-          Номер варки за день
-          <input type="number" id="batch-daily" value="2" min="1" required>
-          <small>Скільки варок вже сьогодні + 1</small>
-        </label>
-      </div>
-      <div class="grid">
         <label>
           № партії (генерується)
-          <input type="text" id="batch-number" value="RP22/23/2" readonly>
-          <small>Формат: RP-{день}/{місячний}/{денний}</small>
+          <input type="text" id="batch-number" readonly>
+          <small>RP-{ДД}/{ММ}/{РР}({денний})</small>
+        </label>
+      </div>
+      <div class="grid">
+        <label>
+          № запису в журналі
+          <input type="text" id="journal-record-no" readonly>
+          <small>Внутрішня наскрізна нумерація журналу варок</small>
         </label>
         <label></label>
         <label></label>
       </div>
       <div class="grid">
         <label>
-          Обсяг варки, кг
-          <input type="number" step="0.01" value="50.00" required>
+          Обсяг варки, кг <span style="color: var(--bl-coral);">*</span>
+          <input type="number" id="volume-kg" step="0.01" min="0.01" required placeholder="вкажіть обсяг у кг">
         </label>
         <label></label>
       </div>
@@ -149,34 +150,40 @@
       </div>
 
       <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1rem;">
-        Мікробіологія
-        <small style="color: var(--pico-muted-color); font-weight: 400;">
-          — результат стає відомий через 3-7 днів після варки
+        <label style="font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; margin: 0;">
+          <input type="checkbox" checked id="micro-applies" style="margin: 0;">
+          Мікробіологія застосовується
+        </label>
+        <small style="color: var(--pico-muted-color); font-weight: 400; display: block; margin-top: 0.25rem;">
+          Зніміть галочку якщо продукт не потребує мікро (наприклад, аромати, скраби з сіллю).
+          Тоді поля мікро будуть неактивні і висновок не залежить від мікро.
         </small>
       </h4>
 
-      <div class="norm-fact-row">
-        <label>Дата постановки</label>
-        <div class="norm">= дата варки</div>
-        <input type="date" value="2026-05-21" readonly>
-      </div>
+      <div class="micro-section">
+        <div class="norm-fact-row">
+          <label>Дата постановки</label>
+          <div class="norm">= дата варки (сьогодні)</div>
+          <input type="date" id="micro-started-date" class="micro-field" readonly>
+        </div>
 
-      <div class="norm-fact-row">
-        <label>Дата завершення</label>
-        <div class="norm" style="color: #856404;">залишити порожнім, заповнити пізніше</div>
-        <input type="date" id="micro-completed-date" placeholder="ще не завершено">
-      </div>
+        <div class="norm-fact-row">
+          <label>Дата завершення</label>
+          <div class="norm" style="color: #856404;">залишити порожнім, заповнити пізніше</div>
+          <input type="date" id="micro-completed-date" class="micro-field" placeholder="ще не завершено">
+        </div>
 
-      <div class="norm-fact-row">
-        <label>Мікро загальна</label>
-        <div class="norm" id="norm-micro-total">не виявлено</div>
-        <select><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
-      </div>
+        <div class="norm-fact-row">
+          <label>Мікро загальна</label>
+          <div class="norm" id="norm-micro-total">не виявлено</div>
+          <select class="micro-field"><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
+        </div>
 
-      <div class="norm-fact-row">
-        <label>Дріжджі та плісняви</label>
-        <div class="norm" id="norm-micro-yeast">не виявлено</div>
-        <select><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
+        <div class="norm-fact-row">
+          <label>Дріжджі та плісняви</label>
+          <div class="norm" id="norm-micro-yeast">не виявлено</div>
+          <select class="micro-field"><option value="">— ще не визначено —</option><option>не виявлено</option><option>виявлено</option></select>
+        </div>
       </div>
 
       <div class="norm-fact-row">
@@ -303,19 +310,16 @@
     applySpec(e.target.value);
   });
 
-  // Авто-генерація № партії: RP{DD}/{місячний}/{денний}
-  // У реальному застосунку місячний і денний підраховуються в БД автоматично,
-  // тут користувач вводить руками (бо нема бекенду).
+  // Авто-генерація № партії: RP{DD}/{MM}/{YY}({денний})
   function generateBatchNumber() {
     const dateStr = document.getElementById("mfg-date").value;
-    const monthly = document.getElementById("batch-monthly").value || "1";
     const daily = document.getElementById("batch-daily").value || "1";
     if (!dateStr) return;
-    const [, , dd] = dateStr.split("-");
-    document.getElementById("batch-number").value = `RP${dd}/${monthly}/${daily}`;
+    const [yyyy, mm, dd] = dateStr.split("-");
+    const yy = yyyy.slice(-2);
+    document.getElementById("batch-number").value = `RP${dd}/${mm}/${yy}(${daily})`;
   }
   document.getElementById("mfg-date").addEventListener("change", generateBatchNumber);
-  document.getElementById("batch-monthly").addEventListener("input", generateBatchNumber);
   document.getElementById("batch-daily").addEventListener("input", generateBatchNumber);
 
   // Розпарсити "S3V12 Cp=5000-8000 mPas" → префікс "S3V12 Cp=" і суфікс "mPas"
@@ -332,6 +336,123 @@
     const s = SPECS[e.target.value];
     if (s) updateViscositySplit(s.viscosity);
   });
+
+  // === Mock-дані існуючих варок (фейк-журнал) + збережені у localStorage ===
+  // У реальному застосунку це підраховує бекенд через SELECT MAX().
+  // Mock-фейк журналу варок (для обчислення next daily seq і журнального №)
+  const FAKE_BATCHES = [
+    {date: "2026-05-21", daily: 2},  // RP21/05/26(2)
+    {date: "2026-05-21", daily: 1},  // RP21/05/26(1)
+    {date: "2026-05-20", daily: 3},  // RP20/05/26(3)
+    {date: "2026-05-20", daily: 2},  // RP20/05/26(2)
+    {date: "2026-05-19", daily: 1},  // RP19/05/26(1)
+    {date: "2026-05-18", daily: 4},  // RP18/05/26(4)
+    {date: "2026-05-18", daily: 3},  // RP18/05/26(3)
+    {date: "2026-04-28", daily: 1},
+    {date: "2026-04-22", daily: 1},
+    {date: "2026-03-15", daily: 1},
+  ];
+
+  function getAllBatches() {
+    const saved = JSON.parse(localStorage.getItem("bulk_batches") || "[]");
+    return [...FAKE_BATCHES, ...saved];
+  }
+
+  // Обчислити next daily за поточну дату + наскрізний № запису в журналі
+  function calculateNext(dateStr) {
+    const all = getAllBatches();
+    const dailyMax = Math.max(0, ...all.filter(b => b.date === dateStr).map(b => b.daily));
+    const recordNo = all.length + 1;
+    return { daily: dailyMax + 1, recordNo: recordNo };
+  }
+
+  // Авто-заповнення дати = сьогодні + auto seq при завантаженні сторінки
+  function initForm() {
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById("mfg-date").value = today;
+    document.getElementById("micro-started-date").value = today;
+
+    const next = calculateNext(today);
+    document.getElementById("batch-daily").value = next.daily;
+    document.getElementById("journal-record-no").value = next.recordNo;
+    generateBatchNumber();
+  }
+
+  // При зміні дати — перерахунок daily + дата мікро = та сама
+  document.getElementById("mfg-date").addEventListener("change", (e) => {
+    const next = calculateNext(e.target.value);
+    document.getElementById("batch-daily").value = next.daily;
+    document.getElementById("micro-started-date").value = e.target.value;
+    generateBatchNumber();
+  });
+
+  // Toggle мікро при checkbox
+  document.getElementById("micro-applies").addEventListener("change", function() {
+    const enabled = this.checked;
+    document.querySelectorAll(".micro-field").forEach(f => {
+      f.disabled = !enabled;
+      if (!enabled) f.value = "";
+    });
+    // Дата постановки повертаємо до сьогодні якщо знову вмикаємо
+    if (enabled) {
+      document.getElementById("micro-started-date").value = document.getElementById("mfg-date").value;
+    }
+  });
+
+  // Submit — зберегти в localStorage і перейти у журнал
+  document.querySelector("form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const dateStr = document.getElementById("mfg-date").value;
+    const daily = parseInt(document.getElementById("batch-daily").value);
+    const journalRecordNo = parseInt(document.getElementById("journal-record-no").value);
+    const rp = document.getElementById("rp-select").value;
+    const volume = parseFloat(document.getElementById("volume-kg").value);
+    const microApplies = document.getElementById("micro-applies").checked;
+    const microCompleted = document.getElementById("micro-completed-date").value;
+    const operator = document.querySelector('select[required]:not(#rp-select)').value;
+    const batchNumber = document.getElementById("batch-number").value;
+
+    if (!volume || volume <= 0) {
+      alert("Обсяг варки обов'язковий і має бути більше нуля.");
+      return;
+    }
+
+    const ph = document.querySelector('input[type="number"][step="0.1"]').value;
+
+    // verdict: якщо мікро застосовується і не завершено → PENDING; інакше OK (для прототипа)
+    let verdict;
+    if (microApplies && !microCompleted) {
+      verdict = "PENDING";
+    } else {
+      verdict = "OK";
+    }
+
+    const data = {
+      id: Date.now(),
+      date: dateStr,
+      rp_code: rp,
+      product_name: SPECS[rp]?.spec_id?.replace("SPEC-", "").split("-v")[0] || rp,
+      daily: daily,
+      journal_record_no: journalRecordNo,
+      batch_number: batchNumber,
+      volume_kg: volume,
+      ph_fact: ph,
+      operator: operator,
+      micro_applies: microApplies,
+      micro_completed_date: microCompleted,
+      verdict: verdict,
+      saved_at: new Date().toISOString(),
+    };
+
+    const saved = JSON.parse(localStorage.getItem("bulk_batches") || "[]");
+    saved.push(data);
+    localStorage.setItem("bulk_batches", JSON.stringify(saved));
+
+    alert(`Варка ${batchNumber} збережена!\n\nВона з'явиться у Журналі варок зверху списку.`);
+    window.location.href = "bulk-list.html";
+  });
+
+  initForm();
 </script>
 
 </body>
