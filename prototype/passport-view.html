@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
@@ -156,14 +157,8 @@
 </main>
 
 <script>
-  const FAKE_GP = {
-    "21/05/26(01)": {tm:"Crumb",label:"Гель для душу Chery and Santal",packaging_size:"200 мл",bulk_date:"21.05.2026",passport_no:"ПУ-21/05/26(01)",passport_generated:"21.05.2026 о 14:30",pao:"12М",shelf_life_years:2,qa:{ph_norm:"5.0 — 6.0",ph_fact:"5.4",visc_norm:"S3V12 Cp=5000-8000 mPas",visc_fact:"S3V12 Cp=7200 mPas",dens_norm:"0.9 — 1.0 г/мл",dens_fact:"0.95 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
-    "20/05/26(02)": {tm:"Crumb",label:"Шампунь Avocado + Collagen",packaging_size:"250 мл",bulk_date:"20.05.2026",passport_no:"ПУ-20/05/26(02)",passport_generated:"20.05.2026 о 16:15",pao:"12М",shelf_life_years:2,qa:{ph_norm:"5.0 — 6.0",ph_fact:"5.5",visc_norm:"S3V12 Cp=5000-8000 mPas",visc_fact:"S3V12 Cp=5200 mPas",dens_norm:"0.9 — 1.0 г/мл",dens_fact:"0.98 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
-    "28/04/26(01)": {tm:"Crumb",label:"Гель для душу Chery and Santal",packaging_size:"200 мл",bulk_date:"28.04.2026",passport_no:"ПУ-28/04/26(01)",passport_generated:"28.04.2026 о 11:00",pao:"12М",shelf_life_years:2,qa:{ph_norm:"5.0 — 6.0",ph_fact:"5.4",visc_norm:"S3V12 Cp=5000-8000 mPas",visc_fact:"S3V12 Cp=7200 mPas",dens_norm:"0.9 — 1.0 г/мл",dens_fact:"0.95 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
-    "18/05/26(03)": {tm:"ANKIE002",label:"Маска для волосся кераміди",packaging_size:"200 мл",bulk_date:"18.05.2026",passport_no:"ПУ-18/05/26(03)",passport_generated:"19.05.2026 о 09:20",pao:"12М",shelf_life_years:2,qa:{ph_norm:"4.0 — 5.0",ph_fact:"4.5",visc_norm:"S3V12 Cp=8000-12000 mPas",visc_fact:"S3V12 Cp=10000 mPas",dens_norm:"0.95 — 1.05 г/мл",dens_fact:"1.02 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
-    "21/05/26(02)": {tm:"Pinky",label:"Гель Floral wood",packaging_size:"250 мл",bulk_date:"21.05.2026",passport_no:null,passport_generated:null,pao:"12М",shelf_life_years:2,qa:{ph_norm:"5.0 — 6.0",ph_fact:"5.4",visc_norm:"S3V12 Cp=5000-8000 mPas",visc_fact:"S3V12 Cp=7200 mPas",dens_norm:"0.9 — 1.0 г/мл",dens_fact:"0.95 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
-    "19/05/26(01)": {tm:"Pinky",label:"Тонік Rich",packaging_size:"150 мл",bulk_date:"19.05.2026",passport_no:null,passport_generated:null,pao:"12М",shelf_life_years:2,qa:{ph_norm:"4.5 — 5.5",ph_fact:"4.9",visc_norm:"—",visc_fact:"—",dens_norm:"0.95 — 1.05 г/мл",dens_fact:"1.00 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
-  };
+  // Seed-паспорти прибрано — будуть завантажені у наступній сесії
+  const FAKE_GP = {};
 
   function todayUkr() {
     const d = new Date();

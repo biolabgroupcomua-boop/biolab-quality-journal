@@ -5,6 +5,7 @@
   <title>Нова варка — БІОЛАБ</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
 </head>
 <body>
 
@@ -62,10 +63,7 @@
         <label>
           Продукт (RP)
           <select id="rp-select" required>
-            <option value="RP032">RP032 — Гель для душу</option>
-            <option value="RP064">RP064 — Кондиціонер для волосся чорний</option>
-            <option value="RP002">RP002 — Безсульфатний шампунь</option>
-            <option value="RP014">RP014 — Шампунь Avocado + Collagen</option>
+            <option value="">— довідник RP ще порожній —</option>
           </select>
         </label>
         <label>
@@ -245,62 +243,8 @@
 </main>
 
 <script>
-  // Демо: при зміні RP підтягуємо норми зі специфікації.
-  // У реальному застосунку це робитиме HTMX через GET /specs/{rp}/active
-  const SPECS = {
-    "RP032": {
-      spec_id: "SPEC-RP032-v1.0",
-      status: "затверджено",
-      status_class: "badge-approved",
-      ph: "5.0 — 6.0",
-      viscosity: "S3V12 Cp=5000-8000 mPas",
-      density: "0.9 — 1.0",
-      colloid: "стабільний",
-      thermo: "стабільний",
-      micro_total: "не виявлено",
-      micro_yeast: "не виявлено",
-      organoleptic: "відповідає затвердженому зразку",
-    },
-    "RP064": {
-      spec_id: "SPEC-RP064-v1.0",
-      status: "затверджено",
-      status_class: "badge-approved",
-      ph: "5.0 — 6.0",
-      viscosity: "S3V12 Cp=3000-6000 mPas",
-      density: "0.95 — 1.05",
-      colloid: "стабільний",
-      thermo: "стабільний",
-      micro_total: "не виявлено",
-      micro_yeast: "не виявлено",
-      organoleptic: "відповідає затвердженому зразку",
-    },
-    "RP002": {
-      spec_id: "SPEC-RP002-v1.0",
-      status: "затверджено",
-      status_class: "badge-approved",
-      ph: "5.0 — 6.0",
-      viscosity: "S3V12 Cp=5000-8000 mPas",
-      density: "0.9 — 1.0",
-      colloid: "стабільний",
-      thermo: "стабільний",
-      micro_total: "не виявлено",
-      micro_yeast: "не виявлено",
-      organoleptic: "від світло-бежевого до жовтого",
-    },
-    "RP014": {
-      spec_id: "SPEC-RP014-v0.9",
-      status: "потребує верифікації",
-      status_class: "badge-draft",
-      ph: "—",
-      viscosity: "S3V12 Cp=4000-7000 mPas",
-      density: "0.95 — 1.0",
-      colloid: "стабільний",
-      thermo: "стабільний",
-      micro_total: "не виявлено",
-      micro_yeast: "не виявлено",
-      organoleptic: "відповідає зразку",
-    },
-  };
+  // Специфікації прибрано — будуть завантажені у наступній сесії з реєстру SPEC-RP-*.
+  const SPECS = {};
 
   function applySpec(rp) {
     const s = SPECS[rp];
@@ -352,19 +296,8 @@
 
   // === Mock-дані існуючих варок (фейк-журнал) + збережені у localStorage ===
   // У реальному застосунку це підраховує бекенд через SELECT MAX().
-  // Mock-фейк журналу варок (для обчислення next daily seq і журнального №)
-  const FAKE_BATCHES = [
-    {date: "2026-05-21", daily: 2},  // RP21/05/26(2)
-    {date: "2026-05-21", daily: 1},  // RP21/05/26(1)
-    {date: "2026-05-20", daily: 3},  // RP20/05/26(3)
-    {date: "2026-05-20", daily: 2},  // RP20/05/26(2)
-    {date: "2026-05-19", daily: 1},  // RP19/05/26(1)
-    {date: "2026-05-18", daily: 4},  // RP18/05/26(4)
-    {date: "2026-05-18", daily: 3},  // RP18/05/26(3)
-    {date: "2026-04-28", daily: 1},
-    {date: "2026-04-22", daily: 1},
-    {date: "2026-03-15", daily: 1},
-  ];
+  // Seed-варки прибрано — daily/record-no рахується тільки з localStorage
+  const FAKE_BATCHES = [];
 
   function getAllBatches() {
     const saved = JSON.parse(localStorage.getItem("bulk_batches") || "[]");

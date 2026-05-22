@@ -5,6 +5,7 @@
   <title>Нова партія ГП — БІОЛАБ</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
 </head>
 <body>
 
@@ -293,18 +294,8 @@
   const outBadge = '<span class="badge badge-out">OUT</span>';
   const pendingBadge = '<span class="badge badge-pending">очікує мікро</span>';
 
-  const BULKS = {
-    "RP21/05/26(1)": {iso_date:"2026-05-21", product:"RP032 — Гель для душу", date:"21.05.2026", volume:"50.00 кг", verdict:"PENDING", verdict_html:pendingBadge, ph:"5.4", viscosity:"S3V12 Cp=7200 mPas", density:"0.95 г/мл"},
-    "RP21/05/26(2)": {iso_date:"2026-05-21", product:"RP064 — Кондиціонер для волосся чорний", date:"21.05.2026", volume:"38.20 кг", verdict:"PENDING", verdict_html:pendingBadge, ph:"6.1", viscosity:"S3V12 Cp=5000 mPas", density:"1.0 г/мл"},
-    "RP20/05/26(3)": {iso_date:"2026-05-20", product:"RP002 — Безсульфатний шампунь", date:"20.05.2026", volume:"23.00 кг", verdict:"OUT", verdict_html:outBadge, ph:"7.2", viscosity:"S3V12 Cp=6500 mPas", density:"0.95 г/мл"},
-    "RP20/05/26(2)": {iso_date:"2026-05-20", product:"RP014 — Шампунь Avocado + Collagen", date:"20.05.2026", volume:"15.00 кг", verdict:"PENDING", verdict_html:pendingBadge, ph:"5.5", viscosity:"S3V12 Cp=5200 mPas", density:"0.98 г/мл"},
-    "RP19/05/26(1)": {iso_date:"2026-05-19", product:"L301 — Тонік Rich з есцином", date:"19.05.2026", volume:"8.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.5", viscosity:"—", density:"1.0 г/мл"},
-    "RP18/05/26(4)": {iso_date:"2026-05-18", product:"RP001 — Шампунь Anti-Dandruff", date:"18.05.2026", volume:"20.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.8", viscosity:"S3V12 Cp=4500 mPas", density:"1.02 г/мл"},
-    "RP18/05/26(3)": {iso_date:"2026-05-18", product:"RP060 — Маска для волосся кераміди", date:"18.05.2026", volume:"8.95 кг", verdict:"OK", verdict_html:okBadge, ph:"5.8", viscosity:"S3V12 Cp=9000 mPas", density:"1.0 г/мл"},
-    "RP28/04/26(1)": {iso_date:"2026-04-28", product:"RP032 — Гель для душу", date:"28.04.2026", volume:"45.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.6", viscosity:"S3V12 Cp=7000 mPas", density:"0.95 г/мл"},
-    "RP22/04/26(1)": {iso_date:"2026-04-22", product:"RP168 — Рідкий дезодорант", date:"22.04.2026", volume:"25.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.9", viscosity:"—", density:"1.0 г/мл"},
-    "RP15/03/26(1)": {iso_date:"2026-03-15", product:"RP002 — Безсульфатний шампунь", date:"15.03.2026", volume:"30.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.4", viscosity:"S3V12 Cp=6000 mPas", density:"0.97 г/мл"},
-  };
+  // Seed-варки прибрано — список будується тільки з localStorage["bulk_batches"]
+  const BULKS = {};
 
   // Додаємо у BULKS варки збережені у localStorage (включно зі створеними сьогодні)
   (function mergeLocalStorageBulks() {
@@ -380,12 +371,7 @@
   // === Облік залишків по варках ===
   // Скільки кг з кожної варки вже розфасовано в seed-даних (FAKE_GP у finished-list/detail).
   // У реальному застосунку це обчислював би бекенд через SUM(volume_kg WHERE bulk_id=X).
-  const SEED_USED_PER_BULK = {
-    "RP21/05/26(1)": 50.0,  // Crumb 21/05/26(01) 48 + Pinky 21/05/26(02) 2
-    "RP20/05/26(2)": 15.0,  // Crumb 20/05/26(02) 15
-    "RP20/05/26(3)": 23.0,  // Plis Me 20/05/26(01) 23 (OUT — все одно вважаємо використаним)
-    "RP19/05/26(1)": 8.0,   // Pinky 19/05/26(01) 8
-  };
+  const SEED_USED_PER_BULK = {};
 
   function parseKg(volumeStr) {
     if (typeof volumeStr === "number") return volumeStr;
@@ -479,14 +465,7 @@
   document.getElementById("gp-daily").addEventListener("input", generateGpBatchNumber);
 
   // Mock-фейк журналу ГП для обчислення next daily + наскрізного № запису
-  const FAKE_GP_BATCHES = [
-    {date: "2026-05-21", daily: 2},
-    {date: "2026-05-21", daily: 1},
-    {date: "2026-05-20", daily: 2},
-    {date: "2026-05-20", daily: 1},
-    {date: "2026-05-19", daily: 1},
-    {date: "2026-04-28", daily: 1},
-  ];
+  const FAKE_GP_BATCHES = [];
   function getAllGpBatches() {
     const saved = JSON.parse(localStorage.getItem("finished_batches") || "[]");
     return [...FAKE_GP_BATCHES, ...saved];
@@ -547,24 +526,8 @@
 
   // === Каскад ТМ → продукт ===
   // Дані: товарні позиції згруповані за ТМ (у реальному застосунку — з довідника ProductVariant)
-  const VARIANTS_BY_TM = {
-    "Crumb": [
-      "Гель для душу Chery and Santal",
-      "Шампунь Avocado + Collagen",
-      "Шампунь Anti-Dandruff",
-    ],
-    "Pinky": [
-      "Гель Floral wood",
-      "Тонік Rich",
-    ],
-    "Plis Me": [
-      "Рідкий дезодорант",
-    ],
-    "ANKIE002": [
-      "Маска для волосся кераміди",
-      "Shower gel Bright",
-    ],
-  };
+  // ТМ → продукти прибрано — буде завантажено з довідника товарних позицій у наступній сесії
+  const VARIANTS_BY_TM = {};
 
   (function initTmSelect() {
     const tmSel = document.getElementById("tm-select");

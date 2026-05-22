@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Вхід — БІОЛАБ Журнал якості</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; background: #f4f6fb; padding: 2rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .login-box {
+      width: 100%; max-width: 420px; background: white;
+      padding: 2.5rem 2.25rem; border-radius: 10px;
+      box-shadow: 0 4px 24px rgba(25, 59, 143, 0.08);
+      border: 1px solid #e8ebf3;
+    }
+    .login-brand {
+      text-align: center; margin-bottom: 1.5rem;
+    }
+    .login-brand img { height: 48px; }
+    .login-brand .subtitle {
+      margin-top: 0.5rem; color: #193B8F; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85em;
+    }
+    .login-box h1 {
+      font-family: 'Unbounded', sans-serif; font-size: 1.3rem;
+      text-align: center; margin: 0 0 1.5rem 0;
+    }
+    .login-box label { font-weight: 500; }
+    .login-box button { width: 100%; margin-top: 0.5rem; }
+    .login-hint {
+      font-size: 0.82em; color: #666; margin-top: 1rem; text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box">
+  <div class="login-brand">
+    <img src="assets/logo_blue.png" alt="BIOLAB">
+    <div class="subtitle">Журнал якості</div>
+  </div>
+  <h1>Вхід у систему</h1>
+
+  <form id="login-form">
+    <label>
+      Користувач
+      <select id="login-user" required>
+        <option value="">— оберіть зі списку —</option>
+        <option value="admin|Olena Nomerovska|Адмін · повний доступ">Olena Nomerovska — Адмін</option>
+        <option value="technologist|Карабут В. О.|Технолог · виробництво і специфікації">Карабут В. О. — Технолог</option>
+        <option value="lab|Санмарі А. П.|Лаборант · вимірювання і мікро">Санмарі А. П. — Лаборант</option>
+        <option value="lab|Мовчан О. М.|Лаборант · вимірювання і мікро">Мовчан О. М. — Лаборант</option>
+        <option value="manager|Номеровська О. С.|Менеджер · паспорти і звіти">Номеровська О. С. — Менеджер</option>
+      </select>
+    </label>
+    <label>
+      Пароль
+      <input type="password" id="login-password" placeholder="Будь-який символ — це прототип">
+    </label>
+    <button type="submit">Увійти</button>
+  </form>
+
+  <p class="login-hint">
+    Прототип — пароль не перевіряється.<br>
+    Реальна автентифікація буде у production-версії.
+  </p>
+</div>
+
+<script>
+  document.getElementById("login-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const sel = document.getElementById("login-user");
+    if (!sel.value) {
+      alert("Будь ласка, оберіть користувача.");
+      return;
+    }
+    const [role, name, roleLabel] = sel.value.split("|");
+    localStorage.setItem("current_user", JSON.stringify({
+      role: role,
+      name: name,
+      role_label: roleLabel,
+      logged_in_at: new Date().toISOString(),
+    }));
+    window.location.href = "index.html";
+  });
+</script>
+
+</body>
+</html>

@@ -5,6 +5,7 @@
   <title>Партія ГП 21/05/26(01) — БІОЛАБ</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
 </head>
 <body>
 
@@ -163,126 +164,9 @@
   const params = new URLSearchParams(window.location.search);
   const gpNum = params.get("gp");
 
-  // Базовий QA-набір для bulk RP21/05/26(1) (Гель RP032)
-  const QA_GEL_OK = {
-    ph_norm: "5.0 — 6.0", ph_fact: "5.4",
-    visc_norm: "S3V12 Cp=5000-8000 mPas", visc_fact: "S3V12 Cp=7200 mPas",
-    dens_norm: "0.9 — 1.0", dens_fact: "0.95",
-    colloid_norm: "стабільний", colloid_fact: "стабільний",
-    thermo_norm: "стабільний", thermo_fact: "стабільний",
-    micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
-    micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
-    organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
-  };
-
-  const FAKE_GP = {
-    "21/05/26(01)": {
-      tm: "Crumb", label: "Гель для душу Chery and Santal",
-      packaging_type: "Флакон", packaging_size: "200 мл",
-      fill_date: "21.05.2026", aroma_date: "20.05.2026",
-      qty: "240", volume_kg: "48.0", fill_operator: "Мовчан О. М.",
-      bulk_no: "RP21/05/26(1)", bulk_date: "21.05.2026",
-      bulk_product: "RP032 — Гель для душу", bulk_verdict: "OK",
-      passport_no: "ПУ-21/05/26(01)", passport_generated: "21.05.2026 о 14:30",
-      qa: QA_GEL_OK,
-    },
-    "21/05/26(02)": {
-      tm: "Pinky", label: "Гель Floral wood",
-      packaging_type: "Флакон", packaging_size: "250 мл",
-      fill_date: "21.05.2026", aroma_date: "20.05.2026",
-      qty: "8", volume_kg: "2.0", fill_operator: "Мовчан О. М.",
-      bulk_no: "RP21/05/26(1)", bulk_date: "21.05.2026",
-      bulk_product: "RP032 — Гель для душу", bulk_verdict: "OK",
-      passport_no: null, // паспорт ще не згенеровано
-      qa: QA_GEL_OK,
-    },
-    "20/05/26(01)": {
-      tm: "Plis Me", label: "Рідкий дезодорант",
-      packaging_type: "Ролер", packaging_size: "50 мл",
-      fill_date: "20.05.2026", aroma_date: "—",
-      qty: "460", volume_kg: "23.0", fill_operator: "Санмарі А. П.",
-      bulk_no: "RP20/05/26(3)", bulk_date: "20.05.2026",
-      bulk_product: "RP002 — Безсульфатний шампунь", bulk_verdict: "OUT",
-      passport_no: null,
-      qa: {
-        ph_norm: "5.0 — 6.0", ph_fact: "7.2",
-        visc_norm: "S3V12 Cp=5000-8000 mPas", visc_fact: "S3V12 Cp=6500 mPas",
-        dens_norm: "0.9 — 1.0", dens_fact: "0.95",
-        colloid_norm: "стабільний", colloid_fact: "стабільний",
-        thermo_norm: "стабільний", thermo_fact: "стабільний",
-        micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
-        micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
-        organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
-      },
-    },
-    "20/05/26(02)": {
-      tm: "Crumb", label: "Шампунь Avocado + Collagen",
-      packaging_type: "Флакон", packaging_size: "250 мл",
-      fill_date: "20.05.2026", aroma_date: "19.05.2026",
-      qty: "60", volume_kg: "15.0", fill_operator: "Карабут В. О.",
-      bulk_no: "RP20/05/26(2)", bulk_date: "20.05.2026",
-      bulk_product: "RP014 — Шампунь Avocado + Collagen", bulk_verdict: "OK",
-      passport_no: "ПУ-20/05/26(02)", passport_generated: "20.05.2026 о 16:15",
-      qa: {
-        ph_norm: "5.0 — 6.0", ph_fact: "5.5",
-        visc_norm: "S3V12 Cp=5000-8000 mPas", visc_fact: "S3V12 Cp=5200 mPas",
-        dens_norm: "0.9 — 1.0", dens_fact: "0.98",
-        colloid_norm: "стабільний", colloid_fact: "стабільний",
-        thermo_norm: "стабільний", thermo_fact: "стабільний",
-        micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
-        micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
-        organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
-      },
-    },
-    "19/05/26(01)": {
-      tm: "Pinky", label: "Тонік Rich",
-      packaging_type: "Флакон", packaging_size: "150 мл",
-      fill_date: "19.05.2026", aroma_date: "—",
-      qty: "53", volume_kg: "8.0", fill_operator: "Мовчан О. М.",
-      bulk_no: "RP19/05/26(1)", bulk_date: "19.05.2026",
-      bulk_product: "L301 — Тонік Rich", bulk_verdict: "OK",
-      passport_no: null,
-      qa: {
-        ph_norm: "4.5 — 5.5", ph_fact: "4.9",
-        visc_norm: "—", visc_fact: "—",
-        dens_norm: "0.95 — 1.05", dens_fact: "1.00",
-        colloid_norm: "стабільний", colloid_fact: "стабільний",
-        thermo_norm: "стабільний", thermo_fact: "стабільний",
-        micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
-        micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
-        organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
-      },
-    },
-    "28/04/26(01)": {
-      tm: "Crumb", label: "Гель для душу Chery and Santal",
-      packaging_type: "Флакон", packaging_size: "200 мл",
-      fill_date: "28.04.2026", aroma_date: "27.04.2026",
-      qty: "220", volume_kg: "44.0", fill_operator: "Мовчан О. М.",
-      bulk_no: "RP27/04/26(1)", bulk_date: "27.04.2026",
-      bulk_product: "RP032 — Гель для душу", bulk_verdict: "OK",
-      passport_no: "ПУ-28/04/26(01)", passport_generated: "28.04.2026 о 11:00",
-      qa: QA_GEL_OK,
-    },
-    "18/05/26(03)": {
-      tm: "ANKIE002", label: "Маска для волосся кераміди",
-      packaging_type: "Банка", packaging_size: "200 мл",
-      fill_date: "18.05.2026", aroma_date: "—",
-      qty: "30", volume_kg: "6.0", fill_operator: "Карабут В. О.",
-      bulk_no: "RP18/05/26(2)", bulk_date: "18.05.2026",
-      bulk_product: "RP140 — Маска для волосся кераміди", bulk_verdict: "OK",
-      passport_no: "ПУ-18/05/26(03)", passport_generated: "19.05.2026 о 09:20",
-      qa: {
-        ph_norm: "4.0 — 5.0", ph_fact: "4.5",
-        visc_norm: "S3V12 Cp=8000-12000 mPas", visc_fact: "S3V12 Cp=10000 mPas",
-        dens_norm: "0.95 — 1.05", dens_fact: "1.02",
-        colloid_norm: "стабільний", colloid_fact: "стабільний",
-        thermo_norm: "стабільний", thermo_fact: "стабільний",
-        micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
-        micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
-        organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
-      },
-    },
-  };
+  // Seed-партії прибрано — будуть завантажені у наступній сесії
+  // Seed-партії прибрано — будуть завантажені у наступній сесії
+  const FAKE_GP = {};
 
   // Fallback на localStorage для нових партій з finished-new.html
   function findInLocalStorage(no) {

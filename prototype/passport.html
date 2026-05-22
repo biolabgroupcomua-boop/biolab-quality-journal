@@ -5,6 +5,7 @@
   <title>Паспорти якості — БІОЛАБ</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
 </head>
 <body>
 
@@ -50,7 +51,7 @@
 <main>
   <header class="page-header">
     <h1>Паспорти якості</h1>
-    <span class="subtitle">99 згенерованих · 5 очікують</span>
+    <span class="subtitle" id="passport-subtitle">— згенерованих</span>
   </header>
 
   <form class="toolbar" id="filter-form">
@@ -93,94 +94,8 @@
         <th>Друкувати</th>
       </tr>
     </thead>
-    <tbody>
-      <tr class="month-row"><td colspan="9"><strong>Травень 2026</strong> · 5 паспортів · 2 очікують</td></tr>
-      <tr>
-        <td>ПУ-21/05/26(01)</td>
-        <td>21.05.2026 14:30</td>
-        <td><a href="finished-detail.html?gp=21/05/26(01)">21/05/26(01)</a></td>
-        <td>Crumb</td>
-        <td>Гель Chery and Santal · 200 мл</td>
-        <td>48.0 кг</td>
-        <td><span class="badge badge-approved">створено</span></td>
-        <td>
-          <a href="passport-view.html" role="button" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">PDF</a>
-        </td>
-        <td>
-          <a href="passport-view.html" role="button" class="secondary outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Друк</a>
-        </td>
-      </tr>
-      <tr>
-        <td>—</td>
-        <td>—</td>
-        <td><a href="finished-detail.html?gp=21/05/26(02)">21/05/26(02)</a></td>
-        <td>Pinky</td>
-        <td>Гель Floral wood · 250 мл</td>
-        <td>2.0 кг</td>
-        <td><span class="badge badge-draft">очікує</span></td>
-        <td colspan="2">
-          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на «PDF»+«Друк».','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
-        </td>
-      </tr>
-      <tr>
-        <td>ПУ-20/05/26(02)</td>
-        <td>20.05.2026 16:15</td>
-        <td><a href="finished-detail.html?gp=20/05/26(02)">20/05/26(02)</a></td>
-        <td>Crumb</td>
-        <td>Шампунь Avocado + Collagen · 250 мл</td>
-        <td>15.0 кг</td>
-        <td><span class="badge badge-approved">створено</span></td>
-        <td>
-          <a href="passport-view.html" role="button" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">PDF</a>
-        </td>
-        <td>
-          <a href="passport-view.html" role="button" class="secondary outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Друк</a>
-        </td>
-      </tr>
-      <tr>
-        <td>—</td>
-        <td>—</td>
-        <td><a href="finished-detail.html?gp=19/05/26(01)">19/05/26(01)</a></td>
-        <td>Pinky</td>
-        <td>Тонік Rich · 150 мл</td>
-        <td>8.0 кг</td>
-        <td><span class="badge badge-draft">очікує</span></td>
-        <td colspan="2">
-          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на «PDF»+«Друк».','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
-        </td>
-      </tr>
-      <tr>
-        <td>ПУ-18/05/26(03)</td>
-        <td>19.05.2026 09:20</td>
-        <td><a href="finished-detail.html?gp=18/05/26(03)">18/05/26(03)</a></td>
-        <td>ANKIE002</td>
-        <td>Маска для волосся кераміди · 200 мл</td>
-        <td>8.95 кг</td>
-        <td><span class="badge badge-approved">створено</span></td>
-        <td>
-          <a href="passport-view.html" role="button" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">PDF</a>
-        </td>
-        <td>
-          <a href="passport-view.html" role="button" class="secondary outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Друк</a>
-        </td>
-      </tr>
-
-      <tr class="month-row"><td colspan="9"><strong>Квітень 2026</strong> · 28 паспортів · 0 очікують</td></tr>
-      <tr>
-        <td>ПУ-28/04/26(01)</td>
-        <td>28.04.2026 11:00</td>
-        <td><a href="finished-detail.html?gp=28/04/26(01)">28/04/26(01)</a></td>
-        <td>Crumb</td>
-        <td>Гель Chery and Santal · 200 мл</td>
-        <td>44.0 кг</td>
-        <td><span class="badge badge-approved">створено</span></td>
-        <td>
-          <a href="passport-view.html" role="button" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">PDF</a>
-        </td>
-        <td>
-          <a href="passport-view.html" role="button" class="secondary outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Друк</a>
-        </td>
-      </tr>
+    <tbody id="passport-tbody">
+      <tr id="empty-row"><td colspan="9" style="text-align: center; padding: 2rem; color: var(--pico-muted-color);">— ще немає згенерованих паспортів —</td></tr>
     </tbody>
   </table>
 </main>
@@ -204,8 +119,10 @@
   function applyGeneratedPassportsToList() {
     const generated = JSON.parse(localStorage.getItem("generated_passports") || "[]");
     if (generated.length === 0) return;
+    const emptyRow = document.getElementById("empty-row");
+    if (emptyRow) emptyRow.remove();
     const tbody = document.querySelector("table tbody");
-    const rows = [...tbody.querySelectorAll("tr:not(.month-row)")];
+    const rows = [...tbody.querySelectorAll("tr:not(.month-row, #empty-row)")];
 
     generated.forEach(gen => {
       const row = rows.find(r => {
@@ -252,6 +169,13 @@
   }
 
   applyGeneratedPassportsToList();
+
+  // Оновлюємо лічильник у підзаголовку
+  (function updateSubtitle() {
+    const generated = JSON.parse(localStorage.getItem("generated_passports") || "[]");
+    document.getElementById("passport-subtitle").textContent =
+      `${generated.length} згенерованих`;
+  })();
 
   // Дописує ?gp=<номер> до кнопок PDF/Друк/Згенерувати на решті рядків (тих що не оновили вище)
   (function wirePassportButtons() {

@@ -5,6 +5,7 @@
   <title>Варка RP21/05/26(1) — БІОЛАБ</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
 </head>
 <body>
 
@@ -163,29 +164,9 @@
   const batchNum = params.get("batch");
 
   // Специфікації для відомих RP-кодів (синхронно з bulk-new.html)
-  const SPEC_BY_RP = {
-    "RP032": {spec_id: "SPEC-RP032-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "S3V12 Cp=5000-8000 mPas", dens: "0.9 — 1.0"},
-    "RP064": {spec_id: "SPEC-RP064-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "S3V12 Cp=3000-6000 mPas", dens: "0.95 — 1.05"},
-    "RP002": {spec_id: "SPEC-RP002-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "S3V12 Cp=5000-8000 mPas", dens: "0.9 — 1.0"},
-    "RP014": {spec_id: "SPEC-RP014-v0.9", status: "потребує верифікації", status_class: "badge-draft", ph: "5.0 — 6.0", visc: "S3V12 Cp=4000-7000 mPas", dens: "0.95 — 1.0"},
-    "RP001": {spec_id: "SPEC-RP001-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 8.5", visc: "S3V12 Cp=3000-6000 mPas", dens: "1.0 — 1.05"},
-    "RP060": {spec_id: "SPEC-RP060-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "S3V12 Cp=5000-9000 mPas", dens: "0.95 — 1.0"},
-    "RP168": {spec_id: "SPEC-RP168-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 7.0", visc: "—", dens: "0.95 — 1.0"},
-    "L301": {spec_id: "SPEC-L301-v1.0", status: "затверджено", status_class: "badge-approved", ph: "5.0 — 6.0", visc: "—", dens: "0.95 — 1.0"},
-  };
-
-  const FAKE_BATCHES_BY_NO = {
-    "RP21/05/26(1)": {rp: "RP032", name: "Гель для душу", date: "21.05.2026", volume: "50.00", verdict: "PENDING", operator: "Санмарі А. П.", ph_fact: "5.4", gp: [{no: "21/05/26(01)", tm: "Crumb", label: "Гель Chery and Santal", vol: "200мл", qty: "240"}, {no: "21/05/26(02)", tm: "Pinky", label: "Гель Floral wood", vol: "250мл", qty: "8"}]},
-    "RP21/05/26(2)": {rp: "RP064", name: "Кондиціонер для волосся чорний", date: "21.05.2026", volume: "38.20", verdict: "PENDING", operator: "Мовчан О. М.", ph_fact: "6.1"},
-    "RP20/05/26(3)": {rp: "RP002", name: "Безсульфатний шампунь", date: "20.05.2026", volume: "23.00", verdict: "OUT", operator: "Санмарі А. П.", ph_fact: "7.2"},
-    "RP20/05/26(2)": {rp: "RP014", name: "Шампунь Avocado + Collagen", date: "20.05.2026", volume: "15.00", verdict: "PENDING", operator: "Мовчан О. М.", ph_fact: "5.5"},
-    "RP19/05/26(1)": {rp: "L301", name: "Тонік Rich з есцином", date: "19.05.2026", volume: "8.00", verdict: "OK", operator: "Санмарі А. П.", ph_fact: "5.5"},
-    "RP18/05/26(4)": {rp: "RP001", name: "Шампунь Anti-Dandruff", date: "18.05.2026", volume: "20.00", verdict: "OK", operator: "Мовчан О. М.", ph_fact: "5.8"},
-    "RP18/05/26(3)": {rp: "RP060", name: "Маска для волосся кераміди", date: "18.05.2026", volume: "8.95", verdict: "OK", operator: "Санмарі А. П.", ph_fact: "5.8"},
-    "RP28/04/26(1)": {rp: "RP032", name: "Гель для душу", date: "28.04.2026", volume: "45.00", verdict: "OK", operator: "Мовчан О. М.", ph_fact: "5.6"},
-    "RP22/04/26(1)": {rp: "RP168", name: "Рідкий дезодорант", date: "22.04.2026", volume: "25.00", verdict: "OK", operator: "Санмарі А. П.", ph_fact: "5.9"},
-    "RP15/03/26(1)": {rp: "RP002", name: "Безсульфатний шампунь", date: "15.03.2026", volume: "30.00", verdict: "OK", operator: "Мовчан О. М.", ph_fact: "5.4"},
-  };
+  // Довідники специфікацій і seed-варок прибрано — будуть завантажені у наступній сесії
+  const SPEC_BY_RP = {};
+  const FAKE_BATCHES_BY_NO = {};
 
   function getVerdictBadgeHtml(v, small) {
     const sizeStyle = small ? 'style="font-size: 0.55em; vertical-align: middle;"' : '';

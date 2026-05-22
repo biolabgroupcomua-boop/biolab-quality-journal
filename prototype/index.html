@@ -5,6 +5,7 @@
   <title>Dashboard — БІОЛАБ Журнал якості</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   <link rel="stylesheet" href="styles.css">
+  <script src="auth.js"></script>
 </head>
 <body>
 
@@ -115,19 +116,8 @@
     document.getElementById("today-label").textContent =
       `Сьогодні: ${today.getDate()} ${MONTHS_GEN[today.getMonth()]} ${today.getFullYear()}`;
 
-    // Seed варки (синхронно з bulk-list.html — verdict як у журналі варок)
-    const SEED_BATCHES = [
-      {date:"2026-05-21", rp:"RP064", name:"Кондиціонер для волосся чорний", batch:"RP21/05/26(2)", volume:38.20, ph:"6.1", verdict:"PENDING", operator:"Мовчан О. М.", daily:2},
-      {date:"2026-05-21", rp:"RP032", name:"Гель для душу", batch:"RP21/05/26(1)", volume:50.00, ph:"5.4", verdict:"PENDING", operator:"Санмарі А. П.", daily:1},
-      {date:"2026-05-20", rp:"RP002", name:"Безсульфатний шампунь", batch:"RP20/05/26(3)", volume:23.00, ph:"7.2", verdict:"OUT", operator:"Санмарі А. П.", daily:3},
-      {date:"2026-05-20", rp:"RP014", name:"Шампунь Avocado + Collagen", batch:"RP20/05/26(2)", volume:15.00, ph:"5.5", verdict:"PENDING", operator:"Мовчан О. М.", daily:2},
-      {date:"2026-05-19", rp:"L301",  name:"Тонік Rich з есцином", batch:"RP19/05/26(1)", volume:8.00, ph:"5.5", verdict:"OK", operator:"Санмарі А. П.", daily:1},
-      {date:"2026-05-18", rp:"RP001", name:"Шампунь Anti-Dandruff", batch:"RP18/05/26(4)", volume:20.00, ph:"5.8", verdict:"OK", operator:"Мовчан О. М.", daily:4},
-      {date:"2026-05-18", rp:"RP060", name:"Маска для волосся кераміди", batch:"RP18/05/26(3)", volume:8.95, ph:"5.8", verdict:"OK", operator:"Санмарі А. П.", daily:3},
-      {date:"2026-04-28", rp:"RP032", name:"Гель для душу", batch:"RP28/04/26(1)", volume:45.00, ph:"5.6", verdict:"OK", operator:"Мовчан О. М.", daily:1},
-      {date:"2026-04-22", rp:"RP168", name:"Рідкий дезодорант", batch:"RP22/04/26(1)", volume:25.00, ph:"5.9", verdict:"OK", operator:"Санмарі А. П.", daily:1},
-      {date:"2026-03-15", rp:"RP002", name:"Безсульфатний шампунь", batch:"RP15/03/26(1)", volume:30.00, ph:"5.4", verdict:"OK", operator:"Мовчан О. М.", daily:1},
-    ];
+    // Seed-варки прибрано — таблиця будується тільки з localStorage
+    const SEED_BATCHES = [];
 
     // Збережені у localStorage варки
     const saved = JSON.parse(localStorage.getItem("bulk_batches") || "[]").map(s => ({
@@ -185,8 +175,7 @@
 
     // KPI: згенеровано сьогодні (з localStorage["generated_passports"])
     const generated = JSON.parse(localStorage.getItem("generated_passports") || "[]");
-    const SEED_GENERATED_TODAY = 0; // seed-паспорти датовано назадніми днями
-    const todayCount = SEED_GENERATED_TODAY + generated.filter(g =>
+    const todayCount = generated.filter(g =>
       g.generated_at && g.generated_at.slice(0, 10) === isoToday
     ).length;
     document.getElementById("kpi-today").textContent = todayCount;
@@ -194,11 +183,8 @@
     // KPI: очікують паспорта (з finished_batches без запису у generated_passports)
     const generatedSet = new Set(generated.map(g => g.gp_no));
     const savedGp = JSON.parse(localStorage.getItem("finished_batches") || "[]");
-    const SEED_PENDING_GP = ["21/05/26(02)", "19/05/26(01)"]; // GP-партії з seed без паспорта
-    const stillPendingFromSeed = SEED_PENDING_GP.filter(no => !generatedSet.has(no)).length;
-    const stillPendingFromSaved = savedGp.filter(gp => !generatedSet.has(gp.batch_number)).length;
-    document.getElementById("kpi-pending").textContent =
-      stillPendingFromSeed + stillPendingFromSaved;
+    const stillPending = savedGp.filter(gp => !generatedSet.has(gp.batch_number)).length;
+    document.getElementById("kpi-pending").textContent = stillPending;
   })();
 </script>
 
