@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="uk" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -87,10 +87,10 @@
       <label style="margin-top: 0.75rem;">
         № партії bulk <span id="bulk-count" style="color: var(--pico-muted-color); font-size: 0.85em;">(4 знайдено)</span>
         <select id="bulk-select" required>
-          <option value="RP21/05/26(1)">RP21/05/26(1) — RP032 Гель для душу — 21.05.2026 — OK</option>
-          <option value="RP21/05/26(2)">RP21/05/26(2) — RP064 Кондиціонер — 21.05.2026 — OK</option>
-          <option value="RP20/05/26(3)">RP20/05/26(3) — RP002 Шампунь — 20.05.2026 — OUT (не можна випустити)</option>
-          <option value="RP20/05/26(2)">RP20/05/26(2) — RP014 Шампунь Avocado — 20.05.2026 — OK</option>
+          <option value="RP21/1/1">RP21/1/1 — RP032 Гель для душу — 21.05.2026 — OK</option>
+          <option value="RP21/2/2">RP21/2/2 — RP064 Кондиціонер — 21.05.2026 — OK</option>
+          <option value="RP20/4/2">RP20/4/2 — RP002 Шампунь — 20.05.2026 — OUT (не можна випустити)</option>
+          <option value="RP20/3/1">RP20/3/1 — RP014 Шампунь Avocado — 20.05.2026 — OK</option>
         </select>
       </label>
     </section>
@@ -197,17 +197,27 @@
       <div class="grid">
         <label>
           Дата фасування
-          <input type="date" id="gp-fill-date" value="2026-05-21" required>
+          <input type="date" id="gp-fill-date" value="2026-05-22" required>
         </label>
         <label>
-          Порядковий номер за день
-          <input type="number" id="gp-seq" value="1" min="1" max="99" required>
-          <small>NN — скільки партій ГП цього дня вже є + 1</small>
+          Номер фасування за місяць
+          <input type="number" id="gp-monthly" value="14" min="1" required>
+          <small>Скільки фасувань (усіх) вже було цього місяця + 1</small>
         </label>
+        <label>
+          Номер фасування за день
+          <input type="number" id="gp-daily" value="1" min="1" required>
+          <small>Скільки фасувань вже сьогодні + 1</small>
+        </label>
+      </div>
+      <div class="grid">
         <label>
           № партії ГП (генерується)
-          <input type="text" id="gp-batch-number" value="21/05/26(01)" readonly>
+          <input type="text" id="gp-batch-number" value="22/14/1" readonly>
+          <small>Формат: {день}/{місячний}/{денний}</small>
         </label>
+        <label></label>
+        <label></label>
       </div>
       <div class="grid">
         <label>
@@ -272,7 +282,7 @@
   // Демо: при зміні bulk підтягуємо дані варки.
   // У реальному застосунку — HTMX через GET /bulk/{id}/details
   const BULKS = {
-    "RP21/05/26(1)": {
+    "RP21/1/1": {
       product: "RP032 — Гель для душу",
       date: "21.05.2026",
       volume: "50.00 кг",
@@ -281,7 +291,7 @@
       viscosity: "S3V12 Cp=7200 mPas",
       density: "0.95 г/мл",
     },
-    "RP21/05/26(2)": {
+    "RP21/2/2": {
       product: "RP064 — Кондиціонер для волосся чорний",
       date: "21.05.2026",
       volume: "38.20 кг",
@@ -290,7 +300,7 @@
       viscosity: "S3V12 Cp=5000 mPas",
       density: "1.0 г/мл",
     },
-    "RP20/05/26(3)": {
+    "RP20/4/2": {
       product: "RP002 — Безсульфатний шампунь",
       date: "20.05.2026",
       volume: "23.00 кг",
@@ -299,7 +309,7 @@
       viscosity: "S3V12 Cp=6500 mPas",
       density: "0.95 г/мл",
     },
-    "RP20/05/26(2)": {
+    "RP20/3/1": {
       product: "RP014 — Шампунь Avocado + Collagen",
       date: "20.05.2026",
       volume: "15.00 кг",
@@ -335,18 +345,18 @@
     applyBulk(e.target.value);
   });
 
-  // Авто-генерація № партії ГП з дати фасування + порядкового
+  // Авто-генерація № партії ГП: {DD}/{місячний}/{денний}
   function generateGpBatchNumber() {
-    const dateStr = document.getElementById("gp-fill-date").value;  // "2026-05-21"
-    const seqRaw = document.getElementById("gp-seq").value || "1";
-    const seq = String(seqRaw).padStart(2, "0");  // "01", "02", ...
+    const dateStr = document.getElementById("gp-fill-date").value;
+    const monthly = document.getElementById("gp-monthly").value || "1";
+    const daily = document.getElementById("gp-daily").value || "1";
     if (!dateStr) return;
-    const [yyyy, mm, dd] = dateStr.split("-");
-    const yy = yyyy.slice(-2);
-    document.getElementById("gp-batch-number").value = `${dd}/${mm}/${yy}(${seq})`;
+    const [, , dd] = dateStr.split("-");
+    document.getElementById("gp-batch-number").value = `${dd}/${monthly}/${daily}`;
   }
   document.getElementById("gp-fill-date").addEventListener("change", generateGpBatchNumber);
-  document.getElementById("gp-seq").addEventListener("input", generateGpBatchNumber);
+  document.getElementById("gp-monthly").addEventListener("input", generateGpBatchNumber);
+  document.getElementById("gp-daily").addEventListener("input", generateGpBatchNumber);
 
   // Quick-select дат для фільтра bulk
   document.getElementById("bulk-date-quick").addEventListener("change", (e) => {

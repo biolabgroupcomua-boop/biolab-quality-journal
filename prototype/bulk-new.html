@@ -77,17 +77,27 @@
       <div class="grid">
         <label>
           Дата виготовлення
-          <input type="date" id="mfg-date" value="2026-05-21" required>
+          <input type="date" id="mfg-date" value="2026-05-22" required>
         </label>
         <label>
-          Порядковий номер за день
-          <input type="number" id="batch-seq" value="4" min="1" max="99" required>
-          <small>Скільки варок цього продукту вже було за день + 1</small>
+          Номер варки за місяць
+          <input type="number" id="batch-monthly" value="23" min="1" required>
+          <small>Скільки варок (усіх продуктів) вже було цього місяця + 1</small>
         </label>
+        <label>
+          Номер варки за день
+          <input type="number" id="batch-daily" value="2" min="1" required>
+          <small>Скільки варок вже сьогодні + 1</small>
+        </label>
+      </div>
+      <div class="grid">
         <label>
           № партії (генерується)
-          <input type="text" id="batch-number" value="RP21/05/26(4)" readonly>
+          <input type="text" id="batch-number" value="RP22/23/2" readonly>
+          <small>Формат: RP-{день}/{місячний}/{денний}</small>
         </label>
+        <label></label>
+        <label></label>
       </div>
       <div class="grid">
         <label>
@@ -293,17 +303,20 @@
     applySpec(e.target.value);
   });
 
-  // Авто-генерація № партії з дати + порядкового номера
+  // Авто-генерація № партії: RP{DD}/{місячний}/{денний}
+  // У реальному застосунку місячний і денний підраховуються в БД автоматично,
+  // тут користувач вводить руками (бо нема бекенду).
   function generateBatchNumber() {
-    const dateStr = document.getElementById("mfg-date").value;  // "2026-05-21"
-    const seq = document.getElementById("batch-seq").value || "1";
+    const dateStr = document.getElementById("mfg-date").value;
+    const monthly = document.getElementById("batch-monthly").value || "1";
+    const daily = document.getElementById("batch-daily").value || "1";
     if (!dateStr) return;
-    const [yyyy, mm, dd] = dateStr.split("-");
-    const yy = yyyy.slice(-2);
-    document.getElementById("batch-number").value = `RP${dd}/${mm}/${yy}(${seq})`;
+    const [, , dd] = dateStr.split("-");
+    document.getElementById("batch-number").value = `RP${dd}/${monthly}/${daily}`;
   }
   document.getElementById("mfg-date").addEventListener("change", generateBatchNumber);
-  document.getElementById("batch-seq").addEventListener("input", generateBatchNumber);
+  document.getElementById("batch-monthly").addEventListener("input", generateBatchNumber);
+  document.getElementById("batch-daily").addEventListener("input", generateBatchNumber);
 
   // Розпарсити "S3V12 Cp=5000-8000 mPas" → префікс "S3V12 Cp=" і суфікс "mPas"
   function updateViscositySplit(viscosityNorm) {

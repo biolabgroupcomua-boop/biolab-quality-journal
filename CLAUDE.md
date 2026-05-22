@@ -203,7 +203,9 @@ User (співробітник з логіном)
 
 BulkBatch (варка)
   ├─ FK Product, FK Specification (поточна затверджена)
-  ├─ batch_number   ("RP21/05/26(1)" — формат RP+ДД/ММ/РР(N))
+  ├─ batch_number   ("RP22/23/2" — формат RP+ДД/місячний/денний)
+  ├─ monthly_seq    (int — порядковий варки за місяць; обнуляється 1-го числа)
+  ├─ daily_seq      (int — порядковий варки за день; обнуляється о півночі)
   ├─ date_mfg
   ├─ volume_kg
   ├─ appearance_fact, color_fact, smell_fact
@@ -226,7 +228,9 @@ FinishedBatch (партія ГП — фасування варки під кон
   ├─ FK PackagingType    (тип тари з довідника — Флакон / Туба / ...)
   ├─ packaging_volume    (цифра обсягу/ваги одиниці тари — 200, 50, 100, ...)
   ├─ packaging_unit      (одиниця: мл або г)
-  ├─ batch_number_gp     ("21/05/26(01)" — формат ДД/ММ/РР(NN), БЕЗ префікса RP)
+  ├─ batch_number_gp     ("22/14/1" — формат ДД/місячний/денний, БЕЗ префікса RP)
+  ├─ monthly_seq_gp      (int — порядковий фасування за місяць)
+  ├─ daily_seq_gp        (int — порядковий фасування за день)
   ├─ date_filling
   ├─ date_aroma_added    (опційно — дата введення аромату в ангро)
   ├─ quantity_units      (шт)
@@ -237,10 +241,11 @@ FinishedBatch (партія ГП — фасування варки під кон
 
 QualityCertificate (паспорт)
   ├─ FK FinishedBatch
-  ├─ passport_no    ("ПУ-21/05/26(01)")
+  ├─ passport_no    ("ПУ-22/14/1" — формат ПУ-{batch_number_gp})
   ├─ generated_at
-  ├─ pdf_path       (data/passports/ПУ-21-05-26-01.pdf)
+  ├─ pdf_path       (data/passports/ПУ-22-14-1.pdf — nullable для legacy)
   ├─ status         (створено / відкликано)
+  ├─ legacy_import  (bool — старі паспорти імпортовані без перевірки verdict)
   └─ verdict_text   (з шаблону, додаткова фраза)
 ```
 
