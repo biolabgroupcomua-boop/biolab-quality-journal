@@ -219,8 +219,11 @@
   })();
 
   // Дописує ?gp=<номер> до кнопок PDF/Друк/Згенерувати на кожному рядку.
-  // Працює для статичних seed-рядків і для динамічно вставлених з localStorage.
+  // Якщо паспорт уже згенеровано (localStorage["generated_passports"]) —
+  // замінює "Згенерувати" на дві кнопки PDF + Друк.
   function wirePassportButtons(scopeRow) {
+    const generated = JSON.parse(localStorage.getItem("generated_passports") || "[]");
+    const generatedSet = new Set(generated.map(g => g.gp_no));
     const rows = scopeRow
       ? [scopeRow]
       : [...document.querySelectorAll("table tbody tr:not(.month-row)")];
@@ -234,11 +237,22 @@
         const isPrint = a.classList.contains("secondary") || (a.textContent || "").trim() === "Друк";
         a.href = `passport-view.html?gp=${gp}` + (isPrint ? "&print=1" : "");
       });
-      // "Згенерувати" з alert-onclick — замінюємо на справжній лінк
-      tr.querySelectorAll('a[onclick*="згенерується PDF"]').forEach(a => {
-        a.href = `passport-view.html?gp=${gp}&print=1`;
-        a.removeAttribute("onclick");
-      });
+      // "Згенерувати" — якщо паспорт уже згенеровано, замінюємо на PDF + Друк
+      const genBtn = tr.querySelector('a[onclick*="згенерується PDF"], a[href*="print=1"][role="button"]');
+      if (genBtn && generatedSet.has(gp)) {
+        const colspan2Cell = genBtn.closest('td[colspan="2"]');
+        if (colspan2Cell) {
+          colspan2Cell.removeAttribute("colspan");
+          colspan2Cell.innerHTML = `<a href="passport-view.html?gp=${gp}" role="button" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">PDF</a>`;
+          const printCell = document.createElement("td");
+          printCell.innerHTML = `<a href="passport-view.html?gp=${gp}&print=1" role="button" class="secondary outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Друк</a>`;
+          colspan2Cell.parentNode.appendChild(printCell);
+        }
+      } else if (genBtn) {
+        // Перепрошиваємо "Згенерувати" з alert-onclick на справжній лінк
+        genBtn.href = `passport-view.html?gp=${gp}&print=1`;
+        genBtn.removeAttribute("onclick");
+      }
     });
   }
 

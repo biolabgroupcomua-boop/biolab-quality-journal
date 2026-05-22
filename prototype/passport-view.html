@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -60,8 +61,8 @@
       <p class="subtitle" id="page-subtitle">Партія ГП 21/05/26(01) · Crumb · Гель для душу Chery and Santal · 200 ml</p>
     </div>
     <div class="no-print">
-      <button type="button" onclick="window.print()" role="button">Завантажити PDF</button>
-      <button type="button" onclick="window.print()" class="secondary">Друкувати</button>
+      <button type="button" id="download-pdf-btn" role="button">⬇ Завантажити PDF</button>
+      <button type="button" onclick="window.print()" class="secondary">🖨 Друкувати</button>
       <a href="finished-list.html" role="button" class="secondary outline">До журналу ГП</a>
     </div>
   </header>
@@ -222,9 +223,11 @@
   const params = new URLSearchParams(window.location.search);
   const gpNum = params.get("gp");
   const autoPrint = params.get("print") === "1";
+  let currentGp = null;
 
   if (gpNum && FAKE_GP[gpNum]) {
-    applyPassport(gpNum, FAKE_GP[gpNum]);
+    currentGp = FAKE_GP[gpNum];
+    applyPassport(gpNum, currentGp);
   } else if (gpNum) {
     document.getElementById("page-title").innerHTML =
       `Паспорт для ${gpNum} <span class="badge badge-out" style="font-size: 0.5em;">не знайдено</span>`;
@@ -232,8 +235,64 @@
       "Партія з таким номером не має згенерованого паспорта.";
   }
 
-  if (autoPrint) {
-    window.addEventListener("load", () => setTimeout(() => window.print(), 500));
+  // Генерація PDF через html2pdf — справжній файл, скачується у Downloads
+  function buildPdfFilename(no, g) {
+    // ПУ-21/05/26(01) → ПУ-21-05-26-01 (слеші заборонені у назвах файлів)
+    const passNo = (g && g.passport_no || `ПУ-${no}`).replace(/[\/\\:*?"<>|()]/g, "-");
+    const tm = (g && g.tm || "").replace(/[\/\\:*?"<>|]/g, "-");
+    return `Паспорт_${passNo}${tm ? "_" + tm : ""}.pdf`;
+  }
+
+  // Записуємо паспорт у localStorage — щоб passport.html і finished-list його побачили
+  function persistGeneratedPassport(no, g, filename) {
+    if (!no || !g) return;
+    const now = new Date();
+    const pad = n => String(n).padStart(2, "0");
+    const generatedLabel =
+      `${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const record = {
+      gp_no: no,
+      passport_no: g.passport_no || `ПУ-${no}`,
+      generated_at: now.toISOString(),
+      generated_label: generatedLabel,
+      tm: g.tm,
+      label: g.label,
+      packaging_size: g.packaging_size,
+      pdf_filename: filename,
+    };
+    const all = JSON.parse(localStorage.getItem("generated_passports") || "[]");
+    const idx = all.findIndex(r => r.gp_no === no);
+    if (idx >= 0) all[idx] = record;
+    else all.push(record);
+    localStorage.setItem("generated_passports", JSON.stringify(all));
+  }
+
+  function downloadPdf() {
+    if (typeof html2pdf === "undefined") {
+      alert("Бібліотека html2pdf ще не завантажилася. Спробуйте через 2 секунди.");
+      return;
+    }
+    const element = document.querySelector(".passport-preview");
+    const filename = buildPdfFilename(gpNum, currentGp);
+    // Спершу записуємо у журнал — щоб після завантаження список паспортів вже мав запис
+    persistGeneratedPassport(gpNum, currentGp, filename);
+    const opt = {
+      margin: [0.5, 0.5, 0.5, 0.5],
+      filename: filename,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
+      jsPDF: { unit: "cm", format: "a4", orientation: "portrait" },
+      pagebreak: { mode: ["avoid-all"] },
+    };
+    html2pdf().set(opt).from(element).save();
+  }
+
+  const downloadBtn = document.getElementById("download-pdf-btn");
+  if (downloadBtn) downloadBtn.addEventListener("click", downloadPdf);
+
+  // ?print=1 — автоматично завантажуємо PDF (а не друкуємо)
+  if (autoPrint && currentGp) {
+    window.addEventListener("load", () => setTimeout(downloadPdf, 700));
   }
 </script>
 

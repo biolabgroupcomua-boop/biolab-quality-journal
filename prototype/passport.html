@@ -199,7 +199,61 @@
     if (form) form.addEventListener("submit", e => e.preventDefault());
   })();
 
-  // Дописує ?gp=<номер> до кнопок PDF/Друк/Згенерувати на кожному рядку.
+  // Оновлюємо існуючі рядки на основі згенерованих паспортів з localStorage
+  // ("Згенерувати" → "PDF/Друк", статус → "створено", № і дата заповнюються)
+  function applyGeneratedPassportsToList() {
+    const generated = JSON.parse(localStorage.getItem("generated_passports") || "[]");
+    if (generated.length === 0) return;
+    const tbody = document.querySelector("table tbody");
+    const rows = [...tbody.querySelectorAll("tr:not(.month-row)")];
+
+    generated.forEach(gen => {
+      const row = rows.find(r => {
+        const gpLink = r.querySelector('a[href*="finished-detail.html?gp="]');
+        if (!gpLink) return false;
+        return gpLink.getAttribute("href").split("?gp=")[1] === gen.gp_no;
+      });
+
+      if (row) {
+        // Оновлюємо існуючий рядок (раніше "Згенерувати" / "очікує")
+        row.style.background = "rgba(220, 255, 80, 0.15)";
+        row.cells[0].textContent = gen.passport_no;
+        row.cells[1].textContent = gen.generated_label;
+        row.cells[6].innerHTML = '<span class="badge badge-approved">створено</span>';
+        // Останній td з colspan=2 ("Згенерувати") → дві окремі клітинки PDF + Друк
+        const actionCell = row.cells[7];
+        if (actionCell && actionCell.getAttribute("colspan") === "2") {
+          actionCell.removeAttribute("colspan");
+          actionCell.innerHTML = `<a href="passport-view.html?gp=${gen.gp_no}" role="button" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">PDF</a>`;
+          const printCell = document.createElement("td");
+          printCell.innerHTML = `<a href="passport-view.html?gp=${gen.gp_no}&print=1" role="button" class="secondary outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Друк</a>`;
+          row.appendChild(printCell);
+        }
+      } else {
+        // GP не з seed — додаємо новий рядок зверху (під першим month-row)
+        const newRow = document.createElement("tr");
+        newRow.style.background = "rgba(220, 255, 80, 0.15)";
+        newRow.innerHTML = `
+          <td>${gen.passport_no}</td>
+          <td>${gen.generated_label}</td>
+          <td><a href="finished-detail.html?gp=${gen.gp_no}">${gen.gp_no}</a></td>
+          <td>${gen.tm || "—"}</td>
+          <td>${(gen.label || "—") + (gen.packaging_size ? " · " + gen.packaging_size : "")}</td>
+          <td>—</td>
+          <td><span class="badge badge-approved">створено</span></td>
+          <td><a href="passport-view.html?gp=${gen.gp_no}" role="button" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">PDF</a></td>
+          <td><a href="passport-view.html?gp=${gen.gp_no}&print=1" role="button" class="secondary outline" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Друк</a></td>
+        `;
+        const firstMonthRow = tbody.querySelector("tr.month-row");
+        if (firstMonthRow) firstMonthRow.insertAdjacentElement("afterend", newRow);
+        else tbody.insertBefore(newRow, tbody.firstElementChild);
+      }
+    });
+  }
+
+  applyGeneratedPassportsToList();
+
+  // Дописує ?gp=<номер> до кнопок PDF/Друк/Згенерувати на решті рядків (тих що не оновили вище)
   (function wirePassportButtons() {
     const rows = [...document.querySelectorAll("table tbody tr:not(.month-row)")];
     rows.forEach(tr => {
