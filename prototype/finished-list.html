@@ -53,7 +53,7 @@
     <a href="finished-new.html" role="button">+ Нова партія ГП</a>
   </header>
 
-  <form class="toolbar">
+  <form class="toolbar" id="filter-form">
     <div>
       <label>ТМ-замовник</label>
       <select>
@@ -66,11 +66,11 @@
     </div>
     <div>
       <label>Від</label>
-      <input type="date" value="2026-05-01">
+      <input type="date" id="filter-date-from">
     </div>
     <div>
       <label>До</label>
-      <input type="date" value="2026-05-21">
+      <input type="date" id="filter-date-to">
     </div>
     <div>
       <label>Дозвіл</label>
@@ -129,7 +129,7 @@
         <td>8</td>
         <td>2.0</td>
         <td colspan="2">
-          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на ''PDF''+''Друк''.','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
+          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на «PDF»+«Друк».','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
         </td>
       </tr>
       <tr>
@@ -171,7 +171,7 @@
         <td>53</td>
         <td>8.0</td>
         <td colspan="2">
-          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на ''PDF''+''Друк''.','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
+          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на «PDF»+«Друк».','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
         </td>
       </tr>
 
@@ -203,6 +203,130 @@
     </ul>
   </nav>
 </main>
+
+<script>
+  // Виставляємо фільтр-дати: "Від" = 1-е поточного місяця, "До" = сьогодні
+  (function initFilterDates() {
+    const today = new Date();
+    const isoToday = today.toISOString().slice(0, 10);
+    const firstOfMonth = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-01`;
+    const fromEl = document.getElementById("filter-date-from");
+    const toEl = document.getElementById("filter-date-to");
+    if (fromEl) fromEl.value = firstOfMonth;
+    if (toEl) toEl.value = isoToday;
+    const form = document.getElementById("filter-form");
+    if (form) form.addEventListener("submit", e => e.preventDefault());
+  })();
+
+  // Дописує ?gp=<номер> до кнопок PDF/Друк/Згенерувати на кожному рядку.
+  // Працює для статичних seed-рядків і для динамічно вставлених з localStorage.
+  function wirePassportButtons(scopeRow) {
+    const rows = scopeRow
+      ? [scopeRow]
+      : [...document.querySelectorAll("table tbody tr:not(.month-row)")];
+    rows.forEach(tr => {
+      const gpLink = tr.querySelector('a[href^="finished-detail.html?gp="]');
+      if (!gpLink) return;
+      const gp = gpLink.getAttribute("href").split("?gp=")[1];
+      if (!gp) return;
+      // PDF / Друк — звичайні linkb passport-view
+      tr.querySelectorAll('a[href="passport-view.html"]').forEach(a => {
+        const isPrint = a.classList.contains("secondary") || (a.textContent || "").trim() === "Друк";
+        a.href = `passport-view.html?gp=${gp}` + (isPrint ? "&print=1" : "");
+      });
+      // "Згенерувати" з alert-onclick — замінюємо на справжній лінк
+      tr.querySelectorAll('a[onclick*="згенерується PDF"]').forEach(a => {
+        a.href = `passport-view.html?gp=${gp}&print=1`;
+        a.removeAttribute("onclick");
+      });
+    });
+  }
+
+  // Підвантажуємо нові партії ГП з localStorage у правильні групи місяців
+  const MONTH_UA = ["Січень","Лютий","Березень","Квітень","Травень",
+                    "Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"];
+  function fmtDate(iso) {
+    const [yyyy, mm, dd] = iso.split("-");
+    return `${dd}.${mm}.${yyyy}`;
+  }
+  function findOrCreateMonthRow(tbody, yyyy, mm) {
+    const monthName = MONTH_UA[parseInt(mm, 10) - 1];
+    const existing = [...tbody.querySelectorAll("tr.month-row")].find(r =>
+      r.textContent.includes(monthName) && r.textContent.includes(yyyy)
+    );
+    if (existing) return existing;
+    const newRow = document.createElement("tr");
+    newRow.className = "month-row";
+    newRow.innerHTML = `<td colspan="10"><strong>${monthName} ${yyyy}</strong> · 0 партій · 0 з паспортом</td>`;
+    const allMonthRows = [...tbody.querySelectorAll("tr.month-row")];
+    const olderRow = allMonthRows.find(r => {
+      const t = r.textContent;
+      const yMatch = t.match(/(\d{4})/);
+      const monthIdx = MONTH_UA.findIndex(n => t.includes(n));
+      if (!yMatch || monthIdx < 0) return false;
+      return `${yMatch[1]}-${String(monthIdx + 1).padStart(2, "0")}` < `${yyyy}-${mm}`;
+    });
+    if (olderRow) tbody.insertBefore(newRow, olderRow);
+    else tbody.appendChild(newRow);
+    return newRow;
+  }
+
+  (function renderSavedGp() {
+    const saved = JSON.parse(localStorage.getItem("finished_batches") || "[]");
+    if (saved.length === 0) return;
+    const tbody = document.querySelector("table tbody");
+
+    saved.sort((a, b) => {
+      if (a.date !== b.date) return b.date.localeCompare(a.date);
+      return (b.daily || 0) - (a.daily || 0);
+    });
+
+    const byYM = {};
+    saved.forEach(b => {
+      const ym = b.date.slice(0, 7);
+      (byYM[ym] = byYM[ym] || []).push(b);
+    });
+
+    Object.keys(byYM).forEach(ym => {
+      const [yyyy, mm] = ym.split("-");
+      const monthRow = findOrCreateMonthRow(tbody, yyyy, mm);
+
+      const td = monthRow.querySelector("td");
+      const txt = td.textContent;
+      const totalMatch = txt.match(/(\d+) партій/);
+      const origTotal = totalMatch ? parseInt(totalMatch[1], 10) : 0;
+      const newCount = byYM[ym].length;
+      const passMatch = txt.match(/(\d+) з паспортом/);
+      const origPass = passMatch ? parseInt(passMatch[1], 10) : 0;
+      td.innerHTML = `<strong>${MONTH_UA[parseInt(mm, 10) - 1]} ${yyyy}</strong> · ${origTotal + newCount} партій (з них ${newCount} нові) · ${origPass} з паспортом`;
+
+      [...byYM[ym]].reverse().forEach(b => {
+        const tr = document.createElement("tr");
+        tr.style.background = "rgba(220, 255, 80, 0.15)";
+        const packaging = b.packaging_type && b.packaging_size
+          ? `${b.packaging_type} ${b.packaging_size}` : "—";
+        tr.innerHTML = `
+          <td>${fmtDate(b.date)}</td>
+          <td><a href="finished-detail.html?gp=${b.batch_number}">${b.batch_number}</a></td>
+          <td><a href="bulk-detail.html?batch=${b.bulk_batch}">${b.bulk_batch}</a></td>
+          <td>${b.tm || "—"}</td>
+          <td>${b.label || "—"}</td>
+          <td>${packaging}</td>
+          <td>${b.qty || "—"}</td>
+          <td>${b.volume_kg ? Number(b.volume_kg).toFixed(1) : "—"}</td>
+          <td colspan="2">
+            <a href="passport-view.html?gp=${b.batch_number}&print=1" role="button"
+               style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
+          </td>
+        `;
+        monthRow.insertAdjacentElement("afterend", tr);
+      });
+    });
+  })();
+
+  // Перепрошиваємо всі статичні кнопки PDF/Друк/Згенерувати на ?gp=<batch>
+  wirePassportButtons();
+</script>
 
 </body>
 </html>

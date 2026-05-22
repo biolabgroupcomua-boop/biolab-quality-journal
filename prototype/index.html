@@ -50,39 +50,39 @@
 <main>
   <header class="page-header">
     <h1>Dashboard</h1>
-    <span class="subtitle">Сьогодні: 21 травня 2026</span>
+    <span class="subtitle" id="today-label">Сьогодні: —</span>
   </header>
 
   <section class="kpi-grid">
     <article class="kpi-card clickable">
       <a href="bulk-list.html">
         <div class="label">Варок цього тижня</div>
-        <p class="value">12</p>
+        <p class="value" id="kpi-week">—</p>
       </a>
     </article>
     <article class="kpi-card warn clickable">
       <a href="bulk-list.html">
         <div class="label">Відхилення (OUT)</div>
-        <p class="value">1</p>
+        <p class="value" id="kpi-out">—</p>
       </a>
     </article>
     <article class="kpi-card clickable">
       <a href="finished-list.html">
         <div class="label">Очікують паспорта</div>
-        <p class="value">5</p>
+        <p class="value" id="kpi-pending">5</p>
       </a>
     </article>
     <article class="kpi-card clickable">
       <a href="passport.html">
         <div class="label">Згенеровано сьогодні</div>
-        <p class="value">3</p>
+        <p class="value" id="kpi-today">3</p>
       </a>
     </article>
   </section>
 
   <section>
     <h3>Останні варки</h3>
-    <table>
+    <table id="recent-bulk-table">
       <thead>
         <tr>
           <th>Дата</th>
@@ -94,53 +94,7 @@
           <th>Виконавець</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>21.05.2026</td>
-          <td>RP032</td>
-          <td><a href="bulk-detail.html?batch=RP21/05/26(1)">RP21/05/26(1)</a></td>
-          <td>50.00</td>
-          <td>5.4</td>
-          <td><span class="badge badge-ok">OK</span></td>
-          <td>Санмарі А. П.</td>
-        </tr>
-        <tr>
-          <td>21.05.2026</td>
-          <td>RP064</td>
-          <td><a href="bulk-detail.html?batch=RP21/05/26(2)">RP21/05/26(2)</a></td>
-          <td>38.20</td>
-          <td>6.1</td>
-          <td><span class="badge badge-ok">OK</span></td>
-          <td>Мовчан О. М.</td>
-        </tr>
-        <tr>
-          <td>20.05.2026</td>
-          <td>RP002</td>
-          <td><a href="bulk-detail.html?batch=RP20/05/26(3)">RP20/05/26(3)</a></td>
-          <td>23.00</td>
-          <td>7.2</td>
-          <td><span class="badge badge-out">OUT</span></td>
-          <td>Санмарі А. П.</td>
-        </tr>
-        <tr>
-          <td>20.05.2026</td>
-          <td>RP014</td>
-          <td><a href="bulk-detail.html?batch=RP20/05/26(2)">RP20/05/26(2)</a></td>
-          <td>15.00</td>
-          <td>5.5</td>
-          <td><span class="badge badge-ok">OK</span></td>
-          <td>Мовчан О. М.</td>
-        </tr>
-        <tr>
-          <td>19.05.2026</td>
-          <td>L301</td>
-          <td><a href="bulk-detail.html?batch=RP19/05/26(1)">RP19/05/26(1)</a></td>
-          <td>8.00</td>
-          <td>5.5</td>
-          <td><span class="badge badge-ok">OK</span></td>
-          <td>Санмарі А. П.</td>
-        </tr>
-      </tbody>
+      <tbody></tbody>
     </table>
     <p><a href="bulk-list.html">Усі варки →</a></p>
   </section>
@@ -150,6 +104,86 @@
     <a href="finished-new.html" role="button" class="secondary">+ Нова партія ГП</a>
   </section>
 </main>
+
+<script>
+  // Дата і таблиця "Останні варки" — динамічно
+  (function initDashboard() {
+    const today = new Date();
+    const isoToday = today.toISOString().slice(0, 10);
+    const MONTHS_GEN = ["січня","лютого","березня","квітня","травня","червня",
+                        "липня","серпня","вересня","жовтня","листопада","грудня"];
+    document.getElementById("today-label").textContent =
+      `Сьогодні: ${today.getDate()} ${MONTHS_GEN[today.getMonth()]} ${today.getFullYear()}`;
+
+    // Seed варки (синхронно з bulk-list.html — verdict як у журналі варок)
+    const SEED_BATCHES = [
+      {date:"2026-05-21", rp:"RP064", name:"Кондиціонер для волосся чорний", batch:"RP21/05/26(2)", volume:38.20, ph:"6.1", verdict:"PENDING", operator:"Мовчан О. М.", daily:2},
+      {date:"2026-05-21", rp:"RP032", name:"Гель для душу", batch:"RP21/05/26(1)", volume:50.00, ph:"5.4", verdict:"PENDING", operator:"Санмарі А. П.", daily:1},
+      {date:"2026-05-20", rp:"RP002", name:"Безсульфатний шампунь", batch:"RP20/05/26(3)", volume:23.00, ph:"7.2", verdict:"OUT", operator:"Санмарі А. П.", daily:3},
+      {date:"2026-05-20", rp:"RP014", name:"Шампунь Avocado + Collagen", batch:"RP20/05/26(2)", volume:15.00, ph:"5.5", verdict:"PENDING", operator:"Мовчан О. М.", daily:2},
+      {date:"2026-05-19", rp:"L301",  name:"Тонік Rich з есцином", batch:"RP19/05/26(1)", volume:8.00, ph:"5.5", verdict:"OK", operator:"Санмарі А. П.", daily:1},
+      {date:"2026-05-18", rp:"RP001", name:"Шампунь Anti-Dandruff", batch:"RP18/05/26(4)", volume:20.00, ph:"5.8", verdict:"OK", operator:"Мовчан О. М.", daily:4},
+      {date:"2026-05-18", rp:"RP060", name:"Маска для волосся кераміди", batch:"RP18/05/26(3)", volume:8.95, ph:"5.8", verdict:"OK", operator:"Санмарі А. П.", daily:3},
+      {date:"2026-04-28", rp:"RP032", name:"Гель для душу", batch:"RP28/04/26(1)", volume:45.00, ph:"5.6", verdict:"OK", operator:"Мовчан О. М.", daily:1},
+      {date:"2026-04-22", rp:"RP168", name:"Рідкий дезодорант", batch:"RP22/04/26(1)", volume:25.00, ph:"5.9", verdict:"OK", operator:"Санмарі А. П.", daily:1},
+      {date:"2026-03-15", rp:"RP002", name:"Безсульфатний шампунь", batch:"RP15/03/26(1)", volume:30.00, ph:"5.4", verdict:"OK", operator:"Мовчан О. М.", daily:1},
+    ];
+
+    // Збережені у localStorage варки
+    const saved = JSON.parse(localStorage.getItem("bulk_batches") || "[]").map(s => ({
+      date: s.date,
+      rp: s.rp_code,
+      name: s.product_name || s.rp_code,
+      batch: s.batch_number,
+      volume: parseFloat(s.volume_kg) || 0,
+      ph: s.ph_fact || "—",
+      verdict: s.verdict || "PENDING",
+      operator: s.operator,
+      daily: s.daily,
+    }));
+
+    // Об'єднуємо і сортуємо DESC за датою, потім daily
+    const all = [...SEED_BATCHES, ...saved];
+    all.sort((a, b) => {
+      if (a.date !== b.date) return b.date.localeCompare(a.date);
+      return (b.daily || 0) - (a.daily || 0);
+    });
+
+    // Рендеримо 5 найновіших
+    const tbody = document.querySelector("#recent-bulk-table tbody");
+    const top5 = all.slice(0, 5);
+    top5.forEach(b => {
+      const [yyyy, mm, dd] = b.date.split("-");
+      const verdictHtml = b.verdict === "OUT" ? '<span class="badge badge-out">OUT</span>'
+                       : b.verdict === "PENDING" ? '<span class="badge badge-pending">очікує мікро</span>'
+                       : '<span class="badge badge-ok">OK</span>';
+      const isFromLocal = !SEED_BATCHES.some(s => s.batch === b.batch);
+      const tr = document.createElement("tr");
+      if (isFromLocal) tr.style.background = "rgba(220, 255, 80, 0.15)";
+      tr.innerHTML = `
+        <td>${dd}.${mm}.${yyyy}</td>
+        <td>${b.rp}</td>
+        <td><a href="bulk-detail.html?batch=${b.batch}">${b.batch}</a></td>
+        <td>${Number(b.volume).toFixed(2)}</td>
+        <td>${b.ph}</td>
+        <td>${verdictHtml}</td>
+        <td>${b.operator}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // KPI: варки за останні 7 днів (включно сьогодні)
+    const weekAgo = new Date(today);
+    weekAgo.setDate(today.getDate() - 6);
+    const isoWeekAgo = weekAgo.toISOString().slice(0, 10);
+    const thisWeek = all.filter(b => b.date >= isoWeekAgo && b.date <= isoToday).length;
+    document.getElementById("kpi-week").textContent = thisWeek;
+
+    // KPI: усі OUT варки
+    const outCount = all.filter(b => b.verdict === "OUT").length;
+    document.getElementById("kpi-out").textContent = outCount;
+  })();
+</script>
 
 </body>
 </html>

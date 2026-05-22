@@ -184,3 +184,7 @@ data/audit.log
 *.tmp
 .DS_Store
 Thumbs.db
+
+# Node.js (тимчасовий jsdom для тестування)
+node_modules/
+package-lock.json

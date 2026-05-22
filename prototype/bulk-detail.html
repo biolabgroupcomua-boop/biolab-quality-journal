@@ -122,6 +122,40 @@
     </p>
   </article>
 
+  <article id="edit-section" hidden style="margin-top: 1.5rem; background: #fff8e1; border: 1px solid #ffd54f;">
+    <h3 style="margin-top: 0;">Внести результати мікробіології</h3>
+    <p style="color: var(--pico-muted-color); font-size: 0.9em; margin-top: -0.5rem;">
+      Заповніть коли мікро-тест завершено (зазвичай 3-7 днів після варки). Після збереження
+      висновок (OK / OUT) перерахується автоматично.
+    </p>
+    <div class="grid">
+      <label>
+        Дата завершення мікро
+        <input type="date" id="edit-micro-completed">
+      </label>
+      <label>
+        Мікро загальна
+        <select id="edit-micro-total">
+          <option value="">— ще не визначено —</option>
+          <option>не виявлено</option>
+          <option>виявлено</option>
+        </select>
+      </label>
+      <label>
+        Дріжджі та плісняви
+        <select id="edit-micro-yeast">
+          <option value="">— ще не визначено —</option>
+          <option>не виявлено</option>
+          <option>виявлено</option>
+        </select>
+      </label>
+    </div>
+    <div style="margin-top: 1rem; display: flex; gap: 0.75rem;">
+      <button type="button" id="edit-save-btn">Зберегти результати</button>
+      <button type="button" id="edit-cancel-btn" class="secondary outline">Скасувати</button>
+    </div>
+  </article>
+
 <script>
   // Читаємо ?batch=... з URL і оновлюємо заголовок сторінки
   // Так кожна партія має свою унікальну сторінку.
@@ -160,6 +194,28 @@
     return `<span class="badge badge-ok" ${sizeStyle}>OK</span>`;
   }
 
+  // Застосовуємо override (адмін відредагував мікро) поверх seed/localStorage даних
+  function applyMicroOverride(b) {
+    if (!b || !batchNum) return b;
+    const overrides = JSON.parse(localStorage.getItem("bulk_micro_overrides") || "{}");
+    const ov = overrides[batchNum];
+    if (!ov) return b;
+    b.micro_completed_date = ov.micro_completed;
+    b.micro_total_fact = ov.micro_total;
+    b.micro_yeast_fact = ov.micro_yeast;
+    // Перерахунок verdict: якщо вже OUT — не чіпаємо. Інакше: коли мікро завершено і факти=норма → OK
+    if (b.verdict !== "OUT" && ov.micro_completed && ov.micro_total && ov.micro_yeast) {
+      const microNormTotal = "не виявлено";
+      const microNormYeast = "не виявлено";
+      if (ov.micro_total === microNormTotal && ov.micro_yeast === microNormYeast) {
+        b.verdict = "OK";
+      } else {
+        b.verdict = "OUT";
+      }
+    }
+    return b;
+  }
+
   // Знайти партію — спершу фейк, потім localStorage
   let batch = FAKE_BATCHES_BY_NO[batchNum];
   let fromLocalStorage = false;
@@ -184,6 +240,8 @@
       };
     }
   }
+
+  batch = applyMicroOverride(batch);
 
   if (batch && batchNum) {
     // Заголовок
@@ -242,16 +300,31 @@
     }
     document.getElementById("qa-fact-ph").textContent = batch.ph_fact || "—";
     if (fromLocalStorage) {
-      // Інші факти невідомі бо при збереженні беремо тільки pH і operator
-      document.getElementById("qa-fact-visc").textContent = "—";
-      document.getElementById("qa-fact-dens").textContent = "—";
-      document.getElementById("qa-fact-colloid").textContent = "—";
-      document.getElementById("qa-fact-thermo").textContent = "—";
+      // Інші факти невідомі — і факт, і колонка "Перевірка" мають бути "—"
+      ["visc","dens","colloid","thermo"].forEach(k => {
+        document.getElementById(`qa-fact-${k}`).textContent = "—";
+      });
+      // Колоїд / Термо мають свої check-комірки лише через .badge-ok hardcode — переписуємо
+      const qaRows = document.querySelectorAll("#qa-tbody tr");
+      // Стовпці 4 (Перевірка) для рядків колоїд (3, 0-індекс) і термо (4)
+      if (qaRows[3]) qaRows[3].cells[3].innerHTML = '<span class="badge badge-draft">не введено</span>';
+      if (qaRows[4]) qaRows[4].cells[3].innerHTML = '<span class="badge badge-draft">не введено</span>';
+
       if (batch.micro_applies && !batch.micro_completed_date) {
         document.getElementById("qa-fact-micro-total").textContent = "очікує (не завершено)";
         document.getElementById("qa-fact-micro-yeast").textContent = "очікує (не завершено)";
         document.getElementById("qa-check-micro-total").innerHTML = '<span class="badge badge-pending">очікує</span>';
         document.getElementById("qa-check-micro-yeast").innerHTML = '<span class="badge badge-pending">очікує</span>';
+      } else if (batch.micro_applies && batch.micro_completed_date && batch.micro_total_fact) {
+        // Override вже застосовано — підставимо факти з нього
+        document.getElementById("qa-fact-micro-total").textContent = batch.micro_total_fact;
+        document.getElementById("qa-fact-micro-yeast").textContent = batch.micro_yeast_fact;
+        const okTotal = batch.micro_total_fact.toLowerCase() === "не виявлено";
+        const okYeast = batch.micro_yeast_fact.toLowerCase() === "не виявлено";
+        document.getElementById("qa-check-micro-total").innerHTML =
+          okTotal ? '<span class="badge badge-ok">в нормі</span>' : '<span class="badge badge-out">поза нормою</span>';
+        document.getElementById("qa-check-micro-yeast").innerHTML =
+          okYeast ? '<span class="badge badge-ok">в нормі</span>' : '<span class="badge badge-out">поза нормою</span>';
       } else if (!batch.micro_applies) {
         document.getElementById("qa-fact-micro-total").textContent = "не застосовується";
         document.getElementById("qa-fact-micro-yeast").textContent = "не застосовується";
@@ -280,16 +353,52 @@
       `Партія з таким номером відсутня у журналі.`;
   }
 
-  // Кнопка "Редагувати" — для прототипа alert
+  // Кнопка "Редагувати" — показує форму вводу мікро
   document.getElementById("edit-btn").addEventListener("click", () => {
-    alert(`Прототип: тут відкриється форма редагування варки ${batchNum || "..."}.
+    const editSection = document.getElementById("edit-section");
+    const isHidden = editSection.hidden;
+    editSection.hidden = !isHidden;
+    if (isHidden) {
+      // При відкритті — підставити поточні значення
+      const overrides = JSON.parse(localStorage.getItem("bulk_micro_overrides") || "{}");
+      const ov = overrides[batchNum] || {};
+      document.getElementById("edit-micro-completed").value = ov.micro_completed || "";
+      document.getElementById("edit-micro-total").value = ov.micro_total || "";
+      document.getElementById("edit-micro-yeast").value = ov.micro_yeast || "";
+      if (typeof editSection.scrollIntoView === "function") {
+        editSection.scrollIntoView({behavior: "smooth", block: "start"});
+      }
+    }
+  });
 
-У реальному застосунку:
-1) Технолог зможе виправити фактичні показники (наприклад, якщо ввів pH помилково)
-2) Лаборант через 3-7 днів додасть результати мікро + дату завершення
-3) При збереженні висновок перерахується автоматично
-4) Усі зміни логуються в audit_log (хто/коли/що)
-5) Для адміна — можна змінити будь-яке поле; для лаборанта — обмеження`);
+  document.getElementById("edit-cancel-btn").addEventListener("click", () => {
+    document.getElementById("edit-section").hidden = true;
+  });
+
+  document.getElementById("edit-save-btn").addEventListener("click", () => {
+    const microCompleted = document.getElementById("edit-micro-completed").value;
+    const microTotal = document.getElementById("edit-micro-total").value;
+    const microYeast = document.getElementById("edit-micro-yeast").value;
+
+    if (!microCompleted) {
+      alert("Дата завершення мікро обов'язкова.");
+      return;
+    }
+    if (!microTotal || !microYeast) {
+      alert("Заповніть результати мікро-тесту (загальна і дріжджі).");
+      return;
+    }
+
+    const overrides = JSON.parse(localStorage.getItem("bulk_micro_overrides") || "{}");
+    overrides[batchNum] = {
+      micro_completed: microCompleted,
+      micro_total: microTotal,
+      micro_yeast: microYeast,
+      saved_at: new Date().toISOString(),
+    };
+    localStorage.setItem("bulk_micro_overrides", JSON.stringify(overrides));
+    alert(`Результати мікро для ${batchNum} збережено.\nСторінка перезавантажиться щоб показати оновлений висновок.`);
+    window.location.reload();
   });
 </script>
 

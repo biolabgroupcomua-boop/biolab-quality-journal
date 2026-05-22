@@ -57,7 +57,7 @@
       <p class="subtitle" id="page-subtitle">Crumb · Гель для душу Chery and Santal · 200 мл · 240 шт</p>
     </div>
     <div>
-      <a href="passport-view.html" role="button">⬇ Завантажити паспорт</a>
+      <a href="passport-view.html" role="button" id="pass-download-btn">⬇ Завантажити паспорт</a>
       <a href="#" role="button" class="secondary outline">Редагувати</a>
     </div>
   </header>
@@ -69,17 +69,17 @@
         <h4>Партія ГП</h4>
         <dl>
           <dt>№ партії ГП</dt>
-          <dd>21/05/26(01)</dd>
+          <dd id="fld-gp-no">21/05/26(01)</dd>
           <dt>Дата фасування</dt>
-          <dd>21.05.2026</dd>
+          <dd id="fld-fill-date">21.05.2026</dd>
           <dt>Дата введення аромату</dt>
-          <dd>20.05.2026</dd>
+          <dd id="fld-aroma-date">20.05.2026</dd>
           <dt>Кількість, шт</dt>
-          <dd>240</dd>
+          <dd id="fld-qty">240</dd>
           <dt>Об'єм партії, кг</dt>
-          <dd>48.0</dd>
+          <dd id="fld-volume-kg">48.0</dd>
           <dt>Виконавець фасування</dt>
-          <dd>Мовчан О. М.</dd>
+          <dd id="fld-fill-operator">Мовчан О. М.</dd>
         </dl>
       </div>
 
@@ -87,9 +87,9 @@
         <h4>Товарна позиція</h4>
         <dl>
           <dt>ТМ-замовник</dt>
-          <dd>Crumb</dd>
+          <dd id="fld-tm">Crumb</dd>
           <dt>Назва на етикетці</dt>
-          <dd>Гель для душу Chery and Santal</dd>
+          <dd id="fld-label">Гель для душу Chery and Santal</dd>
         </dl>
       </div>
 
@@ -97,9 +97,9 @@
         <h4>Тара (з довідника + цифра)</h4>
         <dl>
           <dt>Тип тари</dt>
-          <dd>Флакон</dd>
+          <dd id="fld-packaging-type">Флакон</dd>
           <dt>Об'єм / вага одиниці</dt>
-          <dd>200 мл</dd>
+          <dd id="fld-packaging-size">200 мл</dd>
         </dl>
       </div>
 
@@ -107,25 +107,25 @@
         <h4>Варка (з якої виготовлено)</h4>
         <dl>
           <dt>№ партії варки</dt>
-          <dd><a href="bulk-detail.html?batch=RP21/05/26(1)">RP21/05/26(1)</a></dd>
+          <dd id="fld-bulk-link"><a href="bulk-detail.html?batch=RP21/05/26(1)">RP21/05/26(1)</a></dd>
           <dt>Дата варки</dt>
-          <dd>21.05.2026</dd>
+          <dd id="fld-bulk-date">21.05.2026</dd>
           <dt>Продукт</dt>
-          <dd>RP032 — Гель для душу</dd>
+          <dd id="fld-bulk-product">RP032 — Гель для душу</dd>
           <dt>Висновок варки</dt>
-          <dd><span class="badge badge-ok">OK</span></dd>
+          <dd id="fld-bulk-verdict"><span class="badge badge-ok">OK</span></dd>
         </dl>
       </div>
 
       <div class="spec-block">
         <h4>Паспорт якості</h4>
-        <dl>
+        <dl id="passport-block">
           <dt>№ паспорта</dt>
-          <dd>ПУ-21/05/26(01)</dd>
+          <dd id="fld-pass-no">ПУ-21/05/26(01)</dd>
           <dt>Згенеровано</dt>
-          <dd>22.04.2026 о 01:03</dd>
+          <dd id="fld-pass-generated">21.05.2026 о 14:30</dd>
           <dt>PDF</dt>
-          <dd><a href="passport-view.html">Переглянути →</a></dd>
+          <dd id="fld-pass-pdf"><a href="passport-view.html">Переглянути →</a></dd>
         </dl>
       </div>
 
@@ -133,7 +133,7 @@
   </article>
 
   <article style="margin-top: 1.5rem;">
-    <h3 style="margin-top: 0;">Показники якості (з варки RP21/05/26(1))</h3>
+    <h3 style="margin-top: 0;">Показники якості (з варки <span id="qa-bulk-ref">RP21/05/26(1)</span>)</h3>
     <p style="color: var(--pico-muted-color); font-size: 0.9em;">
       Усі показники тягнуться напряму з варки — у партії ГП окремо не зберігаються.
     </p>
@@ -146,40 +146,272 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td>pH</td><td>5.0 — 6.0</td><td><strong>5.4</strong></td></tr>
-        <tr><td>В'язкість</td><td>S3V12 Cp=5000-8000 mPas</td><td><strong>S3V12 Cp=7200 mPas</strong></td></tr>
-        <tr><td>Густина, г/мл</td><td>0.9 — 1.0</td><td><strong>0.95</strong></td></tr>
-        <tr><td>Колоїдна стабільність</td><td>стабільний</td><td><strong>стабільний</strong></td></tr>
-        <tr><td>Термостабільність</td><td>стабільний</td><td><strong>стабільний</strong></td></tr>
-        <tr><td>Мікробіологія загальна</td><td>не виявлено</td><td><strong>не виявлено</strong></td></tr>
-        <tr><td>Дріжджі та плісняви</td><td>не виявлено</td><td><strong>не виявлено</strong></td></tr>
-        <tr><td>Органолептика</td><td>відповідає затвердженому зразку</td><td><strong>відповідає</strong></td></tr>
+        <tr><td>pH</td><td id="qa-norm-ph">5.0 — 6.0</td><td><strong id="qa-fact-ph">5.4</strong></td></tr>
+        <tr><td>В'язкість</td><td id="qa-norm-visc">S3V12 Cp=5000-8000 mPas</td><td><strong id="qa-fact-visc">S3V12 Cp=7200 mPas</strong></td></tr>
+        <tr><td>Густина, г/мл</td><td id="qa-norm-dens">0.9 — 1.0</td><td><strong id="qa-fact-dens">0.95</strong></td></tr>
+        <tr><td>Колоїдна стабільність</td><td id="qa-norm-colloid">стабільний</td><td><strong id="qa-fact-colloid">стабільний</strong></td></tr>
+        <tr><td>Термостабільність</td><td id="qa-norm-thermo">стабільний</td><td><strong id="qa-fact-thermo">стабільний</strong></td></tr>
+        <tr><td>Мікробіологія загальна</td><td id="qa-norm-micro-total">не виявлено</td><td><strong id="qa-fact-micro-total">не виявлено</strong></td></tr>
+        <tr><td>Дріжджі та плісняви</td><td id="qa-norm-micro-yeast">не виявлено</td><td><strong id="qa-fact-micro-yeast">не виявлено</strong></td></tr>
+        <tr><td>Органолептика</td><td id="qa-norm-organo">відповідає затвердженому зразку</td><td><strong id="qa-fact-organo">відповідає</strong></td></tr>
       </tbody>
     </table>
   </article>
 </main>
 
 <script>
-  // Читаємо ?gp=... з URL і оновлюємо заголовок
   const params = new URLSearchParams(window.location.search);
   const gpNum = params.get("gp");
 
-  const FAKE_GP = {
-    "21/05/26(01)": {tm: "Crumb", label: "Гель для душу Chery and Santal", volume: "200 мл", qty: "240"},
-    "21/05/26(02)": {tm: "Pinky", label: "Гель Floral wood", volume: "250 мл", qty: "8"},
-    "20/05/26(01)": {tm: "Plis Me", label: "Рідкий дезодорант", volume: "50 мл", qty: "460"},
-    "20/05/26(02)": {tm: "Crumb", label: "Шампунь Avocado + Collagen", volume: "250 мл", qty: "60"},
-    "19/05/26(01)": {tm: "Pinky", label: "Тонік Rich", volume: "150 мл", qty: "53"},
-    "28/04/26(01)": {tm: "Crumb", label: "Гель для душу Chery and Santal", volume: "200 мл", qty: "220"},
-    "18/05/26(03)": {tm: "ANKIE002", label: "Маска для волосся кераміди", volume: "200 мл", qty: "30"},
+  // Базовий QA-набір для bulk RP21/05/26(1) (Гель RP032)
+  const QA_GEL_OK = {
+    ph_norm: "5.0 — 6.0", ph_fact: "5.4",
+    visc_norm: "S3V12 Cp=5000-8000 mPas", visc_fact: "S3V12 Cp=7200 mPas",
+    dens_norm: "0.9 — 1.0", dens_fact: "0.95",
+    colloid_norm: "стабільний", colloid_fact: "стабільний",
+    thermo_norm: "стабільний", thermo_fact: "стабільний",
+    micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
+    micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
+    organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
   };
 
-  if (gpNum && FAKE_GP[gpNum]) {
-    const g = FAKE_GP[gpNum];
+  const FAKE_GP = {
+    "21/05/26(01)": {
+      tm: "Crumb", label: "Гель для душу Chery and Santal",
+      packaging_type: "Флакон", packaging_size: "200 мл",
+      fill_date: "21.05.2026", aroma_date: "20.05.2026",
+      qty: "240", volume_kg: "48.0", fill_operator: "Мовчан О. М.",
+      bulk_no: "RP21/05/26(1)", bulk_date: "21.05.2026",
+      bulk_product: "RP032 — Гель для душу", bulk_verdict: "OK",
+      passport_no: "ПУ-21/05/26(01)", passport_generated: "21.05.2026 о 14:30",
+      qa: QA_GEL_OK,
+    },
+    "21/05/26(02)": {
+      tm: "Pinky", label: "Гель Floral wood",
+      packaging_type: "Флакон", packaging_size: "250 мл",
+      fill_date: "21.05.2026", aroma_date: "20.05.2026",
+      qty: "8", volume_kg: "2.0", fill_operator: "Мовчан О. М.",
+      bulk_no: "RP21/05/26(1)", bulk_date: "21.05.2026",
+      bulk_product: "RP032 — Гель для душу", bulk_verdict: "OK",
+      passport_no: null, // паспорт ще не згенеровано
+      qa: QA_GEL_OK,
+    },
+    "20/05/26(01)": {
+      tm: "Plis Me", label: "Рідкий дезодорант",
+      packaging_type: "Ролер", packaging_size: "50 мл",
+      fill_date: "20.05.2026", aroma_date: "—",
+      qty: "460", volume_kg: "23.0", fill_operator: "Санмарі А. П.",
+      bulk_no: "RP20/05/26(3)", bulk_date: "20.05.2026",
+      bulk_product: "RP002 — Безсульфатний шампунь", bulk_verdict: "OUT",
+      passport_no: null,
+      qa: {
+        ph_norm: "5.0 — 6.0", ph_fact: "7.2",
+        visc_norm: "S3V12 Cp=5000-8000 mPas", visc_fact: "S3V12 Cp=6500 mPas",
+        dens_norm: "0.9 — 1.0", dens_fact: "0.95",
+        colloid_norm: "стабільний", colloid_fact: "стабільний",
+        thermo_norm: "стабільний", thermo_fact: "стабільний",
+        micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
+        micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
+        organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
+      },
+    },
+    "20/05/26(02)": {
+      tm: "Crumb", label: "Шампунь Avocado + Collagen",
+      packaging_type: "Флакон", packaging_size: "250 мл",
+      fill_date: "20.05.2026", aroma_date: "19.05.2026",
+      qty: "60", volume_kg: "15.0", fill_operator: "Карабут В. О.",
+      bulk_no: "RP20/05/26(2)", bulk_date: "20.05.2026",
+      bulk_product: "RP014 — Шампунь Avocado + Collagen", bulk_verdict: "OK",
+      passport_no: "ПУ-20/05/26(02)", passport_generated: "20.05.2026 о 16:15",
+      qa: {
+        ph_norm: "5.0 — 6.0", ph_fact: "5.5",
+        visc_norm: "S3V12 Cp=5000-8000 mPas", visc_fact: "S3V12 Cp=5200 mPas",
+        dens_norm: "0.9 — 1.0", dens_fact: "0.98",
+        colloid_norm: "стабільний", colloid_fact: "стабільний",
+        thermo_norm: "стабільний", thermo_fact: "стабільний",
+        micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
+        micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
+        organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
+      },
+    },
+    "19/05/26(01)": {
+      tm: "Pinky", label: "Тонік Rich",
+      packaging_type: "Флакон", packaging_size: "150 мл",
+      fill_date: "19.05.2026", aroma_date: "—",
+      qty: "53", volume_kg: "8.0", fill_operator: "Мовчан О. М.",
+      bulk_no: "RP19/05/26(1)", bulk_date: "19.05.2026",
+      bulk_product: "L301 — Тонік Rich", bulk_verdict: "OK",
+      passport_no: null,
+      qa: {
+        ph_norm: "4.5 — 5.5", ph_fact: "4.9",
+        visc_norm: "—", visc_fact: "—",
+        dens_norm: "0.95 — 1.05", dens_fact: "1.00",
+        colloid_norm: "стабільний", colloid_fact: "стабільний",
+        thermo_norm: "стабільний", thermo_fact: "стабільний",
+        micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
+        micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
+        organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
+      },
+    },
+    "28/04/26(01)": {
+      tm: "Crumb", label: "Гель для душу Chery and Santal",
+      packaging_type: "Флакон", packaging_size: "200 мл",
+      fill_date: "28.04.2026", aroma_date: "27.04.2026",
+      qty: "220", volume_kg: "44.0", fill_operator: "Мовчан О. М.",
+      bulk_no: "RP27/04/26(1)", bulk_date: "27.04.2026",
+      bulk_product: "RP032 — Гель для душу", bulk_verdict: "OK",
+      passport_no: "ПУ-28/04/26(01)", passport_generated: "28.04.2026 о 11:00",
+      qa: QA_GEL_OK,
+    },
+    "18/05/26(03)": {
+      tm: "ANKIE002", label: "Маска для волосся кераміди",
+      packaging_type: "Банка", packaging_size: "200 мл",
+      fill_date: "18.05.2026", aroma_date: "—",
+      qty: "30", volume_kg: "6.0", fill_operator: "Карабут В. О.",
+      bulk_no: "RP18/05/26(2)", bulk_date: "18.05.2026",
+      bulk_product: "RP140 — Маска для волосся кераміди", bulk_verdict: "OK",
+      passport_no: "ПУ-18/05/26(03)", passport_generated: "19.05.2026 о 09:20",
+      qa: {
+        ph_norm: "4.0 — 5.0", ph_fact: "4.5",
+        visc_norm: "S3V12 Cp=8000-12000 mPas", visc_fact: "S3V12 Cp=10000 mPas",
+        dens_norm: "0.95 — 1.05", dens_fact: "1.02",
+        colloid_norm: "стабільний", colloid_fact: "стабільний",
+        thermo_norm: "стабільний", thermo_fact: "стабільний",
+        micro_total_norm: "не виявлено", micro_total_fact: "не виявлено",
+        micro_yeast_norm: "не виявлено", micro_yeast_fact: "не виявлено",
+        organo_norm: "відповідає затвердженому зразку", organo_fact: "відповідає",
+      },
+    },
+  };
+
+  // Fallback на localStorage для нових партій з finished-new.html
+  function findInLocalStorage(no) {
+    const saved = JSON.parse(localStorage.getItem("finished_batches") || "[]");
+    const s = saved.find(b => b.batch_number === no);
+    if (!s) return null;
+    const [yyyy, mm, dd] = s.date.split("-");
+    return {
+      tm: s.tm || "—",
+      label: s.label || "—",
+      packaging_type: "—", packaging_size: "—",
+      fill_date: `${dd}.${mm}.${yyyy}`,
+      aroma_date: "—",
+      qty: "—", volume_kg: "—", fill_operator: "—",
+      bulk_no: s.bulk_batch || "—", bulk_date: "—",
+      bulk_product: "—", bulk_verdict: "OK",
+      passport_no: null,
+      qa: null,
+      _isNewBatch: true,
+    };
+  }
+
+  function badgeForVerdict(v, allowedText, deniedText, pendingText) {
+    if (v === "OUT") return `<span class="badge badge-out">${deniedText}</span>`;
+    if (v === "PENDING") return `<span class="badge badge-pending">${pendingText}</span>`;
+    return `<span class="badge badge-ok">${allowedText}</span>`;
+  }
+
+  function applyGp(no, g) {
+    // Заголовок
+    const headerBadge = badgeForVerdict(g.bulk_verdict, "дозволено", "недоступно — варка OUT", "очікує мікро");
     document.getElementById("page-title").innerHTML =
-      `Партія ГП ${gpNum} <span class="badge badge-ok" style="font-size: 0.55em; vertical-align: middle;">дозволено</span>`;
+      `Партія ГП ${no} <span style="font-size: 0.55em; vertical-align: middle;">${headerBadge}</span>`;
     document.getElementById("page-subtitle").textContent =
-      `${g.tm} · ${g.label} · ${g.volume} · ${g.qty} шт`;
+      `${g.tm} · ${g.label} · ${g.packaging_size} · ${g.qty} шт`;
+
+    // Партія ГП
+    document.getElementById("fld-gp-no").textContent = no;
+    document.getElementById("fld-fill-date").textContent = g.fill_date;
+    document.getElementById("fld-aroma-date").textContent = g.aroma_date;
+    document.getElementById("fld-qty").textContent = g.qty;
+    document.getElementById("fld-volume-kg").textContent = g.volume_kg;
+    document.getElementById("fld-fill-operator").textContent = g.fill_operator;
+
+    // Товарна позиція
+    document.getElementById("fld-tm").textContent = g.tm;
+    document.getElementById("fld-label").textContent = g.label;
+
+    // Тара
+    document.getElementById("fld-packaging-type").textContent = g.packaging_type;
+    document.getElementById("fld-packaging-size").textContent = g.packaging_size;
+
+    // Варка
+    document.getElementById("fld-bulk-link").innerHTML =
+      `<a href="bulk-detail.html?batch=${g.bulk_no}">${g.bulk_no}</a>`;
+    document.getElementById("fld-bulk-date").textContent = g.bulk_date;
+    document.getElementById("fld-bulk-product").textContent = g.bulk_product;
+    document.getElementById("fld-bulk-verdict").innerHTML =
+      badgeForVerdict(g.bulk_verdict, "OK", "OUT", "очікує мікро");
+
+    // Паспорт
+    const downloadBtn = document.getElementById("pass-download-btn");
+    if (g.passport_no) {
+      document.getElementById("fld-pass-no").textContent = g.passport_no;
+      document.getElementById("fld-pass-generated").textContent = g.passport_generated || "—";
+      document.getElementById("fld-pass-pdf").innerHTML =
+        `<a href="passport-view.html?gp=${no}">Переглянути →</a>`;
+      if (downloadBtn) downloadBtn.href = `passport-view.html?gp=${no}&print=1`;
+    } else if (g.bulk_verdict === "OUT") {
+      document.getElementById("fld-pass-no").textContent = "—";
+      document.getElementById("fld-pass-generated").textContent = "—";
+      document.getElementById("fld-pass-pdf").innerHTML =
+        '<span class="badge badge-out">недоступно — варка OUT</span>';
+      if (downloadBtn) {
+        downloadBtn.removeAttribute("href");
+        downloadBtn.style.opacity = "0.4";
+        downloadBtn.style.pointerEvents = "none";
+        downloadBtn.textContent = "Недоступно (OUT)";
+      }
+    } else {
+      document.getElementById("fld-pass-no").textContent = "не згенеровано";
+      document.getElementById("fld-pass-generated").textContent = "—";
+      document.getElementById("fld-pass-pdf").innerHTML =
+        `<a href="passport-view.html?gp=${no}&print=1">Згенерувати →</a>`;
+      if (downloadBtn) {
+        downloadBtn.href = `passport-view.html?gp=${no}&print=1`;
+        downloadBtn.textContent = "🖨 Згенерувати паспорт";
+      }
+    }
+
+    // QA-таблиця
+    document.getElementById("qa-bulk-ref").textContent = g.bulk_no;
+    if (g.qa) {
+      const q = g.qa;
+      document.getElementById("qa-norm-ph").textContent = q.ph_norm;
+      document.getElementById("qa-fact-ph").textContent = q.ph_fact;
+      document.getElementById("qa-norm-visc").textContent = q.visc_norm;
+      document.getElementById("qa-fact-visc").textContent = q.visc_fact;
+      document.getElementById("qa-norm-dens").textContent = q.dens_norm;
+      document.getElementById("qa-fact-dens").textContent = q.dens_fact;
+      document.getElementById("qa-norm-colloid").textContent = q.colloid_norm;
+      document.getElementById("qa-fact-colloid").textContent = q.colloid_fact;
+      document.getElementById("qa-norm-thermo").textContent = q.thermo_norm;
+      document.getElementById("qa-fact-thermo").textContent = q.thermo_fact;
+      document.getElementById("qa-norm-micro-total").textContent = q.micro_total_norm;
+      document.getElementById("qa-fact-micro-total").textContent = q.micro_total_fact;
+      document.getElementById("qa-norm-micro-yeast").textContent = q.micro_yeast_norm;
+      document.getElementById("qa-fact-micro-yeast").textContent = q.micro_yeast_fact;
+      document.getElementById("qa-norm-organo").textContent = q.organo_norm;
+      document.getElementById("qa-fact-organo").textContent = q.organo_fact;
+    } else {
+      // Нова партія з localStorage — деталей QA нема
+      ["ph","visc","dens","colloid","thermo","micro-total","micro-yeast","organo"].forEach(k => {
+        document.getElementById(`qa-fact-${k}`).textContent = "—";
+      });
+    }
+  }
+
+  if (gpNum) {
+    let g = FAKE_GP[gpNum];
+    if (!g) g = findInLocalStorage(gpNum);
+    if (g) {
+      applyGp(gpNum, g);
+    } else {
+      document.getElementById("page-title").innerHTML =
+        `Партія ГП ${gpNum} <span class="badge badge-out" style="font-size: 0.55em;">не знайдена</span>`;
+      document.getElementById("page-subtitle").textContent =
+        "Партія з таким номером відсутня у журналі.";
+    }
   }
 </script>
 
