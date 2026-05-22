@@ -85,13 +85,8 @@
       </div>
 
       <label style="margin-top: 0.75rem;">
-        № партії bulk <span id="bulk-count" style="color: var(--pico-muted-color); font-size: 0.85em;">(4 знайдено)</span>
-        <select id="bulk-select" required>
-          <option value="RP21/05/26(1)">RP21/05/26(1) — RP032 Гель для душу — 21.05.2026 — OK</option>
-          <option value="RP21/05/26(2)">RP21/05/26(2) — RP064 Кондиціонер — 21.05.2026 — OK</option>
-          <option value="RP20/05/26(3)">RP20/05/26(3) — RP002 Шампунь — 20.05.2026 — OUT (не можна випустити)</option>
-          <option value="RP20/05/26(2)">RP20/05/26(2) — RP014 Шампунь Avocado — 20.05.2026 — OK</option>
-        </select>
+        № партії bulk <span id="bulk-count" style="color: var(--pico-muted-color); font-size: 0.85em;">(— знайдено)</span>
+        <select id="bulk-select" required></select>
       </label>
     </section>
 
@@ -292,46 +287,95 @@
 </main>
 
 <script>
-  // Демо: при зміні bulk підтягуємо дані варки.
-  // У реальному застосунку — HTMX через GET /bulk/{id}/details
+  // Демо: при зміні bulk підтягуємо дані варки. iso_date — для фільтрації за датою.
+  // У реальному застосунку — HTMX через GET /bulk/?from=...&to=...
+  const okBadge = '<span class="badge badge-ok">OK</span>';
+  const outBadge = '<span class="badge badge-out">OUT</span>';
+  const pendingBadge = '<span class="badge badge-pending">очікує мікро</span>';
+
   const BULKS = {
-    "RP21/05/26(1)": {
-      product: "RP032 — Гель для душу",
-      date: "21.05.2026",
-      volume: "50.00 кг",
-      verdict_html: '<span class="badge badge-ok">OK</span>',
-      ph: "5.4",
-      viscosity: "S3V12 Cp=7200 mPas",
-      density: "0.95 г/мл",
-    },
-    "RP21/05/26(2)": {
-      product: "RP064 — Кондиціонер для волосся чорний",
-      date: "21.05.2026",
-      volume: "38.20 кг",
-      verdict_html: '<span class="badge badge-ok">OK</span>',
-      ph: "5.7",
-      viscosity: "S3V12 Cp=5000 mPas",
-      density: "1.0 г/мл",
-    },
-    "RP20/05/26(3)": {
-      product: "RP002 — Безсульфатний шампунь",
-      date: "20.05.2026",
-      volume: "23.00 кг",
-      verdict_html: '<span class="badge badge-out">OUT</span>',
-      ph: "7.2",
-      viscosity: "S3V12 Cp=6500 mPas",
-      density: "0.95 г/мл",
-    },
-    "RP20/05/26(2)": {
-      product: "RP014 — Шампунь Avocado + Collagen",
-      date: "20.05.2026",
-      volume: "15.00 кг",
-      verdict_html: '<span class="badge badge-ok">OK</span>',
-      ph: "5.5",
-      viscosity: "S3V12 Cp=5200 mPas",
-      density: "0.98 г/мл",
-    },
+    "RP21/05/26(1)": {iso_date:"2026-05-21", product:"RP032 — Гель для душу", date:"21.05.2026", volume:"50.00 кг", verdict:"PENDING", verdict_html:pendingBadge, ph:"5.4", viscosity:"S3V12 Cp=7200 mPas", density:"0.95 г/мл"},
+    "RP21/05/26(2)": {iso_date:"2026-05-21", product:"RP064 — Кондиціонер для волосся чорний", date:"21.05.2026", volume:"38.20 кг", verdict:"PENDING", verdict_html:pendingBadge, ph:"6.1", viscosity:"S3V12 Cp=5000 mPas", density:"1.0 г/мл"},
+    "RP20/05/26(3)": {iso_date:"2026-05-20", product:"RP002 — Безсульфатний шампунь", date:"20.05.2026", volume:"23.00 кг", verdict:"OUT", verdict_html:outBadge, ph:"7.2", viscosity:"S3V12 Cp=6500 mPas", density:"0.95 г/мл"},
+    "RP20/05/26(2)": {iso_date:"2026-05-20", product:"RP014 — Шампунь Avocado + Collagen", date:"20.05.2026", volume:"15.00 кг", verdict:"PENDING", verdict_html:pendingBadge, ph:"5.5", viscosity:"S3V12 Cp=5200 mPas", density:"0.98 г/мл"},
+    "RP19/05/26(1)": {iso_date:"2026-05-19", product:"L301 — Тонік Rich з есцином", date:"19.05.2026", volume:"8.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.5", viscosity:"—", density:"1.0 г/мл"},
+    "RP18/05/26(4)": {iso_date:"2026-05-18", product:"RP001 — Шампунь Anti-Dandruff", date:"18.05.2026", volume:"20.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.8", viscosity:"S3V12 Cp=4500 mPas", density:"1.02 г/мл"},
+    "RP18/05/26(3)": {iso_date:"2026-05-18", product:"RP060 — Маска для волосся кераміди", date:"18.05.2026", volume:"8.95 кг", verdict:"OK", verdict_html:okBadge, ph:"5.8", viscosity:"S3V12 Cp=9000 mPas", density:"1.0 г/мл"},
+    "RP28/04/26(1)": {iso_date:"2026-04-28", product:"RP032 — Гель для душу", date:"28.04.2026", volume:"45.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.6", viscosity:"S3V12 Cp=7000 mPas", density:"0.95 г/мл"},
+    "RP22/04/26(1)": {iso_date:"2026-04-22", product:"RP168 — Рідкий дезодорант", date:"22.04.2026", volume:"25.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.9", viscosity:"—", density:"1.0 г/мл"},
+    "RP15/03/26(1)": {iso_date:"2026-03-15", product:"RP002 — Безсульфатний шампунь", date:"15.03.2026", volume:"30.00 кг", verdict:"OK", verdict_html:okBadge, ph:"5.4", viscosity:"S3V12 Cp=6000 mPas", density:"0.97 г/мл"},
   };
+
+  // Додаємо у BULKS варки збережені у localStorage (включно зі створеними сьогодні)
+  (function mergeLocalStorageBulks() {
+    const saved = JSON.parse(localStorage.getItem("bulk_batches") || "[]");
+    saved.forEach(s => {
+      const [yyyy, mm, dd] = s.date.split("-");
+      const verdict = s.verdict || "PENDING";
+      BULKS[s.batch_number] = {
+        iso_date: s.date,
+        product: `${s.rp_code} — ${s.product_name || s.rp_code}`,
+        date: `${dd}.${mm}.${yyyy}`,
+        volume: `${parseFloat(s.volume_kg).toFixed(2)} кг`,
+        verdict: verdict,
+        verdict_html: verdict === "OUT" ? outBadge : verdict === "PENDING" ? pendingBadge : okBadge,
+        ph: s.ph_fact || "—",
+        viscosity: "—",
+        density: "—",
+      };
+    });
+  })();
+
+  // Рендеримо опції bulk-select відповідно до фільтра дат
+  function renderBulkOptions() {
+    const fromIso = document.getElementById("bulk-date-from").value;
+    const toIso = document.getElementById("bulk-date-to").value;
+    const sel = document.getElementById("bulk-select");
+    const prevValue = sel.value;
+    sel.innerHTML = "";
+
+    // Фільтруємо + сортуємо DESC за датою
+    const entries = Object.entries(BULKS)
+      .filter(([no, b]) => {
+        if (fromIso && b.iso_date < fromIso) return false;
+        if (toIso && b.iso_date > toIso) return false;
+        return true;
+      })
+      .sort((a, b) => b[1].iso_date.localeCompare(a[1].iso_date));
+
+    document.getElementById("bulk-count").textContent = `(${entries.length} знайдено)`;
+
+    if (entries.length === 0) {
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = "— нема варок у вибраному періоді —";
+      opt.disabled = true;
+      sel.appendChild(opt);
+      // Очистити секцію 2 і залишок
+      document.getElementById("bulk-product").textContent = "—";
+      document.getElementById("bulk-date").textContent = "—";
+      document.getElementById("bulk-volume").textContent = "—";
+      document.getElementById("bulk-verdict").innerHTML = "";
+      document.getElementById("bulk-remaining").textContent = "— кг";
+      document.getElementById("bulk-usage-detail").textContent = "";
+      return;
+    }
+
+    entries.forEach(([no, b]) => {
+      const opt = document.createElement("option");
+      opt.value = no;
+      const verdictLabel = b.verdict === "OUT" ? "OUT (не можна випустити)" : b.verdict === "PENDING" ? "очікує мікро" : "OK";
+      opt.textContent = `${no} — ${b.product} — ${b.date} — ${verdictLabel}`;
+      if (b.verdict === "OUT") opt.style.color = "var(--bl-coral)";
+      sel.appendChild(opt);
+    });
+
+    // Зберігаємо вибір якщо можливо, інакше беремо першу варку у списку
+    if (BULKS[prevValue] && entries.some(([no]) => no === prevValue)) {
+      sel.value = prevValue;
+    }
+    applyBulk(sel.value);
+  }
 
   // === Облік залишків по варках ===
   // Скільки кг з кожної варки вже розфасовано в seed-даних (FAKE_GP у finished-list/detail).
@@ -465,8 +509,8 @@
     document.getElementById("gp-daily").value = next.daily;
     document.getElementById("gp-journal-record-no").value = next.recordNo;
     generateGpBatchNumber();
-    // Показуємо залишок для дефолтно вибраної варки
-    applyBulk(document.getElementById("bulk-select").value);
+    // Будуємо опції за поточним фільтром (з seed + localStorage)
+    renderBulkOptions();
   })();
   document.getElementById("gp-fill-date").addEventListener("change", (e) => {
     const next = calculateNextGp(e.target.value);
@@ -474,7 +518,7 @@
     generateGpBatchNumber();
   });
 
-  // Quick-select дат для фільтра bulk
+  // Quick-select дат для фільтра bulk — після зміни дат перерендеримо опції
   document.getElementById("bulk-date-quick").addEventListener("change", (e) => {
     const today = new Date();
     const isoDate = (d) => d.toISOString().split("T")[0];
@@ -494,7 +538,12 @@
     }
     document.getElementById("bulk-date-from").value = isoDate(from);
     document.getElementById("bulk-date-to").value = isoDate(to);
+    renderBulkOptions();
   });
+
+  // Ручна зміна дат "Від/До" — також перерендеримо опції
+  document.getElementById("bulk-date-from").addEventListener("change", renderBulkOptions);
+  document.getElementById("bulk-date-to").addEventListener("change", renderBulkOptions);
 
   // === Каскад ТМ → продукт ===
   // Дані: товарні позиції згруповані за ТМ (у реальному застосунку — з довідника ProductVariant)
