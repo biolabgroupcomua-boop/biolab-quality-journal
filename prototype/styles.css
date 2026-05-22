@@ -527,8 +527,36 @@ tr.month-row td strong {
   font-family: 'Montserrat', sans-serif;
 }
 
+/* === Print styles — для друку паспорта === */
 @media print {
-  body { display: block; }
-  aside.sidebar { display: none; }
-  main { padding: 0; }
+  body {
+    display: block;
+    background: white;
+  }
+  aside.sidebar,
+  main > header.page-header,
+  .no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0;
+  }
+  .passport-preview {
+    border: none !important;
+    box-shadow: none !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1.5cm !important;
+    font-size: 10pt !important;
+    page-break-inside: avoid;
+  }
+  .passport-preview .pp-logo { height: 50px; }
+  .passport-preview h2 { font-size: 14pt !important; }
+  .passport-preview table { font-size: 9pt !important; }
+  .passport-preview .pp-quality thead th {
+    background: #193B8F !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

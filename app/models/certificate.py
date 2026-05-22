@@ -28,11 +28,13 @@ class QualityCertificate(Base, RecordMixin):
 
     passport_no: Mapped[str] = mapped_column(unique=True, nullable=False, index=True)
     generated_at: Mapped[datetime] = mapped_column(DateTime(timezone=False), nullable=False)
-    pdf_path: Mapped[str] = mapped_column(nullable=False)
+    pdf_path: Mapped[str | None] = mapped_column(nullable=True)
     status: Mapped[CertificateStatusEnum] = mapped_column(
         Enum(CertificateStatusEnum), nullable=False, default=CertificateStatusEnum.CREATED
     )
     verdict_text: Mapped[str | None] = mapped_column(nullable=True)
+
+    legacy_import: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     finished_batch: Mapped["FinishedBatch"] = relationship(  # noqa: F821
         back_populates="certificates"
