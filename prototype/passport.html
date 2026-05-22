@@ -53,18 +53,18 @@
     <span class="subtitle">99 згенерованих · 5 очікують</span>
   </header>
 
-  <form class="toolbar">
+  <form class="toolbar" id="filter-form">
     <div>
       <label>ТМ</label>
       <select><option>Всі</option><option>Crumb</option><option>Plis Me</option><option>Pinky</option></select>
     </div>
     <div>
       <label>Від</label>
-      <input type="date" value="2026-05-01">
+      <input type="date" id="filter-date-from">
     </div>
     <div>
       <label>До</label>
-      <input type="date" value="2026-05-21">
+      <input type="date" id="filter-date-to">
     </div>
     <div>
       <label>Статус</label>
@@ -119,7 +119,7 @@
         <td>2.0 кг</td>
         <td><span class="badge badge-draft">очікує</span></td>
         <td colspan="2">
-          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на ''PDF''+''Друк''.','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
+          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на «PDF»+«Друк».','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
         </td>
       </tr>
       <tr>
@@ -146,7 +146,7 @@
         <td>8.0 кг</td>
         <td><span class="badge badge-draft">очікує</span></td>
         <td colspan="2">
-          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на ''PDF''+''Друк''.','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
+          <a href="#" role="button" onclick="alert('Прототип: тут згенерується PDF паспорта для цієї партії ГП. У реальному застосунку:\n1) бекенд візьме дані варки + специфікацію\n2) WeasyPrint згенерує PDF за шаблоном\n3) файл збережеться в data/passports/\n4) ця кнопка зміниться на «PDF»+«Друк».','Згенерація паспорта'); return false;" style="padding: 0.2rem 0.6rem; font-size: 0.85em;">Згенерувати</a>
         </td>
       </tr>
       <tr>
@@ -184,6 +184,40 @@
     </tbody>
   </table>
 </main>
+
+<script>
+  // Виставляємо фільтр-дати: "Від" = 1-е поточного місяця, "До" = сьогодні
+  (function initFilterDates() {
+    const today = new Date();
+    const isoToday = today.toISOString().slice(0, 10);
+    const firstOfMonth = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-01`;
+    const fromEl = document.getElementById("filter-date-from");
+    const toEl = document.getElementById("filter-date-to");
+    if (fromEl) fromEl.value = firstOfMonth;
+    if (toEl) toEl.value = isoToday;
+    const form = document.getElementById("filter-form");
+    if (form) form.addEventListener("submit", e => e.preventDefault());
+  })();
+
+  // Дописує ?gp=<номер> до кнопок PDF/Друк/Згенерувати на кожному рядку.
+  (function wirePassportButtons() {
+    const rows = [...document.querySelectorAll("table tbody tr:not(.month-row)")];
+    rows.forEach(tr => {
+      const gpLink = tr.querySelector('a[href^="finished-detail.html?gp="]');
+      if (!gpLink) return;
+      const gp = gpLink.getAttribute("href").split("?gp=")[1];
+      if (!gp) return;
+      tr.querySelectorAll('a[href="passport-view.html"]').forEach(a => {
+        const isPrint = a.classList.contains("secondary") || (a.textContent || "").trim() === "Друк";
+        a.href = `passport-view.html?gp=${gp}` + (isPrint ? "&print=1" : "");
+      });
+      tr.querySelectorAll('a[onclick*="згенерується PDF"]').forEach(a => {
+        a.href = `passport-view.html?gp=${gp}&print=1`;
+        a.removeAttribute("onclick");
+      });
+    });
+  })();
+</script>
 
 </body>
 </html>

@@ -305,6 +305,55 @@ main > header.page-header .subtitle {
   box-shadow: none;
 }
 
+/* Inline warning біля факт-полів (! поза нормою) */
+.fact-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.fact-cell > input,
+.fact-cell > select,
+.fact-cell > .viscosity-split {
+  flex: 1;
+  min-width: 0;
+}
+.field-warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--bl-coral);
+  background: #ffe9e6;
+  border: 1px solid #ffcec7;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+input.field-out,
+select.field-out {
+  border-color: var(--bl-coral) !important;
+  background: #fffaf9 !important;
+}
+
+/* Мікро-секція: блокування коли варка вже OUT за іншими показниками */
+.micro-blocked-banner {
+  margin: 0.75rem 0 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #ffe9e6;
+  border: 1px solid #ffcec7;
+  border-radius: 6px;
+  color: var(--bl-coral);
+  font-size: 0.95em;
+  font-weight: 500;
+}
+.micro-section.blocked {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* Висновок панель */
 .verdict-panel {
   margin-top: 1.5rem;
@@ -529,34 +578,86 @@ tr.month-row td strong {
 
 /* === Print styles — для друку паспорта === */
 @media print {
+  /* A4 портрет з мінімальними полями — щоб паспорт уліз на одну сторінку */
+  @page {
+    size: A4 portrait;
+    margin: 0.8cm;
+  }
+
   body {
     display: block;
     background: white;
+    font-size: 9pt;
   }
   aside.sidebar,
   main > header.page-header,
-  .no-print {
+  .no-print,
+  nav {
     display: none !important;
   }
   main {
-    padding: 0;
+    padding: 0 !important;
+    margin: 0 !important;
   }
+  main > h3 { display: none !important; }
+
   .passport-preview {
     border: none !important;
     box-shadow: none !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 1.5cm !important;
-    font-size: 10pt !important;
+    padding: 0 !important;
+    font-size: 8.5pt !important;
+    line-height: 1.3 !important;
     page-break-inside: avoid;
   }
-  .passport-preview .pp-logo { height: 50px; }
-  .passport-preview h2 { font-size: 14pt !important; }
-  .passport-preview table { font-size: 9pt !important; }
+
+  .passport-preview .pp-letterhead {
+    padding-bottom: 0.3rem !important;
+    margin-bottom: 0.5rem !important;
+    gap: 0.75rem !important;
+  }
+  .passport-preview .pp-logo { height: 36px !important; }
+  .passport-preview .pp-company-info { font-size: 7.5pt !important; line-height: 1.3 !important; }
+
+  .passport-preview h2 {
+    font-size: 12pt !important;
+    margin: 0.2rem 0 0.1rem 0 !important;
+  }
+  .passport-preview .pp-no {
+    margin: 0 0 0.3rem 0 !important;
+    font-size: 9pt !important;
+  }
+  .passport-preview p {
+    margin: 0.3rem 0 !important;
+  }
+
+  .passport-preview table {
+    font-size: 8pt !important;
+    margin: 0.3rem 0 !important;
+  }
+  .passport-preview table th,
+  .passport-preview table td {
+    padding: 0.15rem 0.35rem !important;
+  }
   .passport-preview .pp-quality thead th {
     background: #193B8F !important;
     color: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    font-size: 7.5pt !important;
+  }
+
+  .passport-preview .pp-signatures {
+    margin-top: 0.5rem !important;
+  }
+  .passport-preview .pp-signatures td {
+    padding: 0.15rem 0 !important;
+  }
+
+  .passport-preview .pp-footer {
+    margin-top: 0.5rem !important;
+    padding-top: 0.3rem !important;
+    font-size: 7pt !important;
   }
 }

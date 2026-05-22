@@ -53,20 +53,20 @@
 <main>
   <header class="page-header">
     <div>
-      <p style="margin: 0;"><a href="#" style="font-size: 0.85em;">← Усі паспорти</a></p>
-      <h1>Паспорт ПУ-21/05/26(01)-Crumb
+      <p style="margin: 0;"><a href="passport.html" style="font-size: 0.85em;">← Усі паспорти</a></p>
+      <h1 id="page-title">Паспорт ПУ-21/05/26(01)-Crumb
         <span class="badge badge-approved" style="font-size: 0.5em; vertical-align: middle;">створено</span>
       </h1>
-      <p class="subtitle">Партія ГП 21/05/26(01) · Crumb · Гель для душу Chery and Santal · 200 ml</p>
+      <p class="subtitle" id="page-subtitle">Партія ГП 21/05/26(01) · Crumb · Гель для душу Chery and Santal · 200 ml</p>
     </div>
     <div class="no-print">
-      <a href="#" role="button">Завантажити PDF</a>
+      <button type="button" onclick="window.print()" role="button">Завантажити PDF</button>
       <button type="button" onclick="window.print()" class="secondary">Друкувати</button>
-      <a href="#" role="button" class="secondary outline">Перегенерувати</a>
+      <a href="finished-list.html" role="button" class="secondary outline">До журналу ГП</a>
     </div>
   </header>
 
-  <p class="no-print">Згенеровано: 22.04.2026 о 01:03 · <a href="#">Відкрити PDF →</a></p>
+  <p class="no-print" id="pass-generated-line">Згенеровано: 21.05.2026 о 14:30</p>
 
   <h3 class="no-print">Превʼю паспорта</h3>
 
@@ -81,20 +81,20 @@
     </div>
 
     <h2>Паспорт якості / Certificate of Analysis (CoA)</h2>
-    <p class="pp-no">№ ПУ-21/05/26(01) від 22.04.2026</p>
+    <p class="pp-no" id="pp-no">№ ПУ-21/05/26(01) від 21.05.2026</p>
     <p style="text-align: center; font-size: 0.85em; color: #555;">
       Методи випробувань: відповідно до ТУ У 20.4-44197216-001:2021<br>та внутрішніх SOP підприємства
     </p>
 
     <table class="pp-meta">
       <tbody>
-        <tr><th>Назва продукту:</th><td>Гель для душу Chery and Santal</td></tr>
-        <tr><th>Замовник / ТМ:</th><td>Crumb</td></tr>
-        <tr><th>Об'єм / Маса нетто:</th><td>200 ml</td></tr>
-        <tr><th>№ партії ГП:</th><td>21/05/26(01)</td></tr>
-        <tr><th>Дата виготовлення:</th><td>21.05.2026</td></tr>
-        <tr><th>Використати до:</th><td>21.05.2028</td></tr>
-        <tr><th>Після відкриття (PAO):</th><td>12М</td></tr>
+        <tr><th>Назва продукту:</th><td id="pp-product">Гель для душу Chery and Santal</td></tr>
+        <tr><th>Замовник / ТМ:</th><td id="pp-tm">Crumb</td></tr>
+        <tr><th>Об'єм / Маса нетто:</th><td id="pp-volume">200 ml</td></tr>
+        <tr><th>№ партії ГП:</th><td id="pp-gp">21/05/26(01)</td></tr>
+        <tr><th>Дата виготовлення:</th><td id="pp-mfg">21.05.2026</td></tr>
+        <tr><th>Використати до:</th><td id="pp-expiry">21.05.2028</td></tr>
+        <tr><th>Після відкриття (PAO):</th><td id="pp-pao">12М</td></tr>
       </tbody>
     </table>
 
@@ -110,16 +110,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td>1</td><td>Зовнішній вигляд</td><td>—</td><td>відповідає затвердженому зразку</td><td>відповідає</td></tr>
+        <tr><td>1</td><td>Зовнішній вигляд</td><td>—</td><td id="pp-norm-organo">відповідає затвердженому зразку</td><td id="pp-fact-organo">відповідає</td></tr>
         <tr><td>2</td><td>Колір</td><td>—</td><td>від світло-бежевого до жовтого</td><td>відповідає</td></tr>
         <tr><td>3</td><td>Запах</td><td>—</td><td>згідно затвердженого зразка</td><td>відповідає</td></tr>
-        <tr><td>4</td><td>Водневий показник</td><td>pH</td><td>5.0 — 6.0</td><td>5.4</td></tr>
-        <tr><td>5</td><td>В'язкість</td><td>Cp</td><td>S3V12 Cp=5000-8000 mPas</td><td>S3V12 Cp=7200 mPas</td></tr>
-        <tr><td>6</td><td>Густина при 20 °C</td><td>ρ</td><td>0.9 — 1.0 г/мл</td><td>0.95 г/мл</td></tr>
-        <tr><td>7</td><td>Колоїдна стабільність</td><td>—</td><td>стабільний</td><td>стабільний</td></tr>
-        <tr><td>8</td><td>Термостабільність</td><td>—</td><td>стабільний</td><td>стабільний</td></tr>
-        <tr><td>9</td><td>Загальне мікробіологічне число</td><td>—</td><td>не виявлено</td><td>не виявлено</td></tr>
-        <tr><td>10</td><td>Дріжджі та плісняви</td><td>—</td><td>не виявлено</td><td>не виявлено</td></tr>
+        <tr><td>4</td><td>Водневий показник</td><td>pH</td><td id="pp-norm-ph">5.0 — 6.0</td><td id="pp-fact-ph">5.4</td></tr>
+        <tr><td>5</td><td>В'язкість</td><td>Cp</td><td id="pp-norm-visc">S3V12 Cp=5000-8000 mPas</td><td id="pp-fact-visc">S3V12 Cp=7200 mPas</td></tr>
+        <tr><td>6</td><td>Густина при 20 °C</td><td>ρ</td><td id="pp-norm-dens">0.9 — 1.0 г/мл</td><td id="pp-fact-dens">0.95 г/мл</td></tr>
+        <tr><td>7</td><td>Колоїдна стабільність</td><td>—</td><td id="pp-norm-colloid">стабільний</td><td id="pp-fact-colloid">стабільний</td></tr>
+        <tr><td>8</td><td>Термостабільність</td><td>—</td><td id="pp-norm-thermo">стабільний</td><td id="pp-fact-thermo">стабільний</td></tr>
+        <tr><td>9</td><td>Загальне мікробіологічне число</td><td>—</td><td id="pp-norm-micro-total">не виявлено</td><td id="pp-fact-micro-total">не виявлено</td></tr>
+        <tr><td>10</td><td>Дріжджі та плісняви</td><td>—</td><td id="pp-norm-micro-yeast">не виявлено</td><td id="pp-fact-micro-yeast">не виявлено</td></tr>
       </tbody>
     </table>
 
@@ -130,7 +130,7 @@
     </p>
 
     <p style="margin-top: 1rem; font-size: 0.95em;">
-      <strong>Висновок:</strong> Продукт Гель для душу Chery and Santal відповідає
+      <strong>Висновок:</strong> Продукт <span id="pp-conclusion-product">Гель для душу Chery and Santal</span> відповідає
       ТУ У 20.4-44197216-001:2021.
     </p>
 
@@ -148,11 +148,94 @@
       </tr>
     </table>
 
-    <p class="pp-footer">
+    <p class="pp-footer" id="pp-footer">
       Паспорт № ПУ-21/05/26(01)-Crumb · ТОВ «БІОЛАБ ГРУП» · biolab.com.ua
     </p>
   </div>
 </main>
+
+<script>
+  const FAKE_GP = {
+    "21/05/26(01)": {tm:"Crumb",label:"Гель для душу Chery and Santal",packaging_size:"200 мл",bulk_date:"21.05.2026",passport_no:"ПУ-21/05/26(01)",passport_generated:"21.05.2026 о 14:30",pao:"12М",shelf_life_years:2,qa:{ph_norm:"5.0 — 6.0",ph_fact:"5.4",visc_norm:"S3V12 Cp=5000-8000 mPas",visc_fact:"S3V12 Cp=7200 mPas",dens_norm:"0.9 — 1.0 г/мл",dens_fact:"0.95 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
+    "20/05/26(02)": {tm:"Crumb",label:"Шампунь Avocado + Collagen",packaging_size:"250 мл",bulk_date:"20.05.2026",passport_no:"ПУ-20/05/26(02)",passport_generated:"20.05.2026 о 16:15",pao:"12М",shelf_life_years:2,qa:{ph_norm:"5.0 — 6.0",ph_fact:"5.5",visc_norm:"S3V12 Cp=5000-8000 mPas",visc_fact:"S3V12 Cp=5200 mPas",dens_norm:"0.9 — 1.0 г/мл",dens_fact:"0.98 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
+    "28/04/26(01)": {tm:"Crumb",label:"Гель для душу Chery and Santal",packaging_size:"200 мл",bulk_date:"28.04.2026",passport_no:"ПУ-28/04/26(01)",passport_generated:"28.04.2026 о 11:00",pao:"12М",shelf_life_years:2,qa:{ph_norm:"5.0 — 6.0",ph_fact:"5.4",visc_norm:"S3V12 Cp=5000-8000 mPas",visc_fact:"S3V12 Cp=7200 mPas",dens_norm:"0.9 — 1.0 г/мл",dens_fact:"0.95 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
+    "18/05/26(03)": {tm:"ANKIE002",label:"Маска для волосся кераміди",packaging_size:"200 мл",bulk_date:"18.05.2026",passport_no:"ПУ-18/05/26(03)",passport_generated:"19.05.2026 о 09:20",pao:"12М",shelf_life_years:2,qa:{ph_norm:"4.0 — 5.0",ph_fact:"4.5",visc_norm:"S3V12 Cp=8000-12000 mPas",visc_fact:"S3V12 Cp=10000 mPas",dens_norm:"0.95 — 1.05 г/мл",dens_fact:"1.02 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
+    "21/05/26(02)": {tm:"Pinky",label:"Гель Floral wood",packaging_size:"250 мл",bulk_date:"21.05.2026",passport_no:null,passport_generated:null,pao:"12М",shelf_life_years:2,qa:{ph_norm:"5.0 — 6.0",ph_fact:"5.4",visc_norm:"S3V12 Cp=5000-8000 mPas",visc_fact:"S3V12 Cp=7200 mPas",dens_norm:"0.9 — 1.0 г/мл",dens_fact:"0.95 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
+    "19/05/26(01)": {tm:"Pinky",label:"Тонік Rich",packaging_size:"150 мл",bulk_date:"19.05.2026",passport_no:null,passport_generated:null,pao:"12М",shelf_life_years:2,qa:{ph_norm:"4.5 — 5.5",ph_fact:"4.9",visc_norm:"—",visc_fact:"—",dens_norm:"0.95 — 1.05 г/мл",dens_fact:"1.00 г/мл",colloid_norm:"стабільний",colloid_fact:"стабільний",thermo_norm:"стабільний",thermo_fact:"стабільний",micro_total_norm:"не виявлено",micro_total_fact:"не виявлено",micro_yeast_norm:"не виявлено",micro_yeast_fact:"не виявлено",organo_norm:"відповідає затвердженому зразку",organo_fact:"відповідає"}},
+  };
+
+  function todayUkr() {
+    const d = new Date();
+    return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()} о ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+  }
+
+  function addYearsToDate(ukrDate, years) {
+    const m = ukrDate.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+    if (!m) return ukrDate;
+    return `${m[1]}.${m[2]}.${parseInt(m[3], 10) + years}`;
+  }
+
+  function applyPassport(no, g) {
+    const passNo = g.passport_no || `ПУ-${no}`;
+    const expiryDate = g.bulk_date ? addYearsToDate(g.bulk_date, g.shelf_life_years || 2) : "—";
+    const generatedAt = g.passport_generated || todayUkr();
+
+    document.getElementById("page-title").firstChild.textContent =
+      `Паспорт ${passNo}-${g.tm} `;
+    document.getElementById("page-subtitle").textContent =
+      `Партія ГП ${no} · ${g.tm} · ${g.label} · ${g.packaging_size}`;
+    document.getElementById("pass-generated-line").textContent =
+      `Згенеровано: ${generatedAt}`;
+    document.getElementById("pp-no").textContent =
+      `№ ${passNo} від ${g.bulk_date || "—"}`;
+    document.getElementById("pp-product").textContent = g.label;
+    document.getElementById("pp-tm").textContent = g.tm;
+    document.getElementById("pp-volume").textContent = g.packaging_size;
+    document.getElementById("pp-gp").textContent = no;
+    document.getElementById("pp-mfg").textContent = g.bulk_date || "—";
+    document.getElementById("pp-expiry").textContent = expiryDate;
+    document.getElementById("pp-pao").textContent = g.pao || "12М";
+    document.getElementById("pp-conclusion-product").textContent = g.label;
+    document.getElementById("pp-footer").textContent =
+      `Паспорт № ${passNo}-${g.tm} · ТОВ «БІОЛАБ ГРУП» · biolab.com.ua`;
+    document.title = `Паспорт ${passNo} — БІОЛАБ`;
+
+    if (g.qa) {
+      const q = g.qa;
+      const map = {
+        "pp-norm-ph": q.ph_norm, "pp-fact-ph": q.ph_fact,
+        "pp-norm-visc": q.visc_norm, "pp-fact-visc": q.visc_fact,
+        "pp-norm-dens": q.dens_norm, "pp-fact-dens": q.dens_fact,
+        "pp-norm-colloid": q.colloid_norm, "pp-fact-colloid": q.colloid_fact,
+        "pp-norm-thermo": q.thermo_norm, "pp-fact-thermo": q.thermo_fact,
+        "pp-norm-micro-total": q.micro_total_norm, "pp-fact-micro-total": q.micro_total_fact,
+        "pp-norm-micro-yeast": q.micro_yeast_norm, "pp-fact-micro-yeast": q.micro_yeast_fact,
+        "pp-norm-organo": q.organo_norm, "pp-fact-organo": q.organo_fact,
+      };
+      Object.entries(map).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el && val) el.textContent = val;
+      });
+    }
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const gpNum = params.get("gp");
+  const autoPrint = params.get("print") === "1";
+
+  if (gpNum && FAKE_GP[gpNum]) {
+    applyPassport(gpNum, FAKE_GP[gpNum]);
+  } else if (gpNum) {
+    document.getElementById("page-title").innerHTML =
+      `Паспорт для ${gpNum} <span class="badge badge-out" style="font-size: 0.5em;">не знайдено</span>`;
+    document.getElementById("page-subtitle").textContent =
+      "Партія з таким номером не має згенерованого паспорта.";
+  }
+
+  if (autoPrint) {
+    window.addEventListener("load", () => setTimeout(() => window.print(), 500));
+  }
+</script>
 
 </body>
 </html>

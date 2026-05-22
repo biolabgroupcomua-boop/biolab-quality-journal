@@ -53,7 +53,7 @@
     <a href="bulk-new.html" role="button">+ Нова варка</a>
   </header>
 
-  <form class="toolbar">
+  <form class="toolbar" id="filter-form">
     <div>
       <label>Продукт (RP)</label>
       <select>
@@ -65,11 +65,11 @@
     </div>
     <div>
       <label>Від</label>
-      <input type="date" value="2026-05-01">
+      <input type="date" id="filter-date-from">
     </div>
     <div>
       <label>До</label>
-      <input type="date" value="2026-05-21">
+      <input type="date" id="filter-date-to">
     </div>
     <div>
       <label>Висновок</label>
@@ -217,7 +217,23 @@
 </main>
 
 <script>
-  // Підвантажуємо нові варки з localStorage і додаємо на початок таблиці
+  // Виставляємо фільтр-дати: "Від" = 1-е поточного місяця, "До" = сьогодні
+  (function initFilterDates() {
+    const today = new Date();
+    const isoToday = today.toISOString().slice(0, 10);
+    const firstOfMonth = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-01`;
+    const fromEl = document.getElementById("filter-date-from");
+    const toEl = document.getElementById("filter-date-to");
+    if (fromEl) fromEl.value = firstOfMonth;
+    if (toEl) toEl.value = isoToday;
+    // Submit фільтра не повинен перезавантажувати сторінку (поки нема справжньої фільтрації)
+    const form = document.getElementById("filter-form");
+    if (form) form.addEventListener("submit", e => e.preventDefault());
+  })();
+
+  const MONTH_UA = ["Січень","Лютий","Березень","Квітень","Травень",
+                    "Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"];
+
   function formatDateDDMMYYYY(iso) {
     const [yyyy, mm, dd] = iso.split("-");
     return `${dd}.${mm}.${yyyy}`;
@@ -228,35 +244,87 @@
     if (b.verdict === "OUT") return '<span class="badge badge-out">OUT</span>';
     return '<span class="badge badge-ok">OK</span>';
   }
+
+  // Знайти month-row для заданого року-місяця або створити новий зверху
+  function findOrCreateMonthRow(tbody, yyyy, mm) {
+    const monthName = MONTH_UA[parseInt(mm, 10) - 1];
+    const existing = [...tbody.querySelectorAll("tr.month-row")].find(r =>
+      r.textContent.includes(monthName) && r.textContent.includes(yyyy)
+    );
+    if (existing) return existing;
+
+    // Створюємо новий заголовок місяця — вставляємо у правильне місце за хронологією
+    const newRow = document.createElement("tr");
+    newRow.className = "month-row";
+    newRow.dataset.ym = `${yyyy}-${mm}`;
+    newRow.innerHTML = `<td colspan="8"><strong>${monthName} ${yyyy}</strong> · 0 варок · 0 OUT</td>`;
+
+    // Знаходимо перший наявний місячний рядок з меншим ym і вставляємо ПЕРЕД ним
+    const allMonthRows = [...tbody.querySelectorAll("tr.month-row")];
+    const olderRow = allMonthRows.find(r => {
+      const t = r.textContent;
+      const yMatch = t.match(/(\d{4})/);
+      const monthIdx = MONTH_UA.findIndex(n => t.includes(n));
+      if (!yMatch || monthIdx < 0) return false;
+      const otherYm = `${yMatch[1]}-${String(monthIdx + 1).padStart(2, "0")}`;
+      return otherYm < `${yyyy}-${mm}`;
+    });
+    if (olderRow) tbody.insertBefore(newRow, olderRow);
+    else tbody.appendChild(newRow);
+    return newRow;
+  }
+
   (function renderSaved() {
     const saved = JSON.parse(localStorage.getItem("bulk_batches") || "[]");
     if (saved.length === 0) return;
 
     const tbody = document.querySelector("table tbody");
-    const firstMonthRow = tbody.querySelector("tr.month-row");
 
-    // Оновлюємо лічильник у першому місячному рядку (Травень 2026)
-    const newInMay = saved.filter(b => b.date.startsWith("2026-05")).length;
-    if (newInMay > 0 && firstMonthRow) {
-      const td = firstMonthRow.querySelector("td");
-      td.innerHTML = `<strong>Травень 2026</strong> · ${12 + newInMay} варок (з них ${newInMay} нові) · 1 OUT`;
-    }
+    // Сортуємо за датою DESC, потім за daily_seq DESC (новіша зверху)
+    saved.sort((a, b) => {
+      if (a.date !== b.date) return b.date.localeCompare(a.date);
+      return (b.daily || 0) - (a.daily || 0);
+    });
 
-    // Додаємо нові рядки після місячного заголовку (від нової до старої)
-    [...saved].reverse().forEach((b) => {
-      const tr = document.createElement("tr");
-      tr.style.background = "rgba(220, 255, 80, 0.15)";  // підкреслити свіже (lime)
-      tr.innerHTML = `
-        <td>${formatDateDDMMYYYY(b.date)}</td>
-        <td>${b.rp_code}</td>
-        <td>${b.product_name || b.rp_code}</td>
-        <td><a href="bulk-detail.html?batch=${b.batch_number}">${b.batch_number}</a></td>
-        <td>${b.volume_kg.toFixed(2)}</td>
-        <td>${b.ph_fact || "—"}</td>
-        <td>${getVerdictBadge(b)}</td>
-        <td>${b.operator}</td>
-      `;
-      firstMonthRow.insertAdjacentElement("afterend", tr);
+    // Групуємо за рік-місяць
+    const byYM = {};
+    saved.forEach(b => {
+      const ym = b.date.slice(0, 7); // "2026-05"
+      (byYM[ym] = byYM[ym] || []).push(b);
+    });
+
+    // Для кожної групи знаходимо/створюємо month-row і вставляємо рядки
+    Object.keys(byYM).forEach(ym => {
+      const [yyyy, mm] = ym.split("-");
+      const monthRow = findOrCreateMonthRow(tbody, yyyy, mm);
+
+      // Лічильник у заголовку місяця
+      const td = monthRow.querySelector("td");
+      const newCount = byYM[ym].length;
+      const txt = td.textContent;
+      const totalMatch = txt.match(/(\d+) варок/);
+      const outMatch = txt.match(/(\d+) OUT/);
+      const origTotal = totalMatch ? parseInt(totalMatch[1], 10) : 0;
+      const origOut = outMatch ? parseInt(outMatch[1], 10) : 0;
+      const newOut = byYM[ym].filter(b => b.verdict === "OUT").length;
+      td.innerHTML = `<strong>${MONTH_UA[parseInt(mm, 10) - 1]} ${yyyy}</strong> · ${origTotal + newCount} варок (з них ${newCount} нові) · ${origOut + newOut} OUT`;
+
+      // Вставляємо рядки у зворотньому порядку (щоб найновіша опинилась нагорі групи)
+      [...byYM[ym]].reverse().forEach(b => {
+        const tr = document.createElement("tr");
+        tr.style.background = "rgba(220, 255, 80, 0.15)";
+        tr.innerHTML = `
+          <td>${formatDateDDMMYYYY(b.date)}</td>
+          <td>${b.rp_code}</td>
+          <td>${b.product_name || b.rp_code}</td>
+          <td><a href="bulk-detail.html?batch=${b.batch_number}">${b.batch_number}</a></td>
+          <td>${b.volume_kg.toFixed(2)}</td>
+          <td>${b.ph_fact || "—"}</td>
+          <td>${getVerdictBadge(b)}</td>
+          <td>${b.operator}</td>
+        `;
+        monthRow.insertAdjacentElement("afterend", tr);
+      });
     });
   })();
 </script>

@@ -66,11 +66,11 @@
       <div class="grid">
         <label>
           Дата варки від
-          <input type="date" id="bulk-date-from" value="2026-05-15">
+          <input type="date" id="bulk-date-from">
         </label>
         <label>
           Дата варки до
-          <input type="date" id="bulk-date-to" value="2026-05-21">
+          <input type="date" id="bulk-date-to">
         </label>
         <label>
           Швидко
@@ -116,6 +116,11 @@
             <strong id="bulk-verdict"><span class="badge badge-ok">OK</span></strong>
           </div>
         </div>
+        <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(0,0,0,0.1);">
+          <small style="color: var(--pico-muted-color);">Залишок для фасування:</small>
+          <strong id="bulk-remaining" style="margin-left: 0.5rem;">— кг</strong>
+          <small id="bulk-usage-detail" style="color: var(--pico-muted-color); margin-left: 0.5rem;"></small>
+        </div>
         <details style="margin-top: 0.75rem;">
           <summary>Показники якості (з варки) →</summary>
           <table style="margin-top: 0.5rem; font-size: 0.9em;">
@@ -130,29 +135,35 @@
     </section>
 
     <section style="margin-top: 1.5rem;">
-      <h3>3. Виберіть товарну позицію (ТМ × етикетка × тара)</h3>
+      <h3>3. Виберіть товарну позицію (ТМ → продукт)</h3>
       <p style="color: var(--pico-muted-color); font-size: 0.9em; margin-top: -0.5rem;">
-        ТМ-замовник і назва на етикетці тягнуться з довідника товарних позицій.
-        Якщо потрібного варіанту нема — спочатку додайте у довідник.
+        Спочатку оберіть ТМ-замовника, потім зі списку — конкретну етикетку цього бренду.
+        Якщо потрібної товарної позиції нема — додайте її у <a href="variants.html">довіднику</a>.
       </p>
-      <label>
-        Товарна позиція (ТМ + назва на етикетці)
-        <select id="variant-select" required>
-          <option>Crumb — "Гель для душу Chery and Santal"</option>
-          <option>Pinky — "Гель Floral wood"</option>
-          <option>ANKIE002 — "Shower gel Bright"</option>
-        </select>
-      </label>
+      <div class="grid">
+        <label>
+          ТМ-замовник
+          <select id="tm-select" required>
+            <option value="">— виберіть ТМ —</option>
+          </select>
+        </label>
+        <label>
+          Продукт (етикетка цього бренду)
+          <select id="variant-select" required disabled>
+            <option value="">— спочатку виберіть ТМ —</option>
+          </select>
+        </label>
+      </div>
 
       <article style="background: rgba(0,0,0,0.02); padding: 1rem 1.25rem; border-radius: 8px; margin-top: 0.75rem;">
         <div class="grid">
           <div>
             <small style="color: var(--pico-muted-color);">ТМ-замовник</small><br>
-            <strong>Crumb</strong>
+            <strong id="display-tm">—</strong>
           </div>
           <div>
             <small style="color: var(--pico-muted-color);">Назва на етикетці</small><br>
-            <strong>Гель для душу Chery and Santal</strong>
+            <strong id="display-label">—</strong>
           </div>
         </div>
       </article>
@@ -167,7 +178,7 @@
       <div class="grid">
         <label>
           Тип тари (з довідника)
-          <select required>
+          <select id="pkg-type" required>
             <option>Флакон</option>
             <option>Туба</option>
             <option>Ролер</option>
@@ -180,11 +191,11 @@
         </label>
         <label>
           Об'єм / вага одиниці
-          <input type="number" step="0.1" min="0" value="200" required>
+          <input type="number" id="pkg-volume" step="0.1" min="0" value="200" required>
         </label>
         <label>
           Одиниці
-          <select required>
+          <select id="pkg-unit" required>
             <option>мл</option>
             <option>г</option>
           </select>
@@ -223,22 +234,23 @@
       <div class="grid">
         <label>
           Кількість, шт
-          <input type="number" placeholder="напр. 240" required>
+          <input type="number" id="gp-qty" placeholder="напр. 240" min="1" required>
         </label>
         <label>
           Об'єм партії ГП, кг
-          <input type="number" step="0.01" placeholder="напр. 48.00" required>
+          <input type="number" id="gp-volume-kg" step="0.01" min="0.01" placeholder="напр. 48.00" required>
+          <small id="volume-warn" style="color: var(--bl-coral); display: none;">! більше, ніж залишок по варці</small>
         </label>
         <label>
           Дата введення аромату (опц.)
-          <input type="date">
+          <input type="date" id="aroma-date">
           <small>Залишити порожнім якщо продукт без аромату</small>
         </label>
       </div>
       <div class="grid">
         <label>
           Виконавець фасування (з довідника)
-          <select required>
+          <select id="fill-operator" required>
             <option>Санмарі А. П.</option>
             <option>Мовчан О. М.</option>
             <option>Карабут В. О.</option>
@@ -247,7 +259,7 @@
         </label>
         <label>
           Примітка
-          <input type="text" placeholder="Опційно">
+          <input type="text" id="gp-notes" placeholder="Опційно">
         </label>
       </div>
     </section>
@@ -321,6 +333,62 @@
     },
   };
 
+  // === Облік залишків по варках ===
+  // Скільки кг з кожної варки вже розфасовано в seed-даних (FAKE_GP у finished-list/detail).
+  // У реальному застосунку це обчислював би бекенд через SUM(volume_kg WHERE bulk_id=X).
+  const SEED_USED_PER_BULK = {
+    "RP21/05/26(1)": 50.0,  // Crumb 21/05/26(01) 48 + Pinky 21/05/26(02) 2
+    "RP20/05/26(2)": 15.0,  // Crumb 20/05/26(02) 15
+    "RP20/05/26(3)": 23.0,  // Plis Me 20/05/26(01) 23 (OUT — все одно вважаємо використаним)
+    "RP19/05/26(1)": 8.0,   // Pinky 19/05/26(01) 8
+  };
+
+  function parseKg(volumeStr) {
+    if (typeof volumeStr === "number") return volumeStr;
+    const m = String(volumeStr).match(/([\d.]+)/);
+    return m ? parseFloat(m[1]) : 0;
+  }
+
+  function getUsedForBulk(bulkNo) {
+    const seed = SEED_USED_PER_BULK[bulkNo] || 0;
+    const saved = JSON.parse(localStorage.getItem("finished_batches") || "[]");
+    const fromSaved = saved
+      .filter(s => s.bulk_batch === bulkNo)
+      .reduce((sum, s) => sum + (parseFloat(s.volume_kg) || 0), 0);
+    return seed + fromSaved;
+  }
+
+  function updateRemainingDisplay() {
+    const bulkNo = document.getElementById("bulk-select").value;
+    const b = BULKS[bulkNo];
+    const remainEl = document.getElementById("bulk-remaining");
+    const detailEl = document.getElementById("bulk-usage-detail");
+    if (!b) {
+      remainEl.textContent = "— кг";
+      detailEl.textContent = "";
+      return 0;
+    }
+    const total = parseKg(b.volume);
+    const used = getUsedForBulk(bulkNo);
+    const remaining = Math.max(0, total - used);
+    remainEl.textContent = `${remaining.toFixed(2)} кг`;
+    remainEl.style.color = remaining <= 0 ? "var(--bl-coral)"
+                          : remaining < total * 0.2 ? "#856404" : "#155724";
+    detailEl.textContent = `(всього ${total.toFixed(2)} кг · розфасовано ${used.toFixed(2)} кг)`;
+    return remaining;
+  }
+
+  function validateVolumeInput() {
+    const remaining = updateRemainingDisplay();
+    const input = document.getElementById("gp-volume-kg");
+    const warn = document.getElementById("volume-warn");
+    const v = parseFloat(input.value);
+    const isOver = !isNaN(v) && v > remaining + 0.001;
+    input.classList.toggle("field-out", isOver);
+    warn.style.display = isOver ? "block" : "none";
+    return !isOver;
+  }
+
   function applyBulk(key) {
     const b = BULKS[key];
     if (!b) return;
@@ -332,6 +400,10 @@
     document.getElementById("qa-viscosity").textContent = b.viscosity;
     document.getElementById("qa-density").textContent = b.density;
 
+    // Залишок
+    updateRemainingDisplay();
+    validateVolumeInput();
+
     // Блокування коли варка OUT
     const isOut = b.verdict_html.includes("badge-out");
     document.getElementById("verdict-panel-ok").hidden = isOut;
@@ -341,6 +413,9 @@
     saveBtn.style.opacity = isOut ? "0.4" : "1";
     saveBtn.style.cursor = isOut ? "not-allowed" : "pointer";
   }
+
+  // Перевірка при введенні об'єму
+  document.getElementById("gp-volume-kg").addEventListener("input", validateVolumeInput);
 
   document.getElementById("bulk-select").addEventListener("change", (e) => {
     applyBulk(e.target.value);
@@ -381,10 +456,17 @@
   (function initGpForm() {
     const today = new Date().toISOString().slice(0, 10);
     document.getElementById("gp-fill-date").value = today;
+    // Фільтр-дати "Дата варки від/до" — на тиждень тому і сьогодні
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    document.getElementById("bulk-date-from").value = weekAgo.toISOString().slice(0, 10);
+    document.getElementById("bulk-date-to").value = today;
     const next = calculateNextGp(today);
     document.getElementById("gp-daily").value = next.daily;
     document.getElementById("gp-journal-record-no").value = next.recordNo;
     generateGpBatchNumber();
+    // Показуємо залишок для дефолтно вибраної варки
+    applyBulk(document.getElementById("bulk-select").value);
   })();
   document.getElementById("gp-fill-date").addEventListener("change", (e) => {
     const next = calculateNextGp(e.target.value);
@@ -414,13 +496,82 @@
     document.getElementById("bulk-date-to").value = isoDate(to);
   });
 
+  // === Каскад ТМ → продукт ===
+  // Дані: товарні позиції згруповані за ТМ (у реальному застосунку — з довідника ProductVariant)
+  const VARIANTS_BY_TM = {
+    "Crumb": [
+      "Гель для душу Chery and Santal",
+      "Шампунь Avocado + Collagen",
+      "Шампунь Anti-Dandruff",
+    ],
+    "Pinky": [
+      "Гель Floral wood",
+      "Тонік Rich",
+    ],
+    "Plis Me": [
+      "Рідкий дезодорант",
+    ],
+    "ANKIE002": [
+      "Маска для волосся кераміди",
+      "Shower gel Bright",
+    ],
+  };
+
+  (function initTmSelect() {
+    const tmSel = document.getElementById("tm-select");
+    Object.keys(VARIANTS_BY_TM).forEach(tm => {
+      const opt = document.createElement("option");
+      opt.value = tm;
+      opt.textContent = tm;
+      tmSel.appendChild(opt);
+    });
+  })();
+
+  function refreshVariantsForTm(tm) {
+    const varSel = document.getElementById("variant-select");
+    varSel.innerHTML = "";
+    if (!tm || !VARIANTS_BY_TM[tm]) {
+      varSel.disabled = true;
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = "— спочатку виберіть ТМ —";
+      varSel.appendChild(opt);
+      document.getElementById("display-tm").textContent = "—";
+      document.getElementById("display-label").textContent = "—";
+      return;
+    }
+    varSel.disabled = false;
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "— виберіть продукт —";
+    varSel.appendChild(placeholder);
+    VARIANTS_BY_TM[tm].forEach(label => {
+      const opt = document.createElement("option");
+      opt.value = label;
+      opt.textContent = label;
+      varSel.appendChild(opt);
+    });
+    document.getElementById("display-tm").textContent = tm;
+    document.getElementById("display-label").textContent = "—";
+  }
+
+  document.getElementById("tm-select").addEventListener("change", (e) => {
+    refreshVariantsForTm(e.target.value);
+  });
+  document.getElementById("variant-select").addEventListener("change", (e) => {
+    document.getElementById("display-label").textContent = e.target.value || "—";
+  });
+
   // Submit-handler — зберегти партію ГП у localStorage і перейти у журнал ГП
   document.querySelector("form").addEventListener("submit", function(e) {
     e.preventDefault();
     const bulkBatch = document.getElementById("bulk-select").value;
-    const variantSelect = document.getElementById("variant-select");
-    const variantText = variantSelect.options[variantSelect.selectedIndex].textContent;
-    const [tm, label] = variantText.split(" — ").map(s => s.replace(/"/g, "").trim());
+    const tm = document.getElementById("tm-select").value;
+    const label = document.getElementById("variant-select").value;
+    if (!tm || !label) {
+      alert("Будь ласка, виберіть ТМ і продукт.");
+      return;
+    }
     const dateStr = document.getElementById("gp-fill-date").value;
     const daily = parseInt(document.getElementById("gp-daily").value);
     const recordNo = parseInt(document.getElementById("gp-journal-record-no").value);
@@ -429,6 +580,13 @@
     // Перевірка чи bulk OK (не OUT)
     if (document.getElementById("save-btn").disabled) {
       alert("Не можна зберегти партію — варка має висновок OUT. Спершу виправте варку.");
+      return;
+    }
+
+    // Перевірка залишку по варці
+    if (!validateVolumeInput()) {
+      const remaining = updateRemainingDisplay();
+      alert(`Не можна зберегти партію — об'єм перевищує залишок по варці (${remaining.toFixed(2)} кг). Зменшіть об'єм або виберіть іншу варку.`);
       return;
     }
 
@@ -441,6 +599,13 @@
       batch_number: batchNumber,
       daily: daily,
       journal_record_no: recordNo,
+      packaging_type: document.getElementById("pkg-type").value,
+      packaging_size: `${document.getElementById("pkg-volume").value} ${document.getElementById("pkg-unit").value}`,
+      qty: parseInt(document.getElementById("gp-qty").value) || 0,
+      volume_kg: parseFloat(document.getElementById("gp-volume-kg").value) || 0,
+      aroma_date: document.getElementById("aroma-date").value || null,
+      fill_operator: document.getElementById("fill-operator").value,
+      notes: document.getElementById("gp-notes").value || "",
       saved_at: new Date().toISOString(),
     };
     const saved = JSON.parse(localStorage.getItem("finished_batches") || "[]");

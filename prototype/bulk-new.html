@@ -118,7 +118,10 @@
       <div class="norm-fact-row">
         <label>pH</label>
         <div class="norm" id="norm-ph">5.0 — 6.0</div>
-        <input type="number" id="ph-fact" step="0.1" min="0" max="14" placeholder="напр. 5.7">
+        <div class="fact-cell">
+          <input type="number" id="ph-fact" step="0.1" min="0" max="14" placeholder="напр. 5.7">
+          <span class="field-warn" id="warn-ph" hidden>! поза нормою</span>
+        </div>
       </div>
 
       <div class="norm-fact-row">
@@ -140,13 +143,19 @@
       <div class="norm-fact-row">
         <label>Колоїдна стабільність</label>
         <div class="norm" id="norm-colloid">стабільний</div>
-        <select id="colloid-fact"><option>стабільний</option><option>нестабільний</option></select>
+        <div class="fact-cell">
+          <select id="colloid-fact"><option>стабільний</option><option>нестабільний</option></select>
+          <span class="field-warn" id="warn-colloid" hidden>! поза нормою</span>
+        </div>
       </div>
 
       <div class="norm-fact-row">
         <label>Термостабільність</label>
         <div class="norm" id="norm-thermo">стабільний</div>
-        <select id="thermo-fact"><option>стабільний</option><option>нестабільний</option></select>
+        <div class="fact-cell">
+          <select id="thermo-fact"><option>стабільний</option><option>нестабільний</option></select>
+          <span class="field-warn" id="warn-thermo" hidden>! поза нормою</span>
+        </div>
       </div>
 
       <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1rem;">
@@ -160,7 +169,13 @@
         </small>
       </h4>
 
-      <div class="micro-section">
+      <div class="micro-blocked-banner" id="micro-blocked-banner" hidden>
+        ⚠ Мікробіологію вносити не треба — варка вже <strong>OUT</strong> за іншими показниками.
+        Не витрачайте тест на партію, яка не відповідає специфікації.
+        Спершу перевірте і виправте відхилені показники вище.
+      </div>
+
+      <div class="micro-section" id="micro-section">
         <div class="norm-fact-row">
           <label>Дата постановки</label>
           <div class="norm">= дата варки (сьогодні)</div>
@@ -397,6 +412,14 @@
     recalculateVerdict();
   });
 
+  // Показати/сховати inline-попередження ! біля факт-поля
+  function toggleFieldWarn(fieldId, warnId, isOut) {
+    const field = document.getElementById(fieldId);
+    const warn = document.getElementById(warnId);
+    if (field) field.classList.toggle("field-out", isOut);
+    if (warn) warn.hidden = !isOut;
+  }
+
   // === Динамічна перевірка висновку відповідно до специфікації ===
   function recalculateVerdict() {
     const panel = document.getElementById("verdict-panel");
@@ -407,9 +430,11 @@
 
     const rp = document.getElementById("rp-select").value;
     const spec = SPECS[rp];
-    const failures = [];
+    const nonMicroFailures = [];
+    const microFailures = [];
 
-    // pH check (числова норма)
+    // pH check (числова норма) + warning на полі
+    let phOut = false;
     const phFact = parseFloat(document.getElementById("ph-fact").value);
     if (spec && !isNaN(phFact) && spec.ph !== "—") {
       const m = spec.ph.match(/([\d.]+)\s*—\s*([\d.]+)/);
@@ -417,42 +442,70 @@
         const phMin = parseFloat(m[1]);
         const phMax = parseFloat(m[2]);
         if (phFact < phMin || phFact > phMax) {
-          failures.push(`pH ${phFact} поза нормою ${spec.ph}`);
+          phOut = true;
+          nonMicroFailures.push(`pH ${phFact} поза нормою ${spec.ph}`);
+        }
+      }
+    }
+    toggleFieldWarn("ph-fact", "warn-ph", phOut);
+
+    // Текстові показники не-мікро
+    const nonMicroChecks = [
+      {id: "colloid-fact", warn: "warn-colloid", norm: spec?.colloid, label: "Колоїдна стабільність"},
+      {id: "thermo-fact", warn: "warn-thermo", norm: spec?.thermo, label: "Термостабільність"},
+    ];
+    for (const c of nonMicroChecks) {
+      const el = document.getElementById(c.id);
+      let isOut = false;
+      if (el && !el.disabled) {
+        const fact = (el.value || "").trim().toLowerCase();
+        const norm = (c.norm || "").trim().toLowerCase();
+        if (fact && norm && fact !== norm) {
+          isOut = true;
+          nonMicroFailures.push(`${c.label}: «${el.value}» ≠ норма «${c.norm}»`);
+        }
+      }
+      toggleFieldWarn(c.id, c.warn, isOut);
+    }
+
+    // Блокування мікро якщо варка вже OUT за іншими показниками
+    const microSection = document.getElementById("micro-section");
+    const microBanner = document.getElementById("micro-blocked-banner");
+    const blockMicro = nonMicroFailures.length > 0;
+    microSection.classList.toggle("blocked", blockMicro);
+    microBanner.hidden = !blockMicro;
+
+    // Мікро-перевірки — рахуємо тільки якщо мікро не заблоковано і завершено
+    if (microApplies && microCompleted && !blockMicro) {
+      const microChecks = [
+        {id: "micro-total-fact", norm: spec?.micro_total, label: "Мікро загальна"},
+        {id: "micro-yeast-fact", norm: spec?.micro_yeast, label: "Дріжджі та плісняви"},
+      ];
+      for (const c of microChecks) {
+        const el = document.getElementById(c.id);
+        if (!el || el.disabled) continue;
+        const fact = (el.value || "").trim().toLowerCase();
+        const norm = (c.norm || "").trim().toLowerCase();
+        if (fact && norm && fact !== norm) {
+          microFailures.push(`${c.label}: «${el.value}» ≠ норма «${c.norm}»`);
         }
       }
     }
 
-    // Текстові показники
-    const checks = [
-      {id: "colloid-fact", norm: spec?.colloid, label: "Колоїдна стабільність"},
-      {id: "thermo-fact", norm: spec?.thermo, label: "Термостабільність"},
-    ];
-    if (microApplies && microCompleted) {
-      checks.push({id: "micro-total-fact", norm: spec?.micro_total, label: "Мікро загальна"});
-      checks.push({id: "micro-yeast-fact", norm: spec?.micro_yeast, label: "Дріжджі та плісняви"});
-    }
-    for (const c of checks) {
-      const el = document.getElementById(c.id);
-      if (!el || el.disabled) continue;
-      const fact = (el.value || "").trim().toLowerCase();
-      const norm = (c.norm || "").trim().toLowerCase();
-      if (fact && norm && fact !== norm) {
-        failures.push(`${c.label}: «${el.value}» ≠ норма «${c.norm}»`);
-      }
-    }
+    const allFailures = [...nonMicroFailures, ...microFailures];
 
     // Визначення стану панелі
     panel.classList.remove("ok", "out");
     panel.style = "";
-    if (microApplies && !microCompleted) {
+    if (allFailures.length > 0) {
+      panel.classList.add("out");
+      title.textContent = "Поточний висновок: OUT (невідповідність специфікації)";
+      text.innerHTML = `Виявлені відхилення:<br>• ${allFailures.join("<br>• ")}<br><br>Перевірте чи правильно ввели факти. Якщо так — варка не може бути випущена.`;
+    } else if (microApplies && !microCompleted) {
       panel.classList.add("ok");
       panel.style.cssText = "background: #d1ecf1; border-color: #b8daff; color: #0c5460;";
       title.textContent = "Поточний висновок: ОЧІКУЄ МІКРО";
       text.innerHTML = "Органолептика і фіз-хім введено. Мікробіологія ще не завершена — заповніть дату завершення і результати, висновок перерахується автоматично.";
-    } else if (failures.length > 0) {
-      panel.classList.add("out");
-      title.textContent = "Поточний висновок: OUT (невідповідність специфікації)";
-      text.innerHTML = `Виявлені відхилення:<br>• ${failures.join("<br>• ")}<br><br>Перевірте чи правильно ввели факти. Якщо так — варка не може бути випущена.`;
     } else {
       panel.classList.add("ok");
       title.textContent = "Поточний висновок: OK";
